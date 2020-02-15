@@ -8,7 +8,7 @@ end
 if~exist('stimIntensities','var')
     stimIntensities = [0.25 5 1;0.25 5 1];% Default full intensities. For the graph display, this determines the amount of LEDs (usually 20).
 end
-if ~exist('sampli ngRate','var')
+if ~exist('samplingRate','var')
     samplingRate = 20000;%Default sampling rate for 8ch analog output module
 end
 if ~exist('stimLength','var')
@@ -74,7 +74,7 @@ for x = 1:2
         flash(x,end -(samplingRate/1000)+1:end) = [ones(1,ceil(pulseDur/5)) zeros(1,samplingRate/1000 - ceil(pulseDur/5))]; %add stop trigger to close panel in the last ms of the sequence
     end
 end
-
+flash = flash.*3.;
 %% Generate poisson-distributed events
 events = cell(1,6); %timestamps of stimulus event onset
 stimDuration = [beepLength/1000 size(flash,2)/samplingRate buzzLength/1000]; %number of used bin due to stimDuration.

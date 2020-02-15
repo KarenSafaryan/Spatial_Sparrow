@@ -26,8 +26,8 @@ DefaultSettings.widefieldPath = '\\grid-hs\churchland_hpc_home\smusall\BpodImage
 DefaultSettings.videoDrive = 'C:'; %path to where the system saves video data
 DefaultSettings.serverPath = '\\grid-hs\churchland_nlsas_data\data\Behavior_Simon\'; %path to behavioral data on server
 DefaultSettings.bonsaiEXE = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_2_4\Bonsai\Bonsai64.exe'; %path to bonsai .exe
-DefaultSettings.bonsaiParadim = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_workflow\WorkflowTwoCamera_v02.bonsai'; %path to bonsai workflow
-DefaultSettings.wavePort = 'COM6'; %com port for analog module
+DefaultSettings.bonsaiParadim = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_workflow\WorkflowTwoCamera_v07.bonsai'; %path to bonsai workflow
+DefaultSettings.wavePort = 'COM18'; %com port for analog module
 DefaultSettings.TrainingMode = false; %flag if training is being used
 
 % Spout settings
@@ -193,31 +193,34 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'init',TrialSidesList,60'}); %initiate control GUI and show outcome plot for the next 60 trials
     BpodSystem.Data.animalWeight = str2double(newid('Enter animal weight (in grams)')); %ask for animal weight and save
     
-    % start camera
-    % Create a string for the arguments to apss to Bonsai during starting
-    WorkflowArg1 = sprintf('-p:VideoFileName0="%s"', [dataPath filesep bhvFile '_' 'video1.mp4']);
-    WorkflowArg2 = sprintf('-p:VideoFileName1="%s"', [dataPath filesep bhvFile '_' 'video2.mp4']);
-    WorkflowArg3 = sprintf('-p:CsvFileName="%s"', [dataPath filesep bhvFile '_' 'frameTimes.csv']);
-    WorkflowArgs = [WorkflowArg1 ' ' WorkflowArg2 ' ' WorkflowArg3];
     
     %start bonsai
-    cPath = pwd;
-    cd(fileparts(BpodSystem.ProtocolSettings.bonsaiParadim));
-    vidStatus = startBonsai(BpodSystem.ProtocolSettings.bonsaiEXE, BpodSystem.ProtocolSettings.bonsaiParadim, WorkflowArgs);
-    cd(cPath);
+    if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
+        % start camera
+        % Create a string for the arguments to apss to Bonsai during starting
+        WorkflowArg1 = sprintf('-p:VideoFileName0="%s"', [dataPath filesep bhvFile '_' 'video1.mp4']);
+        WorkflowArg2 = sprintf('-p:VideoFileName1="%s"', [dataPath filesep bhvFile '_' 'video2.mp4']);
+        WorkflowArg3 = sprintf('-p:CsvFileName="%s"', [dataPath filesep bhvFile '_' 'frameTimes.csv']);
+        WorkflowArgs = [WorkflowArg1 ' ' WorkflowArg2 ' ' WorkflowArg3];
     
-    % Use UDP to trigger both cameras to start recording
-    pause(2);
-    udpAddress = '127.0.0.1'; % configure Bonsai OSC "ReceiveMessage" object using these parameters
-    udpPort = 7111; % configure Bonsai OSC "ReceiveMessage" object using these parameters
-    udpPath = '/x'; % configure Bonsai OSC "ReceiveMessage" object using these parameters
-    udpObj = udp(udpAddress,udpPort);
-    fopen(udpObj);
-    oscsend(udpObj,udpPath,'i',0) % this uses UDP as a software trigger to start video aquisition by sending the integer 0, which is programmed in the Bonsai OSC ReceiveMessage object as the state triggering video capture
+        cPath = pwd;
+        cd(fileparts(BpodSystem.ProtocolSettings.bonsaiParadim));
+        vidStatus = startBonsai(BpodSystem.ProtocolSettings.bonsaiEXE, BpodSystem.ProtocolSettings.bonsaiParadim, WorkflowArgs);
+        cd(cPath);
     
-    if strcmpi(vidStatus, 'Error')
-        disp('An error occured while trying to start Bonsai! Stopping paradigm.');
-        BpodSystem.Status.BeingUsed = false;
+        % Use UDP to trigger both cameras to start recording
+        pause(2);
+        udpAddress = '127.0.0.1'; % configure Bonsai OSC "ReceiveMessage" object using these parameters
+        udpPort = 7111; % configure Bonsai OSC "ReceiveMessage" object using these parameters
+        udpPath = '/x'; % configure Bonsai OSC "ReceiveMessage" object using these parameters
+        udpObj = udp(udpAddress,udpPort);
+        fopen(udpObj);
+        oscsend(udpObj,udpPath,'i',0) % this uses UDP as a software trigger to start video aquisition by sending the integer 0, which is programmed in the Bonsai OSC ReceiveMessage object as the state triggering video capture
+    
+        if strcmpi(vidStatus, 'Error')
+            disp('An error occured while trying to start Bonsai! Stopping paradigm.');
+            BpodSystem.Status.BeingUsed = false;
+        end
     end
 end
 
@@ -249,8 +252,10 @@ for iTrials = 1:maxTrials
         S = BpodSystem.ProtocolSettings; %update settings for this trial
         W.SamplingRate = BpodSystem.ProtocolSettings.sRate; %adjust sampling rate
         sRate = BpodSystem.ProtocolSettings.sRate;
+        if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
+
         oscsend(udpObj,udpPath,'i',iTrials) % send current trialnr to bonsai
-        
+        end
         %% create sounds - recreate if loudness has changed
         if iTrials == 1 || PrevStimLoudness ~= S.StimLoudness
             LeftPortValveState = 2^0;
@@ -758,10 +763,11 @@ for iTrials = 1:maxTrials
         else
             LeverWait = 0; %don't wait
             LeverState = 'CheckAutoReward';
-            LeverMiss = 'WaitForAnimal1';
+            LeverMiss = 'WaitForAnimal';
+            LeverWaitState = 'WaitForAnimal';
         end
         
-        if S.LeverSound %play indicator sound on lever touch
+        if S.LeverSound %play indicator sou nd on lever touch
             leverSoundID = 9;
         else
             leverSoundID = 63; %this will be empty, so no sound
@@ -773,18 +779,20 @@ for iTrials = 1:maxTrials
         disp(['Target: ' num2str(TargStim) ' Hz - ' cSide]);
         disp(['Dist. Fraction: ' num2str(DistStim) ' - ' wSide]);
         disp(['SingleSpout: = ' int2str(SingleSpout) '; AutoReward = ' num2str(GiveReward || S.AutoReward)]);
-        
-        plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), Signal(1,:), 'g'); %update stimulus plot - audio1
-        hold(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,'on')
-        plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), Signal(2,:), 'c'); %update stimulus plot - audio2
-        plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), Signal(7,:), 'k'); %update stimulus plot - vision1
-        plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), Signal(8,:), 'b'); %update stimulus plot - vision2
-        plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), Signal(5,:), 'r'); %update stimulus plot - somatosensory1
-        plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), Signal(6,:), 'y'); %update stimulus plot - somatosensory1
+        a = min(min(Signal));b = max(max(Signal));
+        plotoffset = b - a ;
+        plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), Signal(1,:), 'r'); %update stimulus plot - audio1
+        hold(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,'on')    
+        plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), Signal(2,:), 'k'); %update stimulus plot - audio2
+        plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), plotoffset + Signal(3,:), 'r'); %update stimulus plot - vision1
+        plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), plotoffset + Signal(4,:), 'k'); %update stimulus plot - vision2
+        plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), 2*plotoffset + Signal(5,:), 'r'); %update stimulus plot - somatosensory1
+        plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), 2*plotoffset + Signal(6,:), 'k'); %update stimulus plot - somatosensory1
         hold(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,'off')
-        a = min(min(Signal));b = max(max(Signal));ylim(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,[a-a/5 b+b/5]);
-        ylim(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,[a b*1.25]);
+%         ylim(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,[a-a/5 b+b/5]);
+        ylim(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,[a 3*plotoffset]);
         xlim(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,[0 stimDur]);
+        set(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,'ytick',[0,1,2].*plotoffset,'yticklabel', {'Aud','Vis','Som'});
         line([waitDur waitDur],get(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,'YLim'),'Color','r','Parent',BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,'linewidth',2);
         set(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, 'box', 'off');
         
@@ -877,7 +885,7 @@ for iTrials = 1:maxTrials
         
         sma = AddState(sma, 'Name', 'CheckAutoReward', ... %always give a reward if AutoReward is on
             'Timer', autoValve, ...
-            'StateChangeConditions', {'Tup',LeverWaitState},...  %do a short break before moving to response state
+            'StateChangeConditions', {'Tup', LeverWaitState},...  %do a short break before moving to response state
             'OutputActions', {'ValveState', RewardValve}); %open reward valve
         
         sma = AddState(sma, 'Name', 'WaitForLever', ... %wait for any levertouch

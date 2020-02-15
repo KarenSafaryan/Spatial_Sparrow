@@ -100,6 +100,7 @@ if ~isempty(varargin)  %if additional input was provided. The first input should
             pFields = fieldnames(Params); %fields in params structure
             
             for iFields = 1:length(hFields) %go through control panel elements
+                hFields(iFields)
                 if strcmp(get(handles.(hFields{iFields}),'Type'),'uicontrol') %if a field is a user control
                     if strcmp(get(handles.(hFields{iFields}),'Style'),'edit') %if control is a textbox
                         handles.(hFields{iFields}).String = num2str(Params.(pFields{ismember(pFields,hFields(iFields))}));
