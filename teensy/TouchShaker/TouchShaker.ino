@@ -21,7 +21,10 @@ unsigned long trialClocker = millis();
 int FSMheader = 0;
 const int sRateLicks = 5;  // This is the minimum duration of lick events that are send to bpod.
 const int sRateLever = 10; // This is the number of ms for outputs to be during levertouch. Signal remains live until 'sRateLever' ms after the last contact.
-
+  
+/* #################################################
+############## PIN CONFIGURATION ###################
+#################################################### */
 // Outputs to BPod
 #define PIN_LEFTTOUCH 2// trigger that informs over left lever contact
 #define PIN_RIGHTTOUCH 3 // trigger that informs over right lever contact
@@ -35,7 +38,24 @@ const int sRateLever = 10; // This is the number of ms for outputs to be during 
 #define LEVERSENSOR_R 16 // touch line for lever touch
 #define SPOUTSENSOR_L 22 // touch line for left spout
 #define SPOUTSENSOR_R 23 // touch line for right spout
+// Pins for stepper - spouts
+#define PIN_SPOUTOUT_L 5
+#define PIN_SPOUTOUT_R 6
+#define PIN_SPOUTSTEP_L 13
+#define PIN_SPOUTDIR_L 14
+#define PIN_SPOUTSTEP_R 17
+#define PIN_SPOUTDIR_R 18
+// Pins for stepper - handles
+#define PIN_LEVEROUT_L 7
+#define PIN_LEVEROUT_R 8
+#define PIN_LEVERSTEP_L 9
+#define PIN_LEVERDIR_L 10
+#define PIN_LEVERSTEP_R 11
+#define PIN_LEVERDIR_R 12 
 
+/* #################################################
+########### UART/BPOD COMMUNICATION ################
+#################################################### */
 // Byte codes for serial communication
 // inputs
 #define MODULE_INFO 255 // byte to return module info
@@ -76,23 +96,10 @@ const int sRateLever = 10; // This is the number of ms for outputs to be during 
 #define RIGHT_SPOUT_OUT 103 // serial command to move the right spout out
 #define LEVER_IN 104 // serial command to move the lever in
 #define LEVER_OUT 105 // serial command to move the lever out
- 
-// Pins for stepper - spouts
-#define PIN_SPOUTOUT_L 5
-#define PIN_SPOUTOUT_R 6
-#define PIN_SPOUTSTEP_L 13
-#define PIN_SPOUTDIR_L 14
-#define PIN_SPOUTSTEP_R 17
-#define PIN_SPOUTDIR_R 18
 
-// Pins for stepper - handles
-#define PIN_LEVEROUT_L 7
-#define PIN_LEVEROUT_R 8
-#define PIN_LEVERSTEP_L 9
-#define PIN_LEVERDIR_L 10
-#define PIN_LEVERSTEP_R 11
-#define PIN_LEVERDIR_R 12 
-
+/* #################################################
+##################### VARIABLES ####################
+#################################################### */
 // Servo vars
 float lServoIn = 10; // position to be reached when spouts are moved in by bpod trigger.
 float lServoOut = 0;  // position to be reached when spouts are moved outin by bpod trigger.
@@ -161,6 +168,11 @@ int stepPulse = 10; // duration of stepper pulse in microseconds
 int stimDur = 5; // duration of stimulus trigger in ms
 int trialDur = 50; // duration of trial trigger in ms
 float temp[10]; // temporary variable for general purposes
+
+/* #################################################
+##################### CAMERA TRIGGER ###############
+#################################################### */
+// volatile long cameraFramesCounter = 0; 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup() {
