@@ -29,7 +29,7 @@ DefaultSettings.bonsaiEXE = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_2_4\Bons
 DefaultSettings.bonsaiParadim = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_workflow\WorkflowTwoCamera_v07.bonsai'; %path to bonsai workflow
 DefaultSettings.wavePort = 'COM18'; %com port for analog module
 DefaultSettings.TrainingMode = false; %flag if training is being used
-
+DefaultSettings.labcamsAddress = '127.0.0.1:9999'
 % Spout settings
 DefaultSettings.SpoutSpeed = 25; % Duration of spout movement from start to endpoint when moving in or out (value in ms)
 DefaultSettings.rInnerLim = 1.5; % Servo position to move right spoute close the animal (value between 0 and 100)
@@ -221,6 +221,38 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
             disp('An error occured while trying to start Bonsai! Stopping paradigm.');
             BpodSystem.Status.BeingUsed = false;
         end
+        
+    elseif isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
+        if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
+           tmp = strsplit(BpodSystem.ProtocolSettings.labcamsAddress,':');
+           udpAddress = tmp{1};
+           udpPort = str2num(tmp{2});
+           udpObj = udp(udpAddress,udpPort);
+           fopen(udpObj);
+           % check if labcams is connected already.
+           fwrite(udpObj,'ping');
+           if udpObj.BytesAvailable
+               fgetl(udpObj);
+               disp(' -> labcams connected.');
+           else
+               %%
+               disp(' -> starting labcams');               
+               labcamsproc=System.Diagnostics.Process.Start('labcams.exe','-w');
+               while true
+                   fwrite(udpObj,'ping')
+                   tmp = fgetl(udpObj);
+                   if labcamsproc.HasExited
+                       break
+                   end
+                   if ~isempty(tmp)
+                       break
+                   end
+               end
+               
+               fwrite(udpObj,'softtrigger=1')
+               fgetl(udpObj)
+           end
+        end
     end
 end
 
@@ -253,8 +285,11 @@ for iTrials = 1:maxTrials
         W.SamplingRate = BpodSystem.ProtocolSettings.sRate; %adjust sampling rate
         sRate = BpodSystem.ProtocolSettings.sRate;
         if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
-
-        oscsend(udpObj,udpPath,'i',iTrials) % send current trialnr to bonsai
+            oscsend(udpObj,udpPath,'i',iTrials) % send current trialnr to bonsai
+        elseif isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
+            if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
+                fwrite(udpObj,sprintf('log=trial:%d',iTrials))
+            end
         end
         %% create sounds - recreate if loudness has changed
         if iTrials == 1 || PrevStimLoudness ~= S.StimLoudness
@@ -1133,10 +1168,15 @@ try
     try BpodSystem.StartModuleRelay('TouchShaker1'); java.lang.Thread.sleep(10); end % Relay bytes from Teensy
     teensyWrite([71 1 '0' 1 '0']); % Move spouts to zero position
     teensyWrite([72 1 '0']); % Move handles to zero position
-    
-    oscsend(udpObj,udpPath,'i',1000) % stop video capture
-    stopBonsai(); %shut down bonsai
-    
+    if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
+        oscsend(udpObj,udpPath,'i',1000) % stop video capture
+        stopBonsai(); %shut down bonsai
+    elseif isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
+        if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
+            fwrite(udpObj,sprintf('log=end'))
+            fwrite(udpObj,sprintf('quit=1'))
+        end
+    end
     % close figures
     close(BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control);
     close(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1);
