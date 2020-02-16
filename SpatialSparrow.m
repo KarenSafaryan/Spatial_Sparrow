@@ -248,9 +248,12 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
                        break
                    end
                end
-               
+               fwrite(udpObj,['expname=' dataPath filesep bhvFile])
+               fgetl(udpObj);
+               fwrite(udpObj,'manualsave=1')
+               fgetl(udpObj);
                fwrite(udpObj,'softtrigger=1')
-               fgetl(udpObj)
+               fgetl(udpObj);
            end
         end
     end
@@ -1173,7 +1176,10 @@ try
         stopBonsai(); %shut down bonsai
     elseif isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
         if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
-            fwrite(udpObj,sprintf('log=end'))
+            fwrite(udpObj,sprintf('log=end'));fgetl(udpObj);
+            fwrite(udpObj,sprintf('softtrigger=0'));fgetl(udpObj);
+            fwrite(udpObj,sprintf('manualsave=0'));fgetl(udpObj);
+            
             fwrite(udpObj,sprintf('quit=1'))
         end
     end
