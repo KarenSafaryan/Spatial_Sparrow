@@ -1,14 +1,8 @@
 # SpatialSparrow
 
-Multisensory behavioral task for mice.
+Multimodal rate discriminaton behavioral task for mice.
 
-## Description
-
-
-
-## Instalation
-
-Clone the repository to Bpod Local/Protocols. If you make changes create a branch and remember to commit changes regularly.
+## Description of the setup
 
 ## Settings and description
 
@@ -134,6 +128,11 @@ Operational variables:
 | servoPos | [0 0] | position of left and right spout, relative to their inner limit. these values will be changed by anti-bias correction to correct spout position |
 
 
-## Video
 
+## Instalation
 
+Clone the repository to Bpod Local/Protocols. If you make changes; create a branch and remember to commit changes regularly.
+
+### Video
+
+There are 2 options for recording video with SpatialSparrow: using [Bonsai](https://bonsai-rx.org/introduction) or using [labcams](https://bitbucket.org/jpcouto/labcams). This readme should show you how to sync the cameras to the BPod (work in progress). 
