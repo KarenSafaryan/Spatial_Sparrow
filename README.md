@@ -4,6 +4,12 @@ Multimodal rate discriminaton behavioral task for mice.
 
 ## Description of the setup
 
+This should show a labeled picture of the setup. 
+
+## Data saving and automatic copy
+
+This should say what gets saved where and what is automatically copied and when. 
+
 ## Settings and description
 
 Settings can be set from Bpod (mat files in Bpod Local/Settings).
@@ -128,10 +134,11 @@ Operational variables:
 | servoPos | [0 0] | position of left and right spout, relative to their inner limit. these values will be changed by anti-bias correction to correct spout position |
 
 
-
-## Instalation
+## Instalation and build instructions
 
 Clone the repository to Bpod Local/Protocols. If you make changes; create a branch and remember to commit changes regularly.
+
+Build instructions coming here soon.
 
 ### Video
 
