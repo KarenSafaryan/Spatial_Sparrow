@@ -8,14 +8,14 @@ Multisensory behavioral task for mice.
 
 ## Instalation
 
-Clone the repository to Bpod Local/Protocols
+Clone the repository to Bpod Local/Protocols. If you make changes create a branch and remember to commit changes regularly.
 
 ## Settings and description
 
 Settings can be set from Bpod (mat files in Bpod Local/Settings).
 Default settings are in SpatialSparrow.m
 
-Settings for training control:
+Settings for `training control`:
 
 | Setting | Default | Description |
 |---------|---------|-------------|
@@ -33,7 +33,7 @@ Settings for training control:
 | RegularStim | false | Produce regular stimuli sequences |
 | biasSeqLength | 3 | nr of trials on one side after which the oposite side is switched with 50% probability |
 
-Settings for trial timing:
+Settings for `trial timing` :
 
 | Setting | Default | Description |
 |---------|---------|-------------|
@@ -55,7 +55,7 @@ Settings for trial timing:
 | UseBothLevers | FALSE | Whether both handles need to be touched to initiate trials |
 | WaitBeforeLever | 1 (s) | Wait time before handles are moved in after trial onset|
 
-Settings for stimuli parameters:
+Settings for `stimuli parameters` :
 
 | Setting | Default | Description |
 |---------|---------|-------------|
@@ -87,7 +87,7 @@ Settings for stimuli parameters:
 | optoBoth  | 1  | Probability for occurence of an optogenetic stimulus on both sides. This comes after determining a single HS target ??? |
 | optoPower  | 5  | Fraction of optogenetics stimuli |
 
-Settings for hardware control and sync:
+Settings for `hardware control and sync` :
 
 | Setting | Default | Description |
 |---------|---------|-------------|
@@ -104,7 +104,7 @@ Settings for hardware control and sync:
 
 To check: rInnerLim, lInnerLim, rOuterLim, lOuterLim
 
-Settings for paths and data copy:
+Settings for `paths and data copy` :
 | Setting | Default | Description |
 |---------|---------|-------------|
 | widefieldPath | ... | path to widefield data on server |
@@ -116,6 +116,13 @@ Settings for paths and data copy:
 | wavePort | COM18 | COM port of the AnalogOutput Module |
 
 
+`Plot` settings:
+| Variable | Default | Description |
+|----------|---------|-------------|
+| PerformanceSwitch| Performed | Show performance over all trials or only self-performed trials |
+| DoFit| false | Show curve fitting in the performance plot |
+| modSelector| Combined | Which data to show in the performance plot |
+
 Operational variables:
 | Variable | Default | Description |
 |----------|---------|-------------|
@@ -125,15 +132,6 @@ Operational variables:
 | cTrial |  | Number of the current trial |
 | runTime |  | Duration of the current session |
 | servoPos | [0 0] | position of left and right spout, relative to their inner limit. these values will be changed by anti-bias correction to correct spout position |
-
-
-Plot settings:
-| Variable | Default | Description |
-|----------|---------|-------------|
-| PerformanceSwitch| Performed | Show performance over all trials or only self-performed trials |
-| DoFit| false | Show curve fitting in the performance plot |
-| modSelector| Combined | Which data to show in the performance plot |
-
 
 
 ## Video
