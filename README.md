@@ -10,6 +10,30 @@ This should show a labeled picture of the setup.
 
 This should say what gets saved where and what is automatically copied and when. 
 
+The TouchShaker teensy module reports lick and handle touch times, these get communicated and logged by Bpod.
+
+### SessionData.RawEvents
+
+Event list correspondence :
+
+| TouchShaker byte | Event |
+|------------------|-------|
+| TouchShaker1_1 | left_spout_touch |
+| TouchShaker1_2 | right_spout_touch |
+| TouchShaker1_3 | left_spout_release |
+| TouchShaker1_4 | right_spout_release |
+| TouchShaker1_5 | left_handle_touch |
+| TouchShaker1_6 | right_handle_touch |
+| TouchShaker1_7 | both_handle_touch |
+| TouchShaker1_8 | left_handle_release |
+| TouchShaker1_9 | right_handle_release |
+| TouchShaker1_14 | acknowledge |
+| TouchShaker1_15 | error |
+
+State list correspondence:
+
+
+
 ## Settings and description
 
 Settings can be set from Bpod (mat files in Bpod Local/Settings).
