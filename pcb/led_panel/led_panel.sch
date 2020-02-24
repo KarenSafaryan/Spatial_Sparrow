@@ -1240,4 +1240,6 @@ F 3 "" H 8165 1610 60  0000 C CNN
 	1    8165 2360
 	-1   0    0    1   
 $EndComp
+Text Notes 5700 5650 0    197  ~ 0
+connector\n
 $EndSCHEMATC
