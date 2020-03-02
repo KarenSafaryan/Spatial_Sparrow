@@ -124,7 +124,7 @@ unsigned long touchClocker_R = millis(); // timer to measure duration of lever t
 int lSpoutInc = 1000; // incremental left spout motion to modulate speed
 int rSpoutInc = 1000; // incremental right spout motion to modulate speed
 int leverInc = 1000; // time between steps of the handle motor to move at requested speed
-int touchChangeInc = 10; // step size when increasing/decreasing touch thresholds 
+int touchChangeInc = 2; // step size when increasing/decreasing touch thresholds 
 
 // flags for current servo states. Required to control servo speed
 bool stimTrigger = false; // flag to indicate that stim trigger is produced

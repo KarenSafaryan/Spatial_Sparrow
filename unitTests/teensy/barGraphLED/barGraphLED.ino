@@ -36,6 +36,8 @@ bool blueOn = false; // flag if blue light is on
 unsigned long blueClocker = millis(); // timer to measure blue light output duration
 int blueThresh = 200; // threshold for analog signal to trigger blue light output
 int blueCheck[2] = {0, 0};
+bool serialTrigger = false;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 int offset = 0;
 
@@ -63,7 +65,17 @@ void setup() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void loop() { // check stim trigger and control display
+ if (serialTrigger == true) {
+ int offsetCount = 0;
+    for (int i = 0; i < lightCount; ++i) {
+        digitalWriteFast((i+offset)%lightCount, HIGH);
+  }
+  delayMicroseconds(100000);
+    for (int i = 0; i < lightCount; ++i) {
+        digitalWriteFast((i+offset)%lightCount, LOW);
+  }
 
+ }
   if (digitalReadFast(IN_STIM) == HIGH) {  // new trigger. read signal and set state.
     Serial.println("Counting");
     switchStim = false;
@@ -123,7 +135,7 @@ void loop() { // check stim trigger and control display
     Serial.println("Playing the sequence");
     
   int offsetCount = 0;
-  while (digitalReadFast(IN_STIM) == LOW) {
+  while ((digitalReadFast(IN_STIM) == LOW) || (serialTrigger)) {
     for (int i = 0; i < lightCount; ++i) {
       if (  i%3 == 0){
         digitalWriteFast((i+offset)%lightCount, HIGH);
@@ -169,7 +181,6 @@ void loop() { // check stim trigger and control display
     }
   }
 }
-bool serialTrigger = false;
 void serialEvent() {
   while (Serial.available()) {
     // get the new byte:
