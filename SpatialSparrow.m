@@ -185,7 +185,7 @@ if ~exist(dataPath,'dir')
         dataPath = uigetdir(pwd,'Select video folder');
     end
 end
-
+keyboard
 %% Initialize camera, control GUI and feedback plots
 if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     BpodNotebook('init');
@@ -1128,10 +1128,33 @@ for iTrials = 1:maxTrials
                 save(BpodSystem.GUIData.SettingsFileName, 'ProtocolSettings'); % save protocol settings file to directory
             end
         end
+        % Move spouts to reset position.
+        try BpodSystem.StartModuleRelay('TouchShaker1'); java.lang.Thread.sleep(10); end % Relay bytes from Teensy
+        teensyWrite([71 1 '0' 1 '0']); % Move spouts to zero position
+        teensyWrite([72 1 '0']); % Move handles to zero position
         
+        % stop video
+        try
+            disp("Stopping video.")
+            if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
+                oscsend(udpObj,udpPath,'i',1000) % stop video capture
+                stopBonsai(); %shut down bonsai
+            elseif isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
+                if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
+                    fwrite(udpObj,sprintf('log=end'));fgetl(udpObj);
+                    fwrite(udpObj,sprintf('softtrigger=0'));fgetl(udpObj);
+                    fwrite(udpObj,sprintf('manualsave=0'));fgetl(udpObj);
+                    
+                    fwrite(udpObj,sprintf('quit=1'))
+                end
+            end
+        catch
+            disp("Error stopping video.")
+        end
         % check for path to server and save behavior + graph
         if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
             try
+                disp(['Writing to server: ',[serverPath bhvFile]])
                 if ~exist(serverPath,'dir')
                     mkdir(serverPath)
                 end
@@ -1147,6 +1170,7 @@ for iTrials = 1:maxTrials
                     set(BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control,'PaperOrientation','portrait','PaperPositionMode','auto');
                     saveas(BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control, [sPath filesep bhvFile '.jpg']);
                 end
+                disp('Done.')
             catch
                 warning('!!! Error while writing to server. Make sure local data got copied correctly. !!!');
             end
@@ -1166,28 +1190,10 @@ for iTrials = 1:maxTrials
     end
 end
 
-%% move steppers to zero, close video and all figures
-try
-    try BpodSystem.StartModuleRelay('TouchShaker1'); java.lang.Thread.sleep(10); end % Relay bytes from Teensy
-    teensyWrite([71 1 '0' 1 '0']); % Move spouts to zero position
-    teensyWrite([72 1 '0']); % Move handles to zero position
-    if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
-        oscsend(udpObj,udpPath,'i',1000) % stop video capture
-        stopBonsai(); %shut down bonsai
-    elseif isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
-        if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
-            fwrite(udpObj,sprintf('log=end'));fgetl(udpObj);
-            fwrite(udpObj,sprintf('softtrigger=0'));fgetl(udpObj);
-            fwrite(udpObj,sprintf('manualsave=0'));fgetl(udpObj);
-            
-            fwrite(udpObj,sprintf('quit=1'))
-        end
-    end
-    % close figures
-    close(BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control);
-    close(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1);
-    close(BpodSystem.GUIHandles.ParamFig);
-end
+%% close figures
+try;close(BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control);end
+try;close(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1);end
+try;close(BpodSystem.GUIHandles.ParamFig);end
 end
 
 %% nested functions
