@@ -185,7 +185,7 @@ if ~exist(dataPath,'dir')
         dataPath = uigetdir(pwd,'Select video folder');
     end
 end
-keyboard
+
 %% Initialize camera, control GUI and feedback plots
 if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     BpodNotebook('init');
@@ -1148,13 +1148,15 @@ for iTrials = 1:maxTrials
                     fwrite(udpObj,sprintf('quit=1'))
                 end
             end
+            disp("Done.")
+
         catch
             disp("Error stopping video.")
         end
         % check for path to server and save behavior + graph
         if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
+            disp(['Writing to server: ',[serverPath bhvFile]])
             try
-                disp(['Writing to server: ',[serverPath bhvFile]])
                 if ~exist(serverPath,'dir')
                     mkdir(serverPath)
                 end
