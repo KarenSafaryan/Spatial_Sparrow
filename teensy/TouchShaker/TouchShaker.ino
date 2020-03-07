@@ -25,13 +25,12 @@ const int sRateLever = 10; // This is the number of ms for outputs to be during 
 /* #################################################
 ############## PIN CONFIGURATION ###################
 #################################################### */
-// Outputs to BPod
-#define PIN_LEFTTOUCH 2// trigger that informs over left lever contact
-#define PIN_RIGHTTOUCH 3 // trigger that informs over right lever contact
+// TTL Outputs
 #define PIN_LEFTLICK 19 // trigger that informs over left licks
 #define PIN_RIGHTLICK 20 // trigger that informs over right licks
 #define PIN_STIMTRIG 21 // stimulus trigger that can be switched by serial command 'MAKE_STIMTRIGGER'
 #define PIN_TRIALTRIG 4 // trial-start trigger that can be switched by serial command 'MAKE_TRIALTRIGGER'
+#define PIN_CAMTIMER 2 // Trigger to synchronize camera acquisition. Sends TTL for 'camTrigDur' with an inter-pulse of 'camTrigRate'.
 
 // Inputs for lick sensors
 #define LEVERSENSOR_L 15 // touch line for lever touch
@@ -168,6 +167,10 @@ int stepPulse = 10; // duration of stepper pulse in microseconds
 int stimDur = 5; // duration of stimulus trigger in ms
 int trialDur = 50; // duration of trial trigger in ms
 float temp[10]; // temporary variable for general purposes
+int camTrigDur = 5; // duration of camera acquisition trigger in ms
+int camTrigRate = 10; // time between camera triggers in ms. Default is 10 for 100fps video rate.
+unsigned long camTrigClocker = micros(); // timer to measure intervals between camera triggers
+
 
 /* #################################################
 ##################### CAMERA TRIGGER ###############
@@ -191,12 +194,12 @@ void setup() {
   pinMode(PIN_LEVERDIR_L, OUTPUT);
   pinMode(PIN_LEVERDIR_R, OUTPUT);
 
-  // Set pin modes for output lines to bpod
-  pinMode(PIN_LEFTTOUCH, OUTPUT);
-  pinMode(PIN_RIGHTTOUCH, OUTPUT);
+  // Set pin modes for digital output lines
   pinMode(PIN_LEFTLICK, OUTPUT);
   pinMode(PIN_RIGHTLICK, OUTPUT);
   pinMode(PIN_STIMTRIG, OUTPUT);
+  pinMode(PIN_TRIALTRIG, OUTPUT);
+  pinMode(PIN_CAMTIMER, OUTPUT);
 
   // Set pin modes for input lines and stepper range
   pinMode(PIN_SPOUTOUT_L, INPUT_PULLUP);
@@ -507,6 +510,30 @@ void loop() {
     }
   }
 
+  // make camera trigger
+  // set to high when camTrigRate is exceeded and reset clocker
+  if (micros() < camTrigClocker) { //rollover case when micros goes back to 0
+    if (((2^32 - camTrigClocker) + micros())  > (camTrigRate*1000) { //time until rollover plus current micros read should be above camTrigRate
+      camTrigClocker = micros();
+      digitalWriteFast(PIN_CAMTIMER, HIGH); // set camera trigger to high
+    }
+  }
+  if ((micros() - camTrigClocker) > (camTrigRate*1000)) {
+    camTrigClocker = micros();
+    digitalWriteFast(PIN_CAMTIMER, HIGH); // set camera trigger to high
+  }
+
+  // set to low when camTrigDur is exceeded
+  if (micros() < camTrigClocker) { //rollover case when micros goes back to 0
+    if (((2^32 - camTrigClocker) + micros())  > (camTrigDur*1000) { //time until rollover plus current micros read should be above camTrigRate
+      digitalWriteFast(PIN_CAMTIMER, LOW); // set camera trigger to low
+    }
+  }
+  if ((micros() - camTrigClocker) > (camTrigDur*1000)) {
+    digitalWriteFast(PIN_CAMTIMER, LOW); // set camera trigger to low
+  }
+  
+
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // get data from touch pins
   touchData[0] = touchRead(SPOUTSENSOR_L);
@@ -576,7 +603,6 @@ void loop() {
 
     
     if (touchData[2] > (meanTouchVals[2]+(stdTouchVals[2]*touchThresh))) { // signal above 200mv from lick circuit and not receiving serial data
-      digitalWriteFast(PIN_LEFTTOUCH, HIGH); // set levertouch trigger to low
       touchClocker_L = millis(); //update time when lever was last touched
       if (!leverTouch_L) {
         Serial1.write(LEFT_HANDLE_TOUCH); // send a byte to bpod if this is an onset event
@@ -585,7 +611,6 @@ void loop() {
     }
     else {
       if ((millis() - touchClocker_L) >= sRateLever) { // check when lever was last touched and set output to low if it happened too long ago.
-        digitalWriteFast(PIN_LEFTTOUCH, LOW); // set levertouch trigger to low
         if (leverTouch_L) {
           Serial1.write(LEFT_HANDLE_RELEASE); // send a byte to bpod if this is an offset event
         }
@@ -594,7 +619,6 @@ void loop() {
     }
   
     if (touchData[3] > (meanTouchVals[3]+(stdTouchVals[3]*touchThresh))) { // signal above 200mv from lick circuit and not receiving serial data
-      digitalWriteFast(PIN_RIGHTTOUCH, HIGH); // set levertouch trigger to low
       touchClocker_R = millis(); //update time when lever was last touched
       if (!leverTouch_R) {
         Serial1.write(RIGHT_HANDLE_TOUCH); // send a byte to bpod if this is an onset event
@@ -603,7 +627,6 @@ void loop() {
     }
     else {
       if ((millis() - touchClocker_R) >= sRateLever) { // check when lever was last touched and set output to low if it happened too long ago.
-        digitalWriteFast(PIN_RIGHTTOUCH, LOW); // set levertouch trigger to low
         if (leverTouch_R) {
           Serial1.write(RIGHT_HANDLE_RELEASE); // send a byte to bpod if this is an offset event
         }
