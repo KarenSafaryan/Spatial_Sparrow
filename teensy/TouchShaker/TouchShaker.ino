@@ -30,7 +30,7 @@ const int sRateLever = 10; // This is the number of ms for outputs to be during 
 #define PIN_RIGHTLICK 20 // trigger that informs over right licks
 #define PIN_STIMTRIG 21 // stimulus trigger that can be switched by serial command 'MAKE_STIMTRIGGER'
 #define PIN_TRIALTRIG 4 // trial-start trigger that can be switched by serial command 'MAKE_TRIALTRIGGER'
-#define PIN_CAMTIMER 2 // Trigger to synchronize camera acquisition. Sends TTL for 'camTrigDur' with an inter-pulse of 'camTrigRate'.
+#define PIN_CAMTIMER 3 // Trigger to synchronize camera acquisition. Sends TTL for 'camTrigDur' with an inter-pulse of 'camTrigRate'.
 
 // Inputs for lick sensors
 #define LEVERSENSOR_L 15 // touch line for lever touch
@@ -167,10 +167,7 @@ int stepPulse = 10; // duration of stepper pulse in microseconds
 int stimDur = 5; // duration of stimulus trigger in ms
 int trialDur = 50; // duration of trial trigger in ms
 float temp[10]; // temporary variable for general purposes
-int camTrigDur = 5; // duration of camera acquisition trigger in ms
-int camTrigRate = 10; // time between camera triggers in ms. Default is 10 for 100fps video rate.
-unsigned long camTrigClocker = micros(); // timer to measure intervals between camera triggers
-
+int camTrigRate = 100; // rate of camera trigger in Hz.
 
 /* #################################################
 ##################### CAMERA TRIGGER ###############
@@ -199,8 +196,11 @@ void setup() {
   pinMode(PIN_RIGHTLICK, OUTPUT);
   pinMode(PIN_STIMTRIG, OUTPUT);
   pinMode(PIN_TRIALTRIG, OUTPUT);
-  pinMode(PIN_CAMTIMER, OUTPUT);
 
+  pinMode(PIN_CAMTIMER, OUTPUT);
+  analogWriteFrequency(PIN_CAMTIMER, camTrigRate);
+  analogWrite(PIN_CAMTIMER, 128); // set to 50% duty cycle
+  
   // Set pin modes for input lines and stepper range
   pinMode(PIN_SPOUTOUT_L, INPUT_PULLUP);
   pinMode(PIN_SPOUTOUT_R, INPUT_PULLUP);
@@ -509,30 +509,6 @@ void loop() {
       trialTrigger = false;
     }
   }
-
-  // make camera trigger
-  // set to high when camTrigRate is exceeded and reset clocker
-  if (micros() < camTrigClocker) { //rollover case when micros goes back to 0
-    if (((2^32 - camTrigClocker) + micros())  > (camTrigRate*1000) { //time until rollover plus current micros read should be above camTrigRate
-      camTrigClocker = micros();
-      digitalWriteFast(PIN_CAMTIMER, HIGH); // set camera trigger to high
-    }
-  }
-  if ((micros() - camTrigClocker) > (camTrigRate*1000)) {
-    camTrigClocker = micros();
-    digitalWriteFast(PIN_CAMTIMER, HIGH); // set camera trigger to high
-  }
-
-  // set to low when camTrigDur is exceeded
-  if (micros() < camTrigClocker) { //rollover case when micros goes back to 0
-    if (((2^32 - camTrigClocker) + micros())  > (camTrigDur*1000) { //time until rollover plus current micros read should be above camTrigRate
-      digitalWriteFast(PIN_CAMTIMER, LOW); // set camera trigger to low
-    }
-  }
-  if ((micros() - camTrigClocker) > (camTrigDur*1000)) {
-    digitalWriteFast(PIN_CAMTIMER, LOW); // set camera trigger to low
-  }
-  
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // get data from touch pins
