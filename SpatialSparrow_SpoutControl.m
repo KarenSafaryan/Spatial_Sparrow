@@ -22,7 +22,7 @@ function varargout = SpatialSparrow_SpoutControl(varargin)
 
 % Edit the above text to modify the response to help SpatialSparrow_SpoutControl
 
-% Last Modified by GUIDE v2.5 06-Nov-2019 21:01:16
+% Last Modified by GUIDE v2.5 10-Mar-2020 13:23:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -667,6 +667,14 @@ drawnow;
 cVal = int2str(BpodSystem.ProtocolSettings.LeverOut); %update from Bpod object
 teensyWrite([72 length(cVal) cVal]);
 
+% --- Executes on button press in MoveLeverZero.
+function MoveLeverZero_Callback(hObject, eventdata, handles)
+% hObject    handle to MoveLeverZero (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global BpodSystem
+drawnow;
+cVal = '0'; teensyWrite([72 length(cVal) cVal]);
 
 % --- Executes on button press in AdjustTouchThresh.
 function AdjustTouchThresh_Callback(hObject, eventdata, handles)
@@ -770,3 +778,5 @@ function decreaseLeverR_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 teensyWrite(87); % move to zero position 
+
+
