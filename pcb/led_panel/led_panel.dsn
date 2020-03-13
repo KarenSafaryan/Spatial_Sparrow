@@ -1,4 +1,4 @@
-(pcb "/home/joao/lib/spatial-sparrow-test/pcb/led_panel/led_panel.dsn"
+(pcb /home/joao/lib/SpatialSparrow/pcb/led_panel/led_panel.dsn
   (parser
     (string_quote ")
     (space_in_quoted_tokens on)
@@ -21,10 +21,9 @@
       )
     )
     (boundary
-      (path pcb 0  229870 -6350  72390 -6350  72390 35560  229870 35560
-            229870 -6350)
+      (path pcb 0  187325 -21209  187325 -61214  27305 -61214  27305 -21082
+            187325 -21209)
     )
-    (plane GND (polygon B.Cu 0  72644 35306  72644 -6096  229616 -6096  229616 35306  72644 35306))
     (via "Via[0-1]_800:400_um")
     (rule
       (width 300)
@@ -34,77 +33,131 @@
     )
   )
   (placement
-    (component lib:Teensy30_31_32_LC
-      (place U2 211328 16129 front 180 (PN Teensy3.2))
-      (place U1 91186 16129 front 0 (PN Teensy3.2))
+    (component MountingHole:MountingHole_3.2mm_M3
+      (place M3_2 122428 -57912 front 0 (PN MountingHole_3.2mm_M3))
+      (place M3_1 92456 -57912 front 0 (PN MountingHole_3.2mm_M3))
     )
-    (component Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork
-      (place righttrigger1 128270 29210 front 0 (PN "right trigger"))
-      (place lefttrigger1 178562 29210 front 0 (PN "left trigger"))
-      (place led2 168148 12319 front 0 (PN "LED2 test"))
-      (place led1 134366 12319 front 0 (PN "LED1 test"))
-      (place gnd1 174752 29210 front 0 (PN GND))
-      (place 5v1 124460 29210 front 0 (PN 5V))
+    (component lib:churchland_lab_logo
+      (place G*** 98044 -49022 front 0 (PN LOGO))
+    )
+    (component MountingHole:MountingHole_4.3mm_M4
+      (place M4_1 31623 -25400 front 0 (PN MountingHole_4.3mm_M4))
+      (place M4_2 183007 -25654 front 0 (PN MountingHole_4.3mm_M4))
+    )
+    (component lib:Teensy30_31_32_LC
+      (place "Left teensy" 45466 -39497 front 0 (PN Teensy3.2))
+      (place "Right teensy" 169037 -39624 front 180 (PN Teensy3.2))
     )
     (component Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical
-      (place R42 182118 18669 front 90 (PN R))
-      (place R41 182118 23749 front 90 (PN R))
-      (place R40 178308 8509 front 90 (PN R))
-      (place R39 178308 13589 front 90 (PN R))
-      (place R38 178308 18669 front 90 (PN R))
-      (place R37 178308 23749 front 90 (PN R))
-      (place R36 174498 8509 front 90 (PN R))
-      (place R35 174498 13589 front 90 (PN R))
-      (place R34 174498 18669 front 90 (PN R))
-      (place R33 174498 23749 front 90 (PN R))
-      (place R32 189738 8509 front 90 (PN R))
-      (place R31 189738 13589 front 90 (PN R))
-      (place R30 189738 18669 front 90 (PN R))
-      (place R29 189738 23749 front 90 (PN R))
-      (place R28 185928 8509 front 90 (PN R))
-      (place R27 185928 13589 front 90 (PN R))
-      (place R26 185928 18669 front 90 (PN R))
-      (place R25 185928 23749 front 90 (PN R))
-      (place R24 182118 8509 front 90 (PN R))
-      (place R23 182118 13589 front 90 (PN R))
-      (place R22 170688 8509 front 180 (PN R))
-      (place R21 131826 8509 front 0 (PN R))
-      (place R20 120396 13589 front 90 (PN R))
-      (place R19 120396 8509 front 90 (PN R))
-      (place R18 116586 23749 front 90 (PN R))
-      (place R17 116586 18669 front 90 (PN R))
-      (place R16 116586 13589 front 90 (PN R))
-      (place R15 116586 8509 front 90 (PN R))
-      (place R14 112776 23749 front 90 (PN R))
-      (place R13 112776 18669 front 90 (PN R))
-      (place R12 112776 13589 front 90 (PN R))
-      (place R11 112776 8509 front 90 (PN R))
-      (place R10 128016 23749 front 90 (PN R))
-      (place R9 128016 18669 front 90 (PN R))
-      (place R8 128016 13589 front 90 (PN R))
-      (place R7 128016 8509 front 90 (PN R))
-      (place R6 124206 23749 front 90 (PN R))
-      (place R5 124206 18669 front 90 (PN R))
-      (place R4 124206 13589 front 90 (PN R))
-      (place R3 124206 8509 front 90 (PN R))
-      (place R2 120396 23749 front 90 (PN R))
-      (place R1 120396 18669 front 90 (PN R))
+      (place RRLED2 127127 -47244 front 90 (PN R))
+      (place RL11 76835 -37973 front 270 (PN R))
+      (place RR20 130683 -44704 front 270 (PN R))
+      (place RR19 134239 -44704 front 270 (PN R))
+      (place RR18 137795 -44704 front 270 (PN R))
+      (place RR17 141351 -44704 front 270 (PN R))
+      (place RR16 144907 -44704 front 270 (PN R))
+      (place RR15 148463 -44704 front 270 (PN R))
+      (place RR14 127127 -38608 front 270 (PN R))
+      (place RR13 130683 -38608 front 270 (PN R))
+      (place RR12 134239 -38608 front 270 (PN R))
+      (place RR11 137795 -38608 front 270 (PN R))
+      (place RR10 141351 -38608 front 270 (PN R))
+      (place RR9 144907 -38608 front 270 (PN R))
+      (place RR8 148463 -38608 front 270 (PN R))
+      (place RR7 127127 -32004 front 270 (PN R))
+      (place RR6 130683 -32004 front 270 (PN R))
+      (place RR5 134239 -32004 front 270 (PN R))
+      (place RR4 137795 -32004 front 270 (PN R))
+      (place RR3 141351 -32004 front 270 (PN R))
+      (place RR2 144907 -32004 front 270 (PN R))
+      (place RR1 148463 -32004 front 270 (PN R))
+      (place RLED1 87503 -33909 front 90 (PN R))
+      (place RL20 83947 -31877 front 270 (PN R))
+      (place RL19 80391 -31877 front 270 (PN R))
+      (place RL18 76835 -31877 front 270 (PN R))
+      (place RL17 73279 -31877 front 270 (PN R))
+      (place RL16 69723 -31877 front 270 (PN R))
+      (place RL15 66167 -31877 front 270 (PN R))
+      (place RL14 87503 -37973 front 270 (PN R))
+      (place RL13 83947 -37973 front 270 (PN R))
+      (place RL12 80391 -37973 front 270 (PN R))
+      (place RL10 73279 -37973 front 270 (PN R))
+      (place RL9 69723 -37973 front 270 (PN R))
+      (place RL8 66167 -37973 front 270 (PN R))
+      (place RL7 87503 -44577 front 270 (PN R))
+      (place RL6 83947 -44577 front 270 (PN R))
+      (place RL5 80391 -44577 front 270 (PN R))
+      (place RL4 76835 -44577 front 270 (PN R))
+      (place RL3 73279 -44577 front 270 (PN R))
+      (place RL2 69723 -44577 front 270 (PN R))
+      (place RL1 66167 -44577 front 270 (PN R))
+    )
+    (component Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork
+      (place Tright 132715 -27432 front 0 (PN "T right"))
+      (place Tleft 82423 -27305 front 0 (PN "T right"))
+      (place pLED2 127127 -27432 front 0 (PN LED2))
+      (place pLED1 87503 -27305 front 0 (PN LED1))
+      (place GND 71247 -27305 front 0 (PN GND))
+      (place 5v 66167 -27305 front 0 (PN 5V))
     )
     (component TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x10_P3.50mm_Horizontal
-      (place J1 226568 30480 front 180 (PN Screw_Terminal_01x10))
+      (place terminal 173258 -25273 front 180 (PN Screw_Terminal_01x10))
     )
     (component "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal"
-      (place D2 148590 20320 front 0 (PN LED))
-      (place D1 148590 2540 front 0 (PN LED))
+      (place LED2 107315 -57531 front 90 (PN LED))
+      (place LED1 107315 -40640 front 90 (PN LED))
     )
     (component "Display:HDSP-4830"
-      (place BAR4 204978 -4191 front 90 (PN "HDSP-4830_2"))
-      (place BAR3 179324 -4191 front 90 (PN "HDSP-4830_2"))
-      (place BAR2 123190 3429 front 270 (PN "HDSP-4830_2"))
-      (place BAR1 97536 3429 front 270 (PN "HDSP-4830_2"))
+      (place BARR2 160020 -51816 front 270 (PN "HDSP-4830_2"))
+      (place BARR1 185547 -51816 front 270 (PN "HDSP-4830_2"))
+      (place BARL2 54610 -51689 back 90 (PN "HDSP-4830_2"))
+      (place BARL1 29083 -51689 back 90 (PN "HDSP-4830_2"))
     )
   )
   (library
+    (image MountingHole:MountingHole_3.2mm_M3
+      (outline (path signal 150  3200 0  3119.77 -712.067  2883.1 -1388.43  2501.86 -1995.17
+            1995.17 -2501.86  1388.43 -2883.1  712.067 -3119.77  0 -3200
+            -712.067 -3119.77  -1388.43 -2883.1  -1995.17 -2501.86  -2501.86 -1995.17
+            -2883.1 -1388.43  -3119.77 -712.067  -3200 0  -3119.77 712.067
+            -2883.1 1388.43  -2501.86 1995.17  -1995.17 2501.86  -1388.43 2883.1
+            -712.067 3119.77  0 3200  712.067 3119.77  1388.43 2883.1  1995.17 2501.86
+            2501.86 1995.17  2883.1 1388.43  3119.77 712.067  3200 0))
+      (outline (path signal 50  3450 0  3369.34 -741.648  3131.14 -1448.62  2746.52 -2087.85
+            2233.48 -2629.46  1616.01 -3048.12  922.973 -3324.25  186.779 -3444.94
+            -558.148 -3404.55  -1276.98 -3204.97  -1936.1 -2855.53  -2504.68 -2372.56
+            -2956.16 -1778.66  -3269.4 -1101.59  -3429.78 -373.011  -3429.78 373.011
+            -3269.4 1101.59  -2956.16 1778.66  -2504.68 2372.56  -1936.1 2855.53
+            -1276.98 3204.97  -558.148 3404.55  186.779 3444.94  922.973 3324.25
+            1616.01 3048.12  2233.48 2629.46  2746.52 2087.85  3131.14 1448.62
+            3369.34 741.648  3450 0))
+      (keepout "" (circle F.Cu 3200))
+      (keepout "" (circle B.Cu 3200))
+    )
+    (image lib:churchland_lab_logo
+    )
+    (image MountingHole:MountingHole_4.3mm_M4
+      (outline (path signal 50  4550 0  4467.78 -861.093  4224.07 -1691.06  3827.7 -2459.92
+            3292.99 -3139.86  2639.26 -3706.32  1890.14 -4138.83  1072.7 -4421.74
+            216.498 -4544.85  -647.533 -4503.69  -1488.16 -4299.75  -2275 -3940.42
+            -2979.62 -3438.66  -3576.54 -2812.62  -4044.2 -2084.93  -4365.69 -1281.88
+            -4529.4 -432.505  -4529.4 432.505  -4365.69 1281.88  -4044.2 2084.93
+            -3576.54 2812.62  -2979.62 3438.66  -2275 3940.42  -1488.16 4299.75
+            -647.533 4503.69  216.498 4544.85  1072.7 4421.74  1890.14 4138.83
+            2639.26 3706.32  3292.99 3139.86  3827.7 2459.92  4224.07 1691.06
+            4467.78 861.093  4550 0))
+      (outline (path signal 150  4300 0  4222.29 -813.78  3991.98 -1598.15  3617.39 -2324.76
+            3112.06 -2967.34  2494.24 -3502.68  1786.29 -3911.42  1013.76 -4178.79
+            204.602 -4295.13  -611.954 -4256.23  -1406.39 -4063.5  -2150 -3723.91
+            -2815.9 -3249.72  -3380.03 -2658.08  -3821.99 -1970.37  -4125.82 -1211.45
+            -4280.53 -408.741  -4280.53 408.741  -4125.82 1211.45  -3821.99 1970.37
+            -3380.03 2658.08  -2815.9 3249.72  -2150 3723.91  -1406.39 4063.5
+            -611.954 4256.23  204.602 4295.13  1013.76 4178.79  1786.29 3911.42
+            2494.24 3502.68  3112.06 2967.34  3617.39 2324.76  3991.98 1598.15
+            4222.29 813.78  4300 0))
+      (keepout "" (circle F.Cu 4300))
+      (keepout "" (circle B.Cu 4300))
+    )
     (image lib:Teensy30_31_32_LC
       (outline (path signal 150  -17780 -8890  -17780 8890))
       (outline (path signal 150  17780 -8890  -17780 -8890))
@@ -172,22 +225,6 @@
       (pin Round[A]Pad_1600_um 18 16510 2540)
       (pin Round[A]Pad_1600_um 17 16510 0)
     )
-    (image Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork
-      (outline (path signal 50  1350 -1200  -1400 -1200))
-      (outline (path signal 50  1350 -1200  1350 1200))
-      (outline (path signal 50  -1400 1200  -1400 -1200))
-      (outline (path signal 50  -1400 1200  1350 1200))
-      (outline (path signal 120  -900 -250  -900 250))
-      (outline (path signal 120  850 -250  -900 -250))
-      (outline (path signal 120  850 250  850 -250))
-      (outline (path signal 120  -900 250  850 250))
-      (outline (path signal 120  900 950  -950 950))
-      (outline (path signal 120  900 900  900 950))
-      (outline (path signal 120  900 -950  900 900))
-      (outline (path signal 120  -950 -950  900 -950))
-      (outline (path signal 120  -950 950  -950 -950))
-      (pin Round[A]Pad_1400_um 1 0 0)
-    )
     (image Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P2.54mm_Vertical
       (outline (path signal 50  3590 1500  -1500 1500))
       (outline (path signal 50  3590 -1500  3590 1500))
@@ -207,6 +244,22 @@
             1174.62 427.525  1250 0))
       (pin Oval[A]Pad_1600x1600_um 2 2540 0)
       (pin Round[A]Pad_1600_um 1 0 0)
+    )
+    (image Connector_Pin:Pin_D0.7mm_L6.5mm_W1.8mm_FlatFork
+      (outline (path signal 50  1350 -1200  -1400 -1200))
+      (outline (path signal 50  1350 -1200  1350 1200))
+      (outline (path signal 50  -1400 1200  -1400 -1200))
+      (outline (path signal 50  -1400 1200  1350 1200))
+      (outline (path signal 120  -900 -250  -900 250))
+      (outline (path signal 120  850 -250  -900 -250))
+      (outline (path signal 120  850 250  850 -250))
+      (outline (path signal 120  -900 250  850 250))
+      (outline (path signal 120  900 950  -950 950))
+      (outline (path signal 120  900 900  900 950))
+      (outline (path signal 120  900 -950  900 900))
+      (outline (path signal 120  -950 -950  900 -950))
+      (outline (path signal 120  -950 950  -950 -950))
+      (pin Round[A]Pad_1400_um 1 0 0)
     )
     (image TerminalBlock_4Ucon:TerminalBlock_4Ucon_1x10_P3.50mm_Horizontal
       (outline (path signal 50  34100 3900  -2600 3900))
@@ -604,384 +657,309 @@
   )
   (network
     (net +5V
-      (pins U2-33 U1-33 J1-1 5v1-1)
+      (pins "Left teensy"-33 "Right teensy"-33 terminal-1 5v-1)
     )
     (net GND
-      (pins U2-1 U1-1 J1-2 gnd1-1 D2-2 D1-2 BAR4-20 BAR4-19 BAR4-18 BAR4-17 BAR4-11
-        BAR4-12 BAR4-16 BAR4-15 BAR4-14 BAR4-13 BAR3-20 BAR3-19 BAR3-18 BAR3-17 BAR3-11
-        BAR3-12 BAR3-16 BAR3-15 BAR3-14 BAR3-13 BAR2-20 BAR2-19 BAR2-18 BAR2-17 BAR2-11
-        BAR2-12 BAR2-16 BAR2-15 BAR2-14 BAR2-13 BAR1-20 BAR1-19 BAR1-18 BAR1-17 BAR1-11
-        BAR1-12 BAR1-16 BAR1-15 BAR1-14 BAR1-13)
+      (pins "Left teensy"-1 "Right teensy"-1 RRLED2-1 RLED1-1 terminal-2 GND-1 BARR2-20
+        BARR2-19 BARR2-18 BARR2-17 BARR2-11 BARR2-12 BARR2-16 BARR2-15 BARR2-14 BARR2-13
+        BARR1-20 BARR1-19 BARR1-18 BARR1-17 BARR1-11 BARR1-12 BARR1-16 BARR1-15 BARR1-14
+        BARR1-13 BARL2-20 BARL2-19 BARL2-18 BARL2-17 BARL2-11 BARL2-12 BARL2-16 BARL2-15
+        BARL2-14 BARL2-13 BARL1-20 BARL1-19 BARL1-18 BARL1-17 BARL1-11 BARL1-12 BARL1-16
+        BARL1-15 BARL1-14 BARL1-13)
     )
-    (net "Net-(BAR1-Pad9)"
-      (pins R12-2 BAR1-9)
+    (net "Net-(BARL1-Pad9)"
+      (pins RL9-2 BARL1-9)
     )
-    (net "Net-(BAR1-Pad10)"
-      (pins R11-2 BAR1-10)
+    (net "Net-(BARL1-Pad10)"
+      (pins RL10-2 BARL1-10)
     )
-    (net "Net-(BAR1-Pad8)"
-      (pins R13-2 BAR1-8)
+    (net "Net-(BARL1-Pad8)"
+      (pins RL8-2 BARL1-8)
     )
-    (net "Net-(BAR1-Pad7)"
-      (pins R14-2 BAR1-7)
+    (net "Net-(BARL1-Pad7)"
+      (pins RL7-2 BARL1-7)
     )
-    (net "Net-(BAR1-Pad6)"
-      (pins R15-2 BAR1-6)
+    (net "Net-(BARL1-Pad6)"
+      (pins RL6-2 BARL1-6)
     )
-    (net "Net-(BAR1-Pad5)"
-      (pins R16-2 BAR1-5)
+    (net "Net-(BARL1-Pad5)"
+      (pins RL5-2 BARL1-5)
     )
-    (net "Net-(BAR1-Pad4)"
-      (pins R17-2 BAR1-4)
+    (net "Net-(BARL1-Pad4)"
+      (pins RL4-2 BARL1-4)
     )
-    (net "Net-(BAR1-Pad3)"
-      (pins R18-2 BAR1-3)
+    (net "Net-(BARL1-Pad3)"
+      (pins RL3-2 BARL1-3)
     )
-    (net "Net-(BAR1-Pad2)"
-      (pins R19-2 BAR1-2)
+    (net "Net-(BARL1-Pad2)"
+      (pins RL2-2 BARL1-2)
     )
-    (net "Net-(BAR1-Pad1)"
-      (pins R20-2 BAR1-1)
+    (net "Net-(BARL1-Pad1)"
+      (pins RL1-2 BARL1-1)
     )
-    (net "Net-(BAR2-Pad9)"
-      (pins R2-2 BAR2-9)
+    (net "Net-(BARL2-Pad9)"
+      (pins RL19-2 BARL2-9)
     )
-    (net "Net-(BAR2-Pad10)"
-      (pins R1-2 BAR2-10)
+    (net "Net-(BARL2-Pad10)"
+      (pins RL20-2 BARL2-10)
     )
-    (net "Net-(BAR2-Pad8)"
-      (pins R3-2 BAR2-8)
+    (net "Net-(BARL2-Pad8)"
+      (pins RL18-2 BARL2-8)
     )
-    (net "Net-(BAR2-Pad7)"
-      (pins R4-2 BAR2-7)
+    (net "Net-(BARL2-Pad7)"
+      (pins RL17-2 BARL2-7)
     )
-    (net "Net-(BAR2-Pad6)"
-      (pins R5-2 BAR2-6)
+    (net "Net-(BARL2-Pad6)"
+      (pins RL16-2 BARL2-6)
     )
-    (net "Net-(BAR2-Pad5)"
-      (pins R6-2 BAR2-5)
+    (net "Net-(BARL2-Pad5)"
+      (pins RL15-2 BARL2-5)
     )
-    (net "Net-(BAR2-Pad4)"
-      (pins R7-2 BAR2-4)
+    (net "Net-(BARL2-Pad4)"
+      (pins RL14-2 BARL2-4)
     )
-    (net "Net-(BAR2-Pad3)"
-      (pins R8-2 BAR2-3)
+    (net "Net-(BARL2-Pad3)"
+      (pins RL13-2 BARL2-3)
     )
-    (net "Net-(BAR2-Pad2)"
-      (pins R9-2 BAR2-2)
+    (net "Net-(BARL2-Pad2)"
+      (pins RL12-2 BARL2-2)
     )
-    (net "Net-(BAR2-Pad1)"
-      (pins R10-2 BAR2-1)
+    (net "Net-(BARL2-Pad1)"
+      (pins RL11-2 BARL2-1)
     )
-    (net "Net-(BAR3-Pad9)"
-      (pins R41-2 BAR3-9)
+    (net "Net-(BARR1-Pad9)"
+      (pins RR9-2 BARR1-9)
     )
-    (net "Net-(BAR3-Pad10)"
-      (pins R42-2 BAR3-10)
+    (net "Net-(BARR1-Pad10)"
+      (pins RR10-2 BARR1-10)
     )
-    (net "Net-(BAR3-Pad8)"
-      (pins R40-2 BAR3-8)
+    (net "Net-(BARR1-Pad8)"
+      (pins RR8-2 BARR1-8)
     )
-    (net "Net-(BAR3-Pad7)"
-      (pins R39-2 BAR3-7)
+    (net "Net-(BARR1-Pad7)"
+      (pins RR7-2 BARR1-7)
     )
-    (net "Net-(BAR3-Pad6)"
-      (pins R38-2 BAR3-6)
+    (net "Net-(BARR1-Pad6)"
+      (pins RR6-2 BARR1-6)
     )
-    (net "Net-(BAR3-Pad5)"
-      (pins R37-2 BAR3-5)
+    (net "Net-(BARR1-Pad5)"
+      (pins RR5-2 BARR1-5)
     )
-    (net "Net-(BAR3-Pad4)"
-      (pins R36-2 BAR3-4)
+    (net "Net-(BARR1-Pad4)"
+      (pins RR4-2 BARR1-4)
     )
-    (net "Net-(BAR3-Pad3)"
-      (pins R35-2 BAR3-3)
+    (net "Net-(BARR1-Pad3)"
+      (pins RR3-2 BARR1-3)
     )
-    (net "Net-(BAR3-Pad2)"
-      (pins R34-2 BAR3-2)
+    (net "Net-(BARR1-Pad2)"
+      (pins RR2-2 BARR1-2)
     )
-    (net "Net-(BAR3-Pad1)"
-      (pins R33-2 BAR3-1)
+    (net "Net-(BARR1-Pad1)"
+      (pins RR1-2 BARR1-1)
     )
-    (net "Net-(BAR4-Pad9)"
-      (pins R31-2 BAR4-9)
+    (net "Net-(BARR2-Pad9)"
+      (pins RR19-2 BARR2-9)
     )
-    (net "Net-(BAR4-Pad10)"
-      (pins R32-2 BAR4-10)
+    (net "Net-(BARR2-Pad10)"
+      (pins RR20-2 BARR2-10)
     )
-    (net "Net-(BAR4-Pad8)"
-      (pins R30-2 BAR4-8)
+    (net "Net-(BARR2-Pad8)"
+      (pins RR18-2 BARR2-8)
     )
-    (net "Net-(BAR4-Pad7)"
-      (pins R29-2 BAR4-7)
+    (net "Net-(BARR2-Pad7)"
+      (pins RR17-2 BARR2-7)
     )
-    (net "Net-(BAR4-Pad6)"
-      (pins R28-2 BAR4-6)
+    (net "Net-(BARR2-Pad6)"
+      (pins RR16-2 BARR2-6)
     )
-    (net "Net-(BAR4-Pad5)"
-      (pins R27-2 BAR4-5)
+    (net "Net-(BARR2-Pad5)"
+      (pins RR15-2 BARR2-5)
     )
-    (net "Net-(BAR4-Pad4)"
-      (pins R26-2 BAR4-4)
+    (net "Net-(BARR2-Pad4)"
+      (pins RR14-2 BARR2-4)
     )
-    (net "Net-(BAR4-Pad3)"
-      (pins R25-2 BAR4-3)
+    (net "Net-(BARR2-Pad3)"
+      (pins RR13-2 BARR2-3)
     )
-    (net "Net-(BAR4-Pad2)"
-      (pins R24-2 BAR4-2)
+    (net "Net-(BARR2-Pad2)"
+      (pins RR12-2 BARR2-2)
     )
-    (net "Net-(BAR4-Pad1)"
-      (pins R23-2 BAR4-1)
+    (net "Net-(BARR2-Pad1)"
+      (pins RR11-2 BARR2-1)
+    )
+    (net "Net-(D1-Pad2)"
+      (pins pLED1-1 terminal-5 LED1-2)
     )
     (net "Net-(D1-Pad1)"
-      (pins R21-2 D1-1)
+      (pins RLED1-2 LED1-1)
+    )
+    (net "Net-(D2-Pad2)"
+      (pins pLED2-1 terminal-6 LED2-2)
     )
     (net "Net-(D2-Pad1)"
-      (pins R22-2 D2-1)
+      (pins RRLED2-2 LED2-1)
     )
     (net "Net-(J1-Pad10)"
-      (pins U2-29 J1-10)
+      (pins "Left teensy"-29 terminal-10)
     )
     (net "Net-(J1-Pad9)"
-      (pins U2-28 J1-9)
+      (pins "Left teensy"-28 terminal-9)
     )
     (net "Net-(J1-Pad8)"
-      (pins U1-29 J1-8)
+      (pins "Right teensy"-29 terminal-8)
     )
     (net "Net-(J1-Pad7)"
-      (pins U1-28 J1-7)
-    )
-    (net "Net-(J1-Pad6)"
-      (pins R22-1 led2-1 J1-6)
-    )
-    (net "Net-(J1-Pad5)"
-      (pins R21-1 led1-1 J1-5)
+      (pins "Right teensy"-28 terminal-7)
     )
     (net "Net-(J1-Pad4)"
-      (pins U2-30 lefttrigger1-1 J1-4)
+      (pins "Left teensy"-30 Tleft-1 terminal-4)
     )
     (net "Net-(J1-Pad3)"
-      (pins U1-30 righttrigger1-1 J1-3)
+      (pins "Right teensy"-30 Tright-1 terminal-3)
     )
-    (net "Net-(R1-Pad1)"
-      (pins U1-12 R1-1)
+    (net "Net-(RL1-Pad1)"
+      (pins "Left teensy"-2 RL1-1)
     )
-    (net "Net-(R2-Pad1)"
-      (pins U1-13 R2-1)
+    (net "Net-(RL2-Pad1)"
+      (pins "Left teensy"-3 RL2-1)
     )
-    (net "Net-(R3-Pad1)"
-      (pins U1-14 R3-1)
+    (net "Net-(RL3-Pad1)"
+      (pins "Left teensy"-4 RL3-1)
     )
-    (net "Net-(R4-Pad1)"
-      (pins U1-20 R4-1)
+    (net "Net-(RL4-Pad1)"
+      (pins "Left teensy"-5 RL4-1)
     )
-    (net "Net-(R5-Pad1)"
-      (pins U1-21 R5-1)
+    (net "Net-(RL5-Pad1)"
+      (pins "Left teensy"-6 RL5-1)
     )
-    (net "Net-(R6-Pad1)"
-      (pins U1-22 R6-1)
+    (net "Net-(RL6-Pad1)"
+      (pins "Left teensy"-7 RL6-1)
     )
-    (net "Net-(R7-Pad1)"
-      (pins U1-23 R7-1)
+    (net "Net-(RL7-Pad1)"
+      (pins "Left teensy"-8 RL7-1)
     )
-    (net "Net-(R8-Pad1)"
-      (pins U1-24 R8-1)
+    (net "Net-(RL8-Pad1)"
+      (pins "Left teensy"-9 RL8-1)
     )
-    (net "Net-(R9-Pad1)"
-      (pins U1-25 R9-1)
+    (net "Net-(RL9-Pad1)"
+      (pins "Left teensy"-10 RL9-1)
     )
-    (net "Net-(R10-Pad1)"
-      (pins U1-26 R10-1)
+    (net "Net-(RL10-Pad1)"
+      (pins "Left teensy"-11 RL10-1)
     )
-    (net "Net-(R11-Pad1)"
-      (pins U1-2 R11-1)
+    (net "Net-(RL12-Pad1)"
+      (pins "Left teensy"-13 RL12-1)
     )
-    (net "Net-(R12-Pad1)"
-      (pins U1-3 R12-1)
+    (net "Net-(RL13-Pad1)"
+      (pins "Left teensy"-14 RL13-1)
     )
-    (net "Net-(R13-Pad1)"
-      (pins U1-4 R13-1)
+    (net "Net-(RL14-Pad1)"
+      (pins "Left teensy"-20 RL14-1)
     )
-    (net "Net-(R14-Pad1)"
-      (pins U1-5 R14-1)
+    (net "Net-(RL15-Pad1)"
+      (pins "Left teensy"-21 RL15-1)
     )
-    (net "Net-(R15-Pad1)"
-      (pins U1-6 R15-1)
+    (net "Net-(RL16-Pad1)"
+      (pins "Left teensy"-22 RL16-1)
     )
-    (net "Net-(R16-Pad1)"
-      (pins U1-7 R16-1)
+    (net "Net-(RL17-Pad1)"
+      (pins "Left teensy"-23 RL17-1)
     )
-    (net "Net-(R17-Pad1)"
-      (pins U1-8 R17-1)
+    (net "Net-(RL18-Pad1)"
+      (pins "Left teensy"-24 RL18-1)
     )
-    (net "Net-(R18-Pad1)"
-      (pins U1-9 R18-1)
+    (net "Net-(RL19-Pad1)"
+      (pins "Left teensy"-25 RL19-1)
     )
-    (net "Net-(R19-Pad1)"
-      (pins U1-10 R19-1)
+    (net "Net-(RL20-Pad1)"
+      (pins "Left teensy"-26 RL20-1)
     )
-    (net "Net-(R20-Pad1)"
-      (pins U1-11 R20-1)
+    (net "Net-(RR1-Pad1)"
+      (pins "Right teensy"-2 RR1-1)
     )
-    (net "Net-(R23-Pad1)"
-      (pins U2-11 R23-1)
+    (net "Net-(RR2-Pad1)"
+      (pins "Right teensy"-3 RR2-1)
     )
-    (net "Net-(R24-Pad1)"
-      (pins U2-10 R24-1)
+    (net "Net-(RR3-Pad1)"
+      (pins "Right teensy"-4 RR3-1)
     )
-    (net "Net-(R25-Pad1)"
-      (pins U2-9 R25-1)
+    (net "Net-(RR4-Pad1)"
+      (pins "Right teensy"-5 RR4-1)
     )
-    (net "Net-(R26-Pad1)"
-      (pins U2-8 R26-1)
+    (net "Net-(RR5-Pad1)"
+      (pins "Right teensy"-6 RR5-1)
     )
-    (net "Net-(R27-Pad1)"
-      (pins U2-7 R27-1)
+    (net "Net-(RR6-Pad1)"
+      (pins "Right teensy"-7 RR6-1)
     )
-    (net "Net-(R28-Pad1)"
-      (pins U2-6 R28-1)
+    (net "Net-(RR7-Pad1)"
+      (pins "Right teensy"-8 RR7-1)
     )
-    (net "Net-(R29-Pad1)"
-      (pins U2-5 R29-1)
+    (net "Net-(RR8-Pad1)"
+      (pins "Right teensy"-9 RR8-1)
     )
-    (net "Net-(R30-Pad1)"
-      (pins U2-4 R30-1)
+    (net "Net-(RR9-Pad1)"
+      (pins "Right teensy"-10 RR9-1)
     )
-    (net "Net-(R31-Pad1)"
-      (pins U2-3 R31-1)
+    (net "Net-(RR10-Pad1)"
+      (pins "Right teensy"-11 RR10-1)
     )
-    (net "Net-(R32-Pad1)"
-      (pins U2-2 R32-1)
+    (net "Net-(RR11-Pad1)"
+      (pins "Right teensy"-12 RR11-1)
     )
-    (net "Net-(R33-Pad1)"
-      (pins U2-26 R33-1)
+    (net "Net-(RR12-Pad1)"
+      (pins "Right teensy"-13 RR12-1)
     )
-    (net "Net-(R34-Pad1)"
-      (pins U2-25 R34-1)
+    (net "Net-(RR13-Pad1)"
+      (pins "Right teensy"-14 RR13-1)
     )
-    (net "Net-(R35-Pad1)"
-      (pins U2-24 R35-1)
+    (net "Net-(RR14-Pad1)"
+      (pins "Right teensy"-20 RR14-1)
     )
-    (net "Net-(R36-Pad1)"
-      (pins U2-23 R36-1)
-    )
-    (net "Net-(R37-Pad1)"
-      (pins U2-22 R37-1)
-    )
-    (net "Net-(R38-Pad1)"
-      (pins U2-21 R38-1)
-    )
-    (net "Net-(R39-Pad1)"
-      (pins U2-20 R39-1)
-    )
-    (net "Net-(R40-Pad1)"
-      (pins U2-14 R40-1)
-    )
-    (net "Net-(R41-Pad1)"
-      (pins U2-13 R41-1)
-    )
-    (net "Net-(R42-Pad1)"
-      (pins U2-12 R42-1)
-    )
-    (net "Net-(U1-Pad37)"
-      (pins U1-37)
-    )
-    (net "Net-(U1-Pad36)"
-      (pins U1-36)
-    )
-    (net "Net-(U1-Pad35)"
-      (pins U1-35)
-    )
-    (net "Net-(U1-Pad34)"
-      (pins U1-34)
-    )
-    (net "Net-(U1-Pad32)"
-      (pins U1-32)
-    )
-    (net "Net-(U1-Pad31)"
-      (pins U1-31)
-    )
-    (net "Net-(U1-Pad27)"
-      (pins U1-27)
-    )
-    (net "Net-(U1-Pad15)"
-      (pins U1-15)
-    )
-    (net "Net-(U1-Pad16)"
-      (pins U1-16)
-    )
-    (net "Net-(U1-Pad19)"
-      (pins U1-19)
-    )
-    (net "Net-(U1-Pad18)"
-      (pins U1-18)
-    )
-    (net "Net-(U1-Pad17)"
-      (pins U1-17)
-    )
-    (net "Net-(U2-Pad37)"
-      (pins U2-37)
-    )
-    (net "Net-(U2-Pad36)"
-      (pins U2-36)
-    )
-    (net "Net-(U2-Pad35)"
-      (pins U2-35)
-    )
-    (net "Net-(U2-Pad34)"
-      (pins U2-34)
-    )
-    (net "Net-(U2-Pad32)"
-      (pins U2-32)
-    )
-    (net "Net-(U2-Pad31)"
-      (pins U2-31)
-    )
-    (net "Net-(U2-Pad27)"
-      (pins U2-27)
-    )
-    (net "Net-(U2-Pad15)"
-      (pins U2-15)
-    )
-    (net "Net-(U2-Pad16)"
-      (pins U2-16)
-    )
-    (net "Net-(U2-Pad19)"
-      (pins U2-19)
-    )
-    (net "Net-(U2-Pad18)"
-      (pins U2-18)
-    )
-    (net "Net-(U2-Pad17)"
-      (pins U2-17)
-    )
-    (class kicad_default "" +5V GND "Net-(BAR1-Pad1)" "Net-(BAR1-Pad10)" "Net-(BAR1-Pad2)"
-      "Net-(BAR1-Pad3)" "Net-(BAR1-Pad4)" "Net-(BAR1-Pad5)" "Net-(BAR1-Pad6)"
-      "Net-(BAR1-Pad7)" "Net-(BAR1-Pad8)" "Net-(BAR1-Pad9)" "Net-(BAR2-Pad1)"
-      "Net-(BAR2-Pad10)" "Net-(BAR2-Pad2)" "Net-(BAR2-Pad3)" "Net-(BAR2-Pad4)"
-      "Net-(BAR2-Pad5)" "Net-(BAR2-Pad6)" "Net-(BAR2-Pad7)" "Net-(BAR2-Pad8)"
-      "Net-(BAR2-Pad9)" "Net-(BAR3-Pad1)" "Net-(BAR3-Pad10)" "Net-(BAR3-Pad2)"
-      "Net-(BAR3-Pad3)" "Net-(BAR3-Pad4)" "Net-(BAR3-Pad5)" "Net-(BAR3-Pad6)"
-      "Net-(BAR3-Pad7)" "Net-(BAR3-Pad8)" "Net-(BAR3-Pad9)" "Net-(BAR4-Pad1)"
-      "Net-(BAR4-Pad10)" "Net-(BAR4-Pad2)" "Net-(BAR4-Pad3)" "Net-(BAR4-Pad4)"
-      "Net-(BAR4-Pad5)" "Net-(BAR4-Pad6)" "Net-(BAR4-Pad7)" "Net-(BAR4-Pad8)"
-      "Net-(BAR4-Pad9)" "Net-(D1-Pad1)" "Net-(D2-Pad1)" "Net-(J1-Pad10)" "Net-(J1-Pad3)"
-      "Net-(J1-Pad4)" "Net-(J1-Pad5)" "Net-(J1-Pad6)" "Net-(J1-Pad7)" "Net-(J1-Pad8)"
-      "Net-(J1-Pad9)" "Net-(R1-Pad1)" "Net-(R10-Pad1)" "Net-(R11-Pad1)" "Net-(R12-Pad1)"
-      "Net-(R13-Pad1)" "Net-(R14-Pad1)" "Net-(R15-Pad1)" "Net-(R16-Pad1)"
-      "Net-(R17-Pad1)" "Net-(R18-Pad1)" "Net-(R19-Pad1)" "Net-(R2-Pad1)" "Net-(R20-Pad1)"
-      "Net-(R23-Pad1)" "Net-(R24-Pad1)" "Net-(R25-Pad1)" "Net-(R26-Pad1)"
-      "Net-(R27-Pad1)" "Net-(R28-Pad1)" "Net-(R29-Pad1)" "Net-(R3-Pad1)" "Net-(R30-Pad1)"
-      "Net-(R31-Pad1)" "Net-(R32-Pad1)" "Net-(R33-Pad1)" "Net-(R34-Pad1)"
-      "Net-(R35-Pad1)" "Net-(R36-Pad1)" "Net-(R37-Pad1)" "Net-(R38-Pad1)"
-      "Net-(R39-Pad1)" "Net-(R4-Pad1)" "Net-(R40-Pad1)" "Net-(R41-Pad1)" "Net-(R42-Pad1)"
-      "Net-(R5-Pad1)" "Net-(R6-Pad1)" "Net-(R7-Pad1)" "Net-(R8-Pad1)" "Net-(R9-Pad1)"
-      "Net-(U1-Pad15)" "Net-(U1-Pad16)" "Net-(U1-Pad17)" "Net-(U1-Pad18)"
-      "Net-(U1-Pad19)" "Net-(U1-Pad27)" "Net-(U1-Pad31)" "Net-(U1-Pad32)"
-      "Net-(U1-Pad34)" "Net-(U1-Pad35)" "Net-(U1-Pad36)" "Net-(U1-Pad37)"
-      "Net-(U2-Pad15)" "Net-(U2-Pad16)" "Net-(U2-Pad17)" "Net-(U2-Pad18)"
-      "Net-(U2-Pad19)" "Net-(U2-Pad27)" "Net-(U2-Pad31)" "Net-(U2-Pad32)"
-      "Net-(U2-Pad34)" "Net-(U2-Pad35)" "Net-(U2-Pad36)" "Net-(U2-Pad37)"
+    (net "Net-(RR15-Pad1)"
+      (pins "Right teensy"-21 RR15-1)
+    )
+    (net "Net-(RR16-Pad1)"
+      (pins "Right teensy"-22 RR16-1)
+    )
+    (net "Net-(RR17-Pad1)"
+      (pins "Right teensy"-23 RR17-1)
+    )
+    (net "Net-(RR18-Pad1)"
+      (pins "Right teensy"-24 RR18-1)
+    )
+    (net "Net-(RR19-Pad1)"
+      (pins "Right teensy"-25 RR19-1)
+    )
+    (net "Net-(RR20-Pad1)"
+      (pins "Right teensy"-26 RR20-1)
+    )
+    (net "Net-(RRL11-Pad1)"
+      (pins "Left teensy"-12 RL11-1)
+    )
+    (class kicad_default "" +5V GND "Net-(BARL1-Pad1)" "Net-(BARL1-Pad10)"
+      "Net-(BARL1-Pad2)" "Net-(BARL1-Pad3)" "Net-(BARL1-Pad4)" "Net-(BARL1-Pad5)"
+      "Net-(BARL1-Pad6)" "Net-(BARL1-Pad7)" "Net-(BARL1-Pad8)" "Net-(BARL1-Pad9)"
+      "Net-(BARL2-Pad1)" "Net-(BARL2-Pad10)" "Net-(BARL2-Pad2)" "Net-(BARL2-Pad3)"
+      "Net-(BARL2-Pad4)" "Net-(BARL2-Pad5)" "Net-(BARL2-Pad6)" "Net-(BARL2-Pad7)"
+      "Net-(BARL2-Pad8)" "Net-(BARL2-Pad9)" "Net-(BARR1-Pad1)" "Net-(BARR1-Pad10)"
+      "Net-(BARR1-Pad2)" "Net-(BARR1-Pad3)" "Net-(BARR1-Pad4)" "Net-(BARR1-Pad5)"
+      "Net-(BARR1-Pad6)" "Net-(BARR1-Pad7)" "Net-(BARR1-Pad8)" "Net-(BARR1-Pad9)"
+      "Net-(BARR2-Pad1)" "Net-(BARR2-Pad10)" "Net-(BARR2-Pad2)" "Net-(BARR2-Pad3)"
+      "Net-(BARR2-Pad4)" "Net-(BARR2-Pad5)" "Net-(BARR2-Pad6)" "Net-(BARR2-Pad7)"
+      "Net-(BARR2-Pad8)" "Net-(BARR2-Pad9)" "Net-(D1-Pad1)" "Net-(D1-Pad2)"
+      "Net-(D2-Pad1)" "Net-(D2-Pad2)" "Net-(J1-Pad10)" "Net-(J1-Pad3)" "Net-(J1-Pad4)"
+      "Net-(J1-Pad7)" "Net-(J1-Pad8)" "Net-(J1-Pad9)" "Net-(RL1-Pad1)" "Net-(RL10-Pad1)"
+      "Net-(RL12-Pad1)" "Net-(RL13-Pad1)" "Net-(RL14-Pad1)" "Net-(RL15-Pad1)"
+      "Net-(RL16-Pad1)" "Net-(RL17-Pad1)" "Net-(RL18-Pad1)" "Net-(RL19-Pad1)"
+      "Net-(RL2-Pad1)" "Net-(RL20-Pad1)" "Net-(RL3-Pad1)" "Net-(RL4-Pad1)"
+      "Net-(RL5-Pad1)" "Net-(RL6-Pad1)" "Net-(RL7-Pad1)" "Net-(RL8-Pad1)"
+      "Net-(RL9-Pad1)" "Net-(RR1-Pad1)" "Net-(RR10-Pad1)" "Net-(RR11-Pad1)"
+      "Net-(RR12-Pad1)" "Net-(RR13-Pad1)" "Net-(RR14-Pad1)" "Net-(RR15-Pad1)"
+      "Net-(RR16-Pad1)" "Net-(RR17-Pad1)" "Net-(RR18-Pad1)" "Net-(RR19-Pad1)"
+      "Net-(RR2-Pad1)" "Net-(RR20-Pad1)" "Net-(RR3-Pad1)" "Net-(RR4-Pad1)"
+      "Net-(RR5-Pad1)" "Net-(RR6-Pad1)" "Net-(RR7-Pad1)" "Net-(RR8-Pad1)"
+      "Net-(RR9-Pad1)" "Net-(RRL11-Pad1)"
       (circuit
         (use_via Via[0-1]_800:400_um)
       )
