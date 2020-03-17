@@ -179,10 +179,19 @@ BpodSystem.Data.cTrial = 1; BpodSystem.Data.Rewarded = logical([]); %needed for 
 dataPath(1:2) = S.videoDrive; %switch HDD with current selection
 if ~exist(dataPath,'dir') 
     try
-        mkdir(dataPath); 
+        mkdir(dataPath);
     catch
-        disp(['Could not create ',dataPath])
-        dataPath = uigetdir(pwd,'Select video folder');
+        ret = {}; %for drive letters
+        for i = double('c') : double('z')
+            if exist(['' i ':\'], 'dir') == 7
+                ret{end+1} = [i ':'];
+            end
+        end
+        [a,b] = listdlg('ListString', ret, 'PromptString', ['Change video drive letter.']);
+        if ~b; a = 1; end
+        dataPath(1:2) = ret{a};
+        S.videoDrive = dataPath(1:2); %update settings
+        BpodSystem.ProtocolSettings.videoDrive = dataPath(1:2); %update settings
     end
 end
 
@@ -192,7 +201,6 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     BpodSystem.GUIHandles.SpatialSparrow_Control = SpatialSparrow_Control; %get handle for control GUI
     BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'init',TrialSidesList,60'}); %initiate control GUI and show outcome plot for the next 60 trials
     BpodSystem.Data.animalWeight = str2double(newid('Enter animal weight (in grams)')); %ask for animal weight and save
-    
     
     %start bonsai
     if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
@@ -1312,11 +1320,15 @@ try
     pause(6);
     
     % Bring Bonsai to foreground
-    hndlWScript.AppActivate('Bonsai');
+    check = hndlWScript.AppActivate('Bonsai');
     % Send F5-hotkey to start workflow
-    hndlWScript.SendKeys('{F5}');
-    fprintf('Starting workflow...\n');
-    pause(1);
+    if check
+        hndlWScript.SendKeys('{F5}');
+        fprintf('Starting workflow...\n');
+        pause(1);
+    else
+        error('Could not bring Bonsay to foreground.');
+    end
     
 catch ME
     returnValue = 'Error';
@@ -1379,22 +1391,27 @@ try
     % Wait a bit
     pause(0.5);
     
-    % Bring Bonsai to foreground
-    hndlWScript.AppActivate('Bonsai');
+    % Bring Bonsai to foreground and check if appActivate was succesful
+    check = hndlWScript.AppActivate('Bonsai');
     
-    % Send hotkey to stop workflow
-    hndlWScript.SendKeys('+{F5}');
-    fprintf('Stopping workflow...\n');
-    
-    % Wait a bit
-    pause(0.5);
-    
-    % Bring Bonsai to foreground again
-    hndlWScript.AppActivate('Bonsai');
-    
-    % Send hotkey to close Bonsai
-    hndlWScript.SendKeys('%{F4}');
-    fprintf('Closing Bonsai...\n');
+    if check
+        % Send hotkey to stop workflow
+        hndlWScript.SendKeys('+{F5}');
+        fprintf('Stopping workflow...\n');
+        
+        % Wait a bit
+        pause(0.5);
+        
+        % Bring Bonsai to foreground again
+        hndlWScript.AppActivate('Bonsai');
+        
+        % Send hotkey to close Bonsai
+        hndlWScript.SendKeys('%{F4}');
+        fprintf('Closing Bonsai...\n');
+        
+    else
+        fprintf('Bonsai was not found. Shutdown skipped.\n');
+    end
     
 catch ME
     returnValue = 'Error';
