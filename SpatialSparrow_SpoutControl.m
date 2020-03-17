@@ -22,7 +22,7 @@ function varargout = SpatialSparrow_SpoutControl(varargin)
 
 % Edit the above text to modify the response to help SpatialSparrow_SpoutControl
 
-% Last Modified by GUIDE v2.5 10-Mar-2020 13:23:49
+% Last Modified by GUIDE v2.5 17-Mar-2020 11:18:33
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -780,3 +780,22 @@ function decreaseLeverR_Callback(hObject, eventdata, handles)
 teensyWrite(87); % move to zero position 
 
 
+% --- Executes on button press in GiveWater.
+function GiveWater_Callback(hObject, eventdata, handles)
+% hObject    handle to GiveWater (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+global BpodSystem
+duration = BpodSystem.ProtocolSettings.leftRewardVolume/1000.; % give water for the regular time
+smavalve = NewStateMachine;
+
+smavalve = AddState(smavalve, 'Name', 'GiveReward', ...
+    'Timer', duration,...
+    'StateChangeConditions', {'Tup', '>exit'},...
+    'OutputActions', {'ValveState', 3}); % Use 3 for valve 1 and 2 (1100) 5 for (1010)
+
+SendStateMachine(smavalve)
+
+RunStateMachine()
+        

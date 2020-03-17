@@ -289,10 +289,6 @@ for iTrials = 1:maxTrials
         sRate = BpodSystem.ProtocolSettings.sRate;
         if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
             oscsend(udpObj,udpPath,'i',iTrials) % send current trialnr to bonsai
-        elseif isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
-            if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
-                fwrite(udpObj,sprintf('log=trial:%d',iTrials))
-            end
         end
         %% create sounds - recreate if loudness has changed
         if iTrials == 1 || PrevStimLoudness ~= S.StimLoudness
@@ -1032,10 +1028,23 @@ for iTrials = 1:maxTrials
             pause(0.01);
             BpodSystem.Data.weirdBytes = true;
         end
+        % set the frame number just before starting
+        if isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
+            if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
+                fwrite(udpObj,sprintf('log=trial_start:%d',iTrials))
+            end
+        end
         
         %% run bpod and save data after trial is finished
+        
         RawEvents = RunStateMachine; % Send and run state matrix
-
+        
+        % set the frame number just after starting
+        if isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
+            if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
+                fwrite(udpObj,sprintf('log=trial_end:%d',iTrials))
+            end
+        end
         % Save events and data
         if length(fieldnames(RawEvents)) > 1
             
