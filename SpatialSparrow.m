@@ -118,7 +118,24 @@ serverPath = [S.serverPath filesep BpodSystem.ProtocolSettings.SubjectName files
     BpodSystem.GUIData.ProtocolName filesep 'Session Data']; %path to data server
 BpodSystem.Data.byteLoss = 0; %counter for cases when the teensy didn't send a response byte
 
-%% ensure teensy and analog modules are present and set up communication
+%% ensure teensy, I2C, and analog modules are present and set up communication
+if ~isempty(find(contains(BpodSystem.Modules.Name,'I2C1'))) % check to see if this system has an I2C 
+    if isfield(BpodSystem.ModuleUSB, 'I2C1')
+        i2c= I2CMessenger(BpodSystem.ModuleUSB.I2C1);
+    else
+        error('Error: Please pair the I2C module with its USB port in the Bpod Console');
+    end
+ 
+    if isempty(i2c)
+        warning('Could not connect to I2C Messager. Session aborted.');
+        BpodSystem.Status.BeingUsed = 0;
+    else
+        i2c.SlaveAddress = 1; % Slave ID must match scanimage!!!
+        i2c.Mode = 'Message';
+    end
+end
+
+
 try
     W = BpodWavePlayer(S.wavePort); %check if analog module com port is correct
 catch
@@ -874,12 +891,25 @@ for iTrials = 1:maxTrials
         BpodSystem.StopModuleRelay('TouchShaker1'); % Stop relaying bytes from teensy to allow communication with state machine
 
         %% Build state matrix
+        % prepare I2C messages to ScanImage
+        if exist('i2c','var') % does this have I2C communication to scanimage?
+            i2c.setMessage(34, int2str(iTrials), 1); % message#, message, slaveAddress (This should be 1, set on scanimage)
+            i2c.setMessage(35, 'S', 1); % message#, message, slaveAddress (This should be 1, set on scanimage)
+        end
+        
         sma = NewStateMatrix();
         
-        sma = AddState(sma, 'Name', 'TrialStart', ... %trigger to signal trialstart to attached hardware. Only works when using 'WaitForCam'.
-            'Timer', S.WaitForCam, ...
-            'StateChangeConditions', {CamTrig,'TriggerDowntime','Tup','TriggerDowntime'},... %wait for imager before producing barcode sequence
-            'OutputActions', {'BNCState',1}); % BNC 1 is high, all others are low
+        if exist('i2c','var') % does this have I2C communication to scanimage?
+            sma = AddState(sma, 'Name', 'TrialStart', ... %trigger to signal trialstart to attached hardware. Only works when using 'WaitForCam'.
+                'Timer', S.WaitForCam, ...
+                'StateChangeConditions', {CamTrig,'TriggerDowntime','Tup','TriggerDowntime'},... %wait for imager before producing barcode sequence
+                'OutputActions', {'BNCState',1,'I2C1', [1 34]}); % BNC 1 is high, all others are low, sends message to scan image
+        else
+            sma = AddState(sma, 'Name', 'TrialStart', ... %trigger to signal trialstart to attached hardware. Only works when using 'WaitForCam'.
+                'Timer', S.WaitForCam, ...
+                'StateChangeConditions', {CamTrig,'TriggerDowntime','Tup','TriggerDowntime'},... %wait for imager before producing barcode sequence
+                'OutputActions', {'BNCState',1}); % BNC 1 is high, all others are low
+        end
         
         sma = AddState(sma, 'Name', 'TriggerDowntime', ... %give a 50ms downtime of the trigger before sending the barcode. Might help with to ensure that data is correctly recorded.
             'Timer', 0.05, ...
@@ -954,10 +984,17 @@ for iTrials = 1:maxTrials
             'StateChangeConditions', {CamTrig,'PlayStimulus','Tup','PlayStimulus'},... %start stimulus presentation
             'OutputActions', {});
         
-        sma = AddState(sma, 'Name', 'PlayStimulus', ... %present stimulus for the set stimulus duration.
+        if exist('i2c','var') % does this have I2C communication to scanimage?
+            sma = AddState(sma, 'Name', 'PlayStimulus', ... %present stimulus for the set stimulus duration.
+                'Timer', waitDur, ... %waitDur is the duration the animal has to wait before moving to next state
+                'StateChangeConditions', {'Tup','DecisionWait'},...
+                'OutputActions', {'WavePlayer1',['P' 0], 'TouchShaker1', 77, 'I2C1',[1,35]}); %start stimulus presentation + stimulus trigger, sends I2C message to scanimage
+        else
+            sma = AddState(sma, 'Name', 'PlayStimulus', ... %present stimulus for the set stimulus duration.
             'Timer', waitDur, ... %waitDur is the duration the animal has to wait before moving to next state
             'StateChangeConditions', {'Tup','DecisionWait'},...
             'OutputActions', {'WavePlayer1',['P' 0], 'TouchShaker1', 77}); %start stimulus presentation + stimulus trigger
+        end
         
         sma = AddState(sma, 'Name', 'DecisionWait', ... %Add gap after stimulus presentation
             'Timer', cDecisionGap, ...
