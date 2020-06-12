@@ -1038,7 +1038,6 @@ for iTrials = 1:maxTrials
         %% run bpod and save data after trial is finished
         
         RawEvents = RunStateMachine; % Send and run state matrix
-        
         % set the frame number just after starting
         if isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
             if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)

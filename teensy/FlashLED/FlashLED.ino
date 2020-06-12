@@ -1,4 +1,4 @@
-// Code to control a single bar matrix displays for behavioral stimulation.
+                    // Code to control a single bar matrix displays for behavioral stimulation.
 // Generates a sequence of digital output signals to generate sweeping visual motion. Alternatively, the whole panel is triggered.
 // Inputs are digital sequences of 0.1ms duration per pulse. Each sequence should consist of up to 5bits (0.5ms in toal).
 // A single high or any unknown sequence deactivates the panel.
