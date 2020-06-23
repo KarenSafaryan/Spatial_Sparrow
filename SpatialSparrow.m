@@ -863,44 +863,49 @@ for iTrials = 1:maxTrials
 
         %% Build state matrix
         sma = NewStateMatrix();
-        
+        sma = AddState(sma, 'Name', 'Sync', ... %trigger to signal trialstart to attached hardware. Only works when using 'WaitForCam'.
+            'Timer', 0.1, ...
+            'StateChangeConditions', {'Tup','TrialStart'},... %            'StateChangeConditions', {CamTrig,'TriggerDowntime','Tup','TriggerDowntime'},... %wait for imager before producing barcode sequence
+            'OutputActions', {'BNCState',1}); % BNC 1 is high, all others are low
         sma = AddState(sma, 'Name', 'TrialStart', ... %trigger to signal trialstart to attached hardware. Only works when using 'WaitForCam'.
             'Timer', S.WaitForCam, ...
-            'StateChangeConditions', {CamTrig,'TriggerDowntime','Tup','TriggerDowntime'},... %wait for imager before producing barcode sequence
+            'StateChangeConditions', {CamTrig,'CheckForLever'},... %            'StateChangeConditions', {CamTrig,'TriggerDowntime','Tup','TriggerDowntime'},... %wait for imager before producing barcode sequence
             'OutputActions', {'BNCState',1}); % BNC 1 is high, all others are low
         
-        sma = AddState(sma, 'Name', 'TriggerDowntime', ... %give a 50ms downtime of the trigger before sending the barcode. Might help with to ensure that data is correctly recorded.
-            'Timer', 0.05, ...
-            'StateChangeConditions', {'Tup','trialCode1'},...
-            'OutputActions', {'TouchShaker1', 78}); % all outpouts are low but make teensy send a trial-onset trigger
-        
-        % generate barcode to identify trialNr on adjacent hardware
-        Cnt = 0;
-        code = encode2of5(iTrials);
-        codeModuleDurs = [0.0025 0.0055]; %Durations for each module of the trial code sent over the TTL line
-        
-        for iCode = 1:size(code,2)
-            Cnt = Cnt+1;
-            stateName = ['trialCode' num2str(Cnt)];
-            nextState = [stateName 'Low'];
-            
-            sma = AddState(sma, 'Name', stateName, ... %produce high state
-                'Timer', codeModuleDurs(code(1,iCode)), ...
-                'StateChangeConditions', {'Tup',nextState},... %move to next low state
-                'OutputActions',{'BNCState',1}); %send output to BNC1 to send barcode to adjacent hardware
-            
-            stateName = nextState;
-            if iCode == size(code,2)
-                nextState = 'CheckForLever';
-            else
-                nextState = ['trialCode' num2str(Cnt + 1)];
-            end
-            
-            sma = AddState(sma, 'Name', stateName, ... %produce low state
-                'Timer', codeModuleDurs(code(2, iCode)), ...
-                'StateChangeConditions', {'Tup',nextState},... %move to next low state
-                'OutputActions',{});
-        end
+% generate barcode to identify trialNr on adjacent hardware
+% No need to send codes, not used anywhere, better to send a rise
+% when trial starts
+%         sma = AddState(sma, 'Name', 'TriggerDowntime', ... %give a 50ms downtime of the trigger before sending the barcode. Might help with to ensure that data is correctly recorded.
+%             'Timer', 0.05, ...
+%             'StateChangeConditions', {'Tup','trialCode1'},...
+%             'OutputActions', {'TouchShaker1', 78}); % all outpouts are low but make teensy send a trial-onset trigger
+%         Cnt = 0;
+%         
+%         code = encode2of5(iTrials);
+%         codeModuleDurs = [0.0025 0.0055]; %Durations for each module of the trial code sent over the TTL line
+%         
+%         for iCode = 1:size(code,2)
+%             Cnt = Cnt+1;
+%             stateName = ['trialCode' num2str(Cnt)];
+%             nextState = [stateName 'Low'];
+%             
+%             sma = AddState(sma, 'Name', stateName, ... %produce high state
+%                 'Timer', codeModuleDurs(code(1,iCode)), ...
+%                 'StateChangeConditions', {'Tup',nextState},... %move to next low state
+%                 'OutputActions',{'BNCState',1}); %send output to BNC1 to send barcode to adjacent hardware
+%             
+%             stateName = nextState;
+%             if iCode == size(code,2)
+%                 nextState = 'CheckForLever';
+%             else
+%                 nextState = ['trialCode' num2str(Cnt + 1)];
+%             end
+%             
+%             sma = AddState(sma, 'Name', stateName, ... %produce low state
+%                 'Timer', codeModuleDurs(code(2, iCode)), ...
+%                 'StateChangeConditions', {'Tup',nextState},... %move to next low state
+%                 'OutputActions',{});
+%         end
         
         sma = AddState(sma, 'Name', 'CheckForLever', ... %check if lever is part of the paradigm
             'Timer', 0, ...
@@ -1000,7 +1005,7 @@ for iTrials = 1:maxTrials
         sma = AddState(sma, 'Name', 'StopStim', ... %move to next trials after a randomly varying waiting period.
             'Timer', 1, ...
             'StateChangeConditions', {'Tup', 'exit', 'TouchShaker1_14','exit'}, ...
-            'OutputActions', {'WavePlayer1','X', 'TouchShaker1', 105});  %make sure all stimuli are off and move handles out
+            'OutputActions', {'WavePlayer1','X', 'TouchShaker1', 105,'BNCState',0});  %make sure all stimuli are off and move handles out
         
         %% send state machine to bpod and create ITI jitter
         SendStateMachine(sma);

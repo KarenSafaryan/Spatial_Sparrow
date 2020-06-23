@@ -1,5 +1,5 @@
 % connect to bpod
-Bpod('COM13')
+Bpod('COM3')
 %%
 global BpodSystem
 BpodSystem.StartModuleRelay('TouchShaker1');
