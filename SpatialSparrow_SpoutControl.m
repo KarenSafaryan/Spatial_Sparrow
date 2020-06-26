@@ -818,8 +818,8 @@ function widefieldTrigger_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of widefieldTrigger
 value = get(hObject,'Value');
+global BpodSystem
 if value
-    global BpodSystem
     BpodSystem.ProtocolSettings.triggerWidefield = 1;
 else
     BpodSystem.ProtocolSettings.triggerWidefield = 0;

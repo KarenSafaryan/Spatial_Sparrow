@@ -272,7 +272,7 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
 end
 
-if BpodSystem.ProtocolSettings.triggerWidefield == 1
+if BpodSystem.ProtocolSettings.triggerWidefield
     if isfield(BpodSystem.ProtocolSettings,'labcamsWidefield')
         if ~isempty(BpodSystem.ProtocolSettings.labcamsWidefield)
             tmp = strsplit(BpodSystem.ProtocolSettings.labcamsWidefield,':');
@@ -282,22 +282,22 @@ if BpodSystem.ProtocolSettings.triggerWidefield == 1
             fopen(udpWF);
             % check if labcams WIDEFIELD is connected already.
             fwrite(udpWF,'ping');
-            if udpWF.BytesAvailable
-                fgetl(udpWF);
-                disp(' -> WIDEFIELD labcams connected.');
-                fwrite(udpWF,'manualsave=0')
-                fgetl(udpWF)
-                fwrite(udpWF,'softtrigger=0')
-                fgetl(udpWF)
-                fwrite(udpWF,['expname=' BpodSystem.ProtocolSettings.SubjectName filesep 'onephoton' filesep bhvFile])
-                fgetl(udpWF)
-        else
-            disp(' -> WIDEFIELD labcams not connected.');
-            clear udpWF
-            end
+            fgetl(udpWF);
+            fwrite(udpWF,'manualsave=0')
+            fgetl(udpWF)
+            fwrite(udpWF,'softtrigger=0')
+            fgetl(udpWF)
+            fwrite(udpWF,['expname=' BpodSystem.ProtocolSettings.SubjectName filesep 'onephoton' filesep bhvFile])
+            fgetl(udpWF)
+            disp(' -> WIDEFIELD labcams connected.');
+        
+    else
+        disp(' -> WIDEFIELD labcams not connected.');
+        clear udpWF
         end
     end
 end
+
 %% Initialize some arrays
 OutcomeRecord = NaN(1,maxTrials);
 AssistRecord = false(1,maxTrials);
@@ -307,6 +307,7 @@ singleSpoutBias = false; %flag to indicate if single spout was presented to coun
         
 %% Start WF if connected
 if exist('udpWF', 'var')
+    pause(1)
     fwrite(udpWF,'softtrigger=0')
     fgetl(udpWF)
     fwrite(udpWF,'manualsave=1')
@@ -1199,8 +1200,8 @@ for iTrials = 1:maxTrials
                     fwrite(udpObj,sprintf('log=end'));fgetl(udpObj);
                     fwrite(udpObj,sprintf('softtrigger=0'));fgetl(udpObj);
                     fwrite(udpObj,sprintf('manualsave=0'));fgetl(udpObj);
-                    
                     fwrite(udpObj,sprintf('quit=1'))
+                    fclose(udpObj);
                 end
             end
             disp("Done.")
@@ -1209,10 +1210,10 @@ for iTrials = 1:maxTrials
             disp("Error stopping video.")
         end
         if exist('udpWF', 'var')
-        fwrite(udpWF,'softtrigger=0')
-        fgetl(udpWF)
-        fwrite(udpWF,'manualsave=0')
-        close(udpWF)
+            fwrite(udpWF,'softtrigger=0')
+            fgetl(udpWF)
+            fwrite(udpWF,'manualsave=0')
+            fclose(udpWF);
         end
         % check for path to server and save behavior + graph
         if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
