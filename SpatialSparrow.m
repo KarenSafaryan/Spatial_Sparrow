@@ -31,7 +31,7 @@ DefaultSettings.wavePort = 'COM18'; %com port for analog module
 DefaultSettings.TrainingMode = false; %flag if training is being used
 DefaultSettings.labcamsAddress = '127.0.0.1:9999'
 DefaultSettings.labcamsWidefield = '';%'peanutbread.cshl.edu:9998'
-
+DefaultSettings.triggerWidefield = 1; 
 % Spout settings
 DefaultSettings.SpoutSpeed = 25; % Duration of spout movement from start to endpoint when moving in or out (value in ms)
 DefaultSettings.rInnerLim = 1.5; % Servo position to move right spoute close the animal (value between 0 and 100)
@@ -261,31 +261,6 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     end
 end
 
-if isfield(BpodSystem.ProtocolSettings,'labcamsWidefield')
-    if ~isempty(BpodSystem.ProtocolSettings.labcamsWidefield)
-        tmp = strsplit(BpodSystem.ProtocolSettings.labcamsWidefield,':');
-        udpAddress = tmp{1};
-        udpPort = str2num(tmp{2});
-        udpWF = udp(udpAddress,udpPort);
-        fopen(udpWF);
-        % check if labcams WIDEFIELD is connected already.
-        fwrite(udpWF,'ping');
-        if udpWF.BytesAvailable
-            fgetl(udpWF);
-            disp(' -> WIDEFIELD labcams connected.');
-            fwrite(udpWF,'manualsave=0')
-            fgetl(udpWF)
-            fwrite(udpWF,'softtrigger=0')
-            fgetl(udpWF)
-            fwrite(udpWF,['expname=' BpodSystem.ProtocolSettings.SubjectName filesep 'onephoton' filesep bhvFile])
-            fgetl(udpWF)
-    else
-        disp(' -> WIDEFIELD labcams not connected.');
-        clear udpWF
-        end
-    end
-end
-
 
 BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1 = []; %handle needs to exist so code does not crash when trying to close all figures
 if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
@@ -297,6 +272,32 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
 end
 
+if BpodSystem.ProtocolSettings.triggerWidefield
+    if isfield(BpodSystem.ProtocolSettings,'labcamsWidefield')
+        if ~isempty(BpodSystem.ProtocolSettings.labcamsWidefield)
+            tmp = strsplit(BpodSystem.ProtocolSettings.labcamsWidefield,':');
+            udpAddress = tmp{1};
+            udpPort = str2num(tmp{2});
+            udpWF = udp(udpAddress,udpPort);
+            fopen(udpWF);
+            % check if labcams WIDEFIELD is connected already.
+            fwrite(udpWF,'ping');
+            if udpWF.BytesAvailable
+                fgetl(udpWF);
+                disp(' -> WIDEFIELD labcams connected.');
+                fwrite(udpWF,'manualsave=0')
+                fgetl(udpWF)
+                fwrite(udpWF,'softtrigger=0')
+                fgetl(udpWF)
+                fwrite(udpWF,['expname=' BpodSystem.ProtocolSettings.SubjectName filesep 'onephoton' filesep bhvFile])
+                fgetl(udpWF)
+        else
+            disp(' -> WIDEFIELD labcams not connected.');
+            clear udpWF
+            end
+        end
+    end
+    end
 %% Initialize some arrays
 OutcomeRecord = NaN(1,maxTrials);
 AssistRecord = false(1,maxTrials);
