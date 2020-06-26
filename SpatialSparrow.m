@@ -31,7 +31,7 @@ DefaultSettings.wavePort = 'COM18'; %com port for analog module
 DefaultSettings.TrainingMode = false; %flag if training is being used
 DefaultSettings.labcamsAddress = '127.0.0.1:9999'
 DefaultSettings.labcamsWidefield = '';%'peanutbread.cshl.edu:9998'
-DefaultSettings.triggerWidefield = 1; 
+DefaultSettings.triggerWidefield = 0; 
 % Spout settings
 DefaultSettings.SpoutSpeed = 25; % Duration of spout movement from start to endpoint when moving in or out (value in ms)
 DefaultSettings.rInnerLim = 1.5; % Servo position to move right spoute close the animal (value between 0 and 100)
@@ -272,7 +272,7 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
 end
 
-if BpodSystem.ProtocolSettings.triggerWidefield
+if BpodSystem.ProtocolSettings.triggerWidefield == 1
     if isfield(BpodSystem.ProtocolSettings,'labcamsWidefield')
         if ~isempty(BpodSystem.ProtocolSettings.labcamsWidefield)
             tmp = strsplit(BpodSystem.ProtocolSettings.labcamsWidefield,':');
@@ -297,7 +297,7 @@ if BpodSystem.ProtocolSettings.triggerWidefield
             end
         end
     end
-    end
+end
 %% Initialize some arrays
 OutcomeRecord = NaN(1,maxTrials);
 AssistRecord = false(1,maxTrials);
