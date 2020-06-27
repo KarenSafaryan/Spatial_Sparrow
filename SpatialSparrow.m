@@ -276,13 +276,6 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     uiwait(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1); %wait for spout control and clear handle afterwards
     set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
 end
-
-if exist('udplabcams','var')
-    fwrite(udplabcams,'manualsave=0')
-    fgetl(udplabcams);
-    fwrite(udplabcams,'softtrigger=1')
-    fgetl(udplabcams);
-end                
                 
 if BpodSystem.ProtocolSettings.triggerWidefield
     if isfield(BpodSystem.ProtocolSettings,'labcamsWidefield')
@@ -316,7 +309,17 @@ AssistRecord = false(1,maxTrials);
 LastBias = 1; %last trial were bias correction was used
 PrevStimLoudness = S.StimLoudness; %variable to check if loudness has changed
 singleSpoutBias = false; %flag to indicate if single spout was presented to counter bias
-        
+
+%% Start saving labcams if connected
+if exist('udplabcams','var')
+    fwrite(udplabcams,'softtrigger=0')
+    fgetl(udplabcams);
+    fwrite(udplabcams,'manualsave=1')
+    fgetl(udplabcams);
+    fwrite(udplabcams,'softtrigger=1')
+    fgetl(udplabcams);
+end                
+
 %% Start WF if connected
 if exist('udpWF', 'var')
     pause(1)
