@@ -29,7 +29,7 @@ DefaultSettings.bonsaiEXE = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_2_4\Bons
 DefaultSettings.bonsaiParadim = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_workflow\WorkflowTwoCamera_v07.bonsai'; %path to bonsai workflow
 DefaultSettings.wavePort = 'COM18'; %com port for analog module
 DefaultSettings.TrainingMode = false; %flag if training is being used
-DefaultSettings.labcamsAddress = '127.0.0.1:9999'
+DefaultSettings.labcamsAddress = '127.0.0.1:9999';
 DefaultSettings.labcamsWidefield = '';%'peanutbread.cshl.edu:9998'
 DefaultSettings.triggerWidefield = 0; 
 % Spout settings
@@ -182,9 +182,10 @@ dataPath(1:2) = S.videoDrive; %switch HDD with current selection
 if ~exist(dataPath,'dir')
     try
         mkdir(dataPath);
-    catch
+    catch 
         disp(['Could not create ',dataPath])
         dataPath = uigetdir(pwd,'Select video folder');
+        
     end
 end
 
@@ -229,33 +230,37 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
             tmp = strsplit(BpodSystem.ProtocolSettings.labcamsAddress,':');
             udpAddress = tmp{1};
             udpPort = str2num(tmp{2});
-            udpObj = udp(udpAddress,udpPort);
-            fopen(udpObj);
+            udplabcams = udp(udpAddress,udpPort);
+            fopen(udplabcams);
             % check if labcams is connected already.
-            fwrite(udpObj,'ping');
-            if udpObj.BytesAvailable
-                fgetl(udpObj);
+            fwrite(udplabcams,'ping');
+            if udplabcams.BytesAvailable
+                fgetl(udplabcams);
                 disp(' -> labcams connected.');
             else
                 %%
                 disp(' -> starting labcams');
                 labcamsproc=System.Diagnostics.Process.Start('labcams.exe','-w');
                 while true
-                    fwrite(udpObj,'ping')
-                    tmp = fgetl(udpObj);
+                    fwrite(udplabcams,'ping')
+                    tmp = fgetl(udplabcams);
                     if labcamsproc.HasExited
+                        disp('Labcams has exited?')
+                        clear udplabcams
                         break
                     end
                     if ~isempty(tmp)
                         break
                     end
                 end
-                fwrite(udpObj,['expname=' dataPath filesep bhvFile])
-                fgetl(udpObj);
-                fwrite(udpObj,'manualsave=1')
-                fgetl(udpObj);
-                fwrite(udpObj,'softtrigger=1')
-                fgetl(udpObj);
+            end
+            if exist('udplabcams','var')
+                fwrite(udplabcams,['expname=' dataPath filesep bhvFile])
+                fgetl(udplabcams);
+                fwrite(udplabcams,'manualsave=0') % Dont save while adjusting
+                fgetl(udplabcams);
+                fwrite(udplabcams,'softtrigger=1')
+                fgetl(udplabcams);
             end
         end
     end
@@ -272,6 +277,13 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
 end
 
+if exist('udplabcams','var')
+    fwrite(udplabcams,'manualsave=0')
+    fgetl(udplabcams);
+    fwrite(udplabcams,'softtrigger=1')
+    fgetl(udplabcams);
+end                
+                
 if BpodSystem.ProtocolSettings.triggerWidefield
     if isfield(BpodSystem.ProtocolSettings,'labcamsWidefield')
         if ~isempty(BpodSystem.ProtocolSettings.labcamsWidefield)
@@ -1073,10 +1085,8 @@ for iTrials = 1:maxTrials
             BpodSystem.Data.weirdBytes = true;
         end
         % set the frame number just before starting
-        if isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
-            if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
-                fwrite(udpObj,sprintf('log=trial_start:%d',iTrials))
-            end
+        if exist('udplabcams','var')
+                fwrite(udplabcams,sprintf('log=trial_start:%d',iTrials));
         end
         if exist('udpWF','var')
             fwrite(udpWF,sprintf('log=trial_start:%d',iTrials));
@@ -1085,13 +1095,11 @@ for iTrials = 1:maxTrials
         
         RawEvents = RunStateMachine; % Send and run state matrix
         % set the frame number just after starting
-        if isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
-            if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
-                fwrite(udpObj,sprintf('log=trial_end:%d',iTrials))
-            end
+        if exist('udplabcams','var')
+            fwrite(udplabcams,sprintf('log=trial_end:%d',iTrials));
         end
         if exist('udpWF','var')
-            fwrite(udpObj,sprintf('log=trial_end:%d',iTrials))
+            fwrite(udpWF,sprintf('log=trial_end:%d',iTrials));
         end
         % Save events and data
         if length(fieldnames(RawEvents)) > 1
@@ -1195,24 +1203,25 @@ for iTrials = 1:maxTrials
             if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
                 oscsend(udpObj,udpPath,'i',1000) % stop video capture
                 stopBonsai(); %shut down bonsai
-            elseif isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
-                if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
-                    fwrite(udpObj,sprintf('log=end'));fgetl(udpObj);
-                    fwrite(udpObj,sprintf('softtrigger=0'));fgetl(udpObj);
-                    fwrite(udpObj,sprintf('manualsave=0'));fgetl(udpObj);
-                    fwrite(udpObj,sprintf('quit=1'))
-                    fclose(udpObj);
-                end
             end
-            disp("Done.")
             
-        catch
+            if exist('udplabcams','var')
+                fwrite(udplabcams,sprintf('log=end'));fgetl(udplabcams);
+                fwrite(udplabcams,sprintf('softtrigger=0'));fgetl(udplabcams);
+                fwrite(udplabcams,sprintf('manualsave=0'));fgetl(udplabcams);
+                fwrite(udplabcams,sprintf('quit=1'))
+                fclose(udplabcams);
+                clear udplabcams
+            end
+            disp("Done stopping video.")
+            
+        catch err
             disp("Error stopping video.")
+            disp(err.message)
         end
         if exist('udpWF', 'var')
-            fwrite(udpWF,'softtrigger=0')
-            fgetl(udpWF)
-            fwrite(udpWF,'manualsave=0')
+            fwrite(udpWF,'softtrigger=0');fgetl(udpWF);
+            fwrite(udpWF,'manualsave=0');
             fclose(udpWF);
         end
         % check for path to server and save behavior + graph

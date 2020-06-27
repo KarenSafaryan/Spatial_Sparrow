@@ -2,39 +2,38 @@
     "cams": [
         {
             "Save": true,
-            "description": "facecam",
+            "description": "cam0",
             "driver": "PointGrey",
-	    "serial": 19208295,
-            "frameRate": 50.0,
+            "frameRate": 100.0,
             "gain": 1,
-	    "exposure":19000,
-	    "gamma":2.0,
+	    "exposure":10000,
+	    "gamma":2.3,
 	    "pxformat":"Mono8",
 	    "id": 0,
+	    "serial":20073107,
             "name": "pointgrey0",
-	    "hwaccel":"intel",
+	    "hwaccel":"nvidia",
 	    "saveMethod":"ffmpeg",
-	    "roi": [216,126,848,772]
-
+	    "hardware_trigger":"out_line3",
+	    "roi": [264,230,752,566]
         },
 	{
             "Save": true,
-            "description": "bodycam",
+            "description": "cam1",
             "driver": "PointGrey",
-            "frameRate": 50.0,
-	    "binning":2,
+            "frameRate": 100.0,
             "gain": 1,
-	    "exposure":19000,
-	    "gamma":2.8,
+	    "exposure":10000,
+	    "gamma":2.3,
 	    "pxformat":"Mono8",
 	    "id": 1,
-	    "serial": 13020800,
-            "name": "pointgrey1",
- 	    "roi": [0,96,640,320],
-	    "hwaccel":"intel",
-	    "NoQueue":false,
-	    "saveMethod":"ffmpeg"
-        }
+	    "serial":20073110,
+            "name": "pointgrey0",
+	    "hwaccel":"nvidia",
+	    "saveMethod":"ffmpeg",
+	    "hardware_trigger":"in_line3",
+	    "roi": [280,360,720,306]
+	}
     ],
     "compress": 17,
     "datapaths": {
