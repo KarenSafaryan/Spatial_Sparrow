@@ -80,7 +80,7 @@ F 3 "https://www.pololu.com/product/2982" H 3750 4200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x04 FromTouch1
+L Connector:Screw_Terminal_01x05 FromTouch1
 U 1 1 5F05C787
 P 7400 6950
 F 0 "FromTouch1" H 7318 6525 50  0000 C CNN
@@ -91,7 +91,7 @@ F 3 "~" H 7400 6950 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x04 FromZeros1
+L Connector:Screw_Terminal_01x05 FromZeros1
 U 1 1 5F05AFB3
 P 10500 6950
 F 0 "FromZeros1" H 10418 6525 50  0000 C CNN
@@ -552,6 +552,28 @@ F 1 "Pololu_Breakout_DRV8825" H 4200 3150 50  0000 C CNN
 F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 3850 1750 50  0001 L CNN
 F 3 "https://www.pololu.com/product/2982" H 3750 2250 50  0001 C CNN
 	1    3650 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x05 SoundVision
+U 1 1 5F0675E7
+P 5300 7000
+F 0 "SoundVision" H 5218 6575 50  0000 C CNN
+F 1 "Screw_Terminal_01x06" H 5218 6666 50  0000 C CNN
+F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x06_P5.08mm_Horizontal" H 5300 7000 50  0001 C CNN
+F 3 "~" H 5300 7000 50  0001 C CNN
+	1    5300 7000
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x02 J?
+U 1 1 5F069700
+P 5300 12600
+F 0 "J?" H 5380 12592 50  0000 L CNN
+F 1 "Screw_Terminal_01x02" H 5380 12501 50  0000 L CNN
+F 2 "" H 5300 12600 50  0001 C CNN
+F 3 "~" H 5300 12600 50  0001 C CNN
+	1    5300 12600
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC

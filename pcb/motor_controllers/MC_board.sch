@@ -576,4 +576,6 @@ F 3 "~" H 5300 12600 50  0001 C CNN
 	1    5300 12600
 	1    0    0    -1  
 $EndComp
+Text Notes 5000 13350 0    50   ~ 0
+4x12 2x5 and 1x9 screw terminals
 $EndSCHEMATC
