@@ -16,258 +16,91 @@ $EndDescr
 $Comp
 L Device:CP1 C1
 U 1 1 5EFBABCC
-P 4200 2150
-F 0 "C1" H 4315 2196 50  0000 L CNN
-F 1 "100 uF" H 4315 2105 50  0000 L CNN
-F 2 "Capacitor_THT:C_Rect_L7.2mm_W7.2mm_P5.00mm_FKS2_FKP2_MKS2_MKP2" H 4200 2150 50  0001 C CNN
-F 3 "~" H 4200 2150 50  0001 C CNN
-	1    4200 2150
+P 2000 1750
+F 0 "C1" H 2115 1796 50  0000 L CNN
+F 1 "100 uF" H 2115 1705 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L7.2mm_W7.2mm_P5.00mm_FKS2_FKP2_MKS2_MKP2" H 2000 1750 50  0001 C CNN
+F 3 "~" H 2000 1750 50  0001 C CNN
+	1    2000 1750
 	1    0    0    -1  
 $EndComp
-$Comp
-L Driver_Motor:Pololu_Breakout_DRV8825 MC-LeverL1
-U 1 1 5EFD01B1
-P 6150 2150
-F 0 "MC-LeverL1" H 6500 2800 50  0000 C CNN
-F 1 "Pololu_Breakout_DRV8825" H 6650 2700 50  0000 C CNN
-F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 6350 1350 50  0001 L CNN
-F 3 "https://www.pololu.com/product/2982" H 6250 1850 50  0001 C CNN
-	1    6150 2150
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5200 3200 5200 2250
-Wire Wire Line
-	5200 2250 5750 2250
-Wire Wire Line
-	8200 3100 8200 3300
-Wire Wire Line
-	8200 3300 5100 3300
-Wire Wire Line
-	5100 3300 5100 2150
-Wire Wire Line
-	5100 2150 5750 2150
-Wire Wire Line
-	5100 3400 5100 5050
-Wire Wire Line
-	9350 3300 9350 3450
-Wire Wire Line
-	9350 3450 5150 3450
-Wire Wire Line
-	5150 3450 5150 4950
-Wire Wire Line
-	9500 4100 9500 6350
-Wire Wire Line
-	2050 6350 2050 3150
-Wire Wire Line
-	2050 3150 2550 3150
-Wire Wire Line
-	2000 6400 2000 3050
-Wire Wire Line
-	2000 3050 2550 3050
-Wire Wire Line
-	9150 4500 9150 6100
-Wire Wire Line
-	2300 6100 2300 5200
-Wire Wire Line
-	9200 4400 9200 6150
-Wire Wire Line
-	2250 6150 2250 5100
-Wire Wire Line
-	2250 5100 2800 5100
 $Comp
 L Connector:Screw_Terminal_01x04 HandleL-ToMotor1
 U 1 1 5F00F6D8
-P 6900 2450
-F 0 "HandleL-ToMotor1" H 6980 2442 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 6980 2351 50  0000 L CNN
-F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 6900 2450 50  0001 C CNN
-F 3 "~" H 6900 2450 50  0001 C CNN
-	1    6900 2450
-	1    0    0    -1  
+P 9850 6750
+F 0 "HandleL-ToMotor1" H 9930 6742 50  0000 L CNN
+F 1 "Screw_Terminal_01x04" H 9930 6651 50  0000 L CNN
+F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 9850 6750 50  0001 C CNN
+F 3 "~" H 9850 6750 50  0001 C CNN
+	1    9850 6750
+	0    1    1    0   
 $EndComp
 $Comp
 L Connector:Screw_Terminal_01x04 HandleR-ToMotor1
 U 1 1 5F010C08
-P 6900 5150
-F 0 "HandleR-ToMotor1" H 6980 5142 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 6980 5051 50  0000 L CNN
-F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 6900 5150 50  0001 C CNN
-F 3 "~" H 6900 5150 50  0001 C CNN
-	1    6900 5150
-	1    0    0    -1  
+P 6750 6750
+F 0 "HandleR-ToMotor1" H 6830 6742 50  0000 L CNN
+F 1 "Screw_Terminal_01x04" H 6830 6651 50  0000 L CNN
+F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 6750 6750 50  0001 C CNN
+F 3 "~" H 6750 6750 50  0001 C CNN
+	1    6750 6750
+	0    1    1    0   
 $EndComp
 $Comp
 L Connector:Screw_Terminal_01x04 SpoutR-ToMotor1
 U 1 1 5F00E35C
-P 3900 5350
-F 0 "SpoutR-ToMotor1" H 3980 5342 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 3980 5251 50  0000 L CNN
-F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 3900 5350 50  0001 C CNN
-F 3 "~" H 3900 5350 50  0001 C CNN
-	1    3900 5350
-	1    0    0    -1  
+P 4650 6750
+F 0 "SpoutR-ToMotor1" H 4730 6742 50  0000 L CNN
+F 1 "Screw_Terminal_01x04" H 4730 6651 50  0000 L CNN
+F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 4650 6750 50  0001 C CNN
+F 3 "~" H 4650 6750 50  0001 C CNN
+	1    4650 6750
+	0    1    1    0   
 $EndComp
 $Comp
 L Connector:Screw_Terminal_01x04 SpoutL-ToMotor1
 U 1 1 5F00C5DF
-P 3800 3250
-F 0 "SpoutL-ToMotor1" H 3880 3242 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 3880 3151 50  0000 L CNN
-F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 3800 3250 50  0001 C CNN
-F 3 "~" H 3800 3250 50  0001 C CNN
-	1    3800 3250
-	1    0    0    -1  
+P 2250 6800
+F 0 "SpoutL-ToMotor1" H 2330 6792 50  0000 L CNN
+F 1 "Screw_Terminal_01x04" H 2330 6701 50  0000 L CNN
+F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 2250 6800 50  0001 C CNN
+F 3 "~" H 2250 6800 50  0001 C CNN
+	1    2250 6800
+	0    1    1    0   
 $EndComp
-Wire Wire Line
-	9200 6150 2250 6150
-Wire Wire Line
-	2300 5200 2800 5200
-Wire Wire Line
-	9150 6100 2300 6100
-Wire Wire Line
-	9550 6400 2000 6400
-Wire Wire Line
-	9500 6350 2050 6350
 $Comp
 L Driver_Motor:Pololu_Breakout_DRV8825 MC-SpoutR1
 U 1 1 5EFCADAC
-P 3200 5000
-F 0 "MC-SpoutR1" H 3550 5650 50  0000 C CNN
-F 1 "Pololu_Breakout_DRV8825" H 3800 5550 50  0000 C CNN
-F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 3400 4200 50  0001 L CNN
-F 3 "https://www.pololu.com/product/2982" H 3300 4700 50  0001 C CNN
-	1    3200 5000
+P 3650 4500
+F 0 "MC-SpoutR1" H 4000 5150 50  0000 C CNN
+F 1 "Pololu_Breakout_DRV8825" H 4250 5050 50  0000 C CNN
+F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 3850 3700 50  0001 L CNN
+F 3 "https://www.pololu.com/product/2982" H 3750 4200 50  0001 C CNN
+	1    3650 4500
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	3350 2850 3550 2850
-Wire Wire Line
-	3550 3150 3600 3150
-Wire Wire Line
-	3350 2950 3500 2950
-Wire Wire Line
-	3500 2950 3500 3250
-Wire Wire Line
-	3500 3250 3600 3250
-Wire Wire Line
-	3350 3150 3450 3150
-Wire Wire Line
-	3450 3150 3450 3350
-Wire Wire Line
-	3450 3350 3600 3350
-Wire Wire Line
-	3350 3250 3400 3250
-Wire Wire Line
-	3400 3250 3400 3450
-Wire Wire Line
-	3400 3450 3600 3450
-Wire Wire Line
-	3600 4900 3750 4900
-Wire Wire Line
-	3750 4900 3750 5250
-Wire Wire Line
-	3750 5250 3700 5250
-Wire Wire Line
-	3600 5000 3700 5000
-Wire Wire Line
-	3700 5000 3700 5250
-Wire Wire Line
-	3600 5200 3650 5200
-Wire Wire Line
-	3650 5200 3650 5450
-Wire Wire Line
-	3650 5450 3700 5450
-Wire Wire Line
-	3600 5300 3600 5550
-Wire Wire Line
-	3600 5550 3700 5550
-Wire Wire Line
-	6700 2050 6700 2350
-Wire Wire Line
-	6550 2150 6650 2150
-Wire Wire Line
-	6650 2150 6650 2450
-Wire Wire Line
-	6650 2450 6700 2450
-Wire Wire Line
-	6550 2350 6600 2350
-Wire Wire Line
-	6600 2350 6600 2550
-Wire Wire Line
-	6600 2550 6700 2550
-Wire Wire Line
-	6550 2450 6550 2650
-Wire Wire Line
-	6550 2650 6700 2650
-Wire Wire Line
-	6550 4850 6550 5150
-Wire Wire Line
-	6500 5050 6500 5250
-Wire Wire Line
-	6500 5250 6700 5250
-Wire Wire Line
-	6450 5150 6450 5350
-Wire Wire Line
-	6450 5350 6700 5350
 $Comp
-L Connector:Screw_Terminal_01x04 FromTouch1
+L Connector:Screw_Terminal_01x05 FromTouch1
 U 1 1 5F05C787
-P 8500 4300
-F 0 "FromTouch1" H 8418 3875 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 8418 3966 50  0000 C CNN
-F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 8500 4300 50  0001 C CNN
-F 3 "~" H 8500 4300 50  0001 C CNN
-	1    8500 4300
+P 7400 6950
+F 0 "FromTouch1" H 7318 6525 50  0000 C CNN
+F 1 "Screw_Terminal_01x04" H 7318 6616 50  0000 C CNN
+F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 7400 6950 50  0001 C CNN
+F 3 "~" H 7400 6950 50  0001 C CNN
+	1    7400 6950
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	9550 4000 9550 6400
-Wire Wire Line
-	9200 2650 9100 2650
-Wire Wire Line
-	9200 3000 9200 2650
-Wire Wire Line
-	9250 2550 9100 2550
-Wire Wire Line
-	9250 2900 9250 2550
-Wire Wire Line
-	9300 2450 9100 2450
-Wire Wire Line
-	9300 2800 9300 2450
-Wire Wire Line
-	9350 2350 9100 2350
-Wire Wire Line
-	9350 2700 9350 2350
 $Comp
-L Connector:Screw_Terminal_01x04 FromZeros1
+L Connector:Screw_Terminal_01x05 FromZeros1
 U 1 1 5F05AFB3
-P 8900 2550
-F 0 "FromZeros1" H 8818 2125 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 8818 2216 50  0000 C CNN
-F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 8900 2550 50  0001 C CNN
-F 3 "~" H 8900 2550 50  0001 C CNN
-	1    8900 2550
+P 10500 6950
+F 0 "FromZeros1" H 10418 6525 50  0000 C CNN
+F 1 "Screw_Terminal_01x04" H 10418 6616 50  0000 C CNN
+F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 10500 6950 50  0001 C CNN
+F 3 "~" H 10500 6950 50  0001 C CNN
+	1    10500 6950
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	8850 4100 8700 4100
-Wire Wire Line
-	8800 4300 8800 4200
-Wire Wire Line
-	8800 4200 8700 4200
-Wire Wire Line
-	11750 5050 8750 5050
-Wire Wire Line
-	8750 5050 8750 4300
-Wire Wire Line
-	8750 4300 8700 4300
-Wire Wire Line
-	11800 4700 11800 5150
-Wire Wire Line
-	11800 5150 8700 5150
-Wire Wire Line
-	8700 5150 8700 4400
 $Comp
 L Connector:Barrel_Jack 9V1
 U 1 1 5F03BFA0
@@ -290,10 +123,6 @@ F 3 "~" H 2500 13860 50  0001 C CNN
 	1    2450 13900
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	6550 2050 6700 2050
-Wire Wire Line
-	3550 2850 3550 3150
 $Comp
 L Connector:Screw_Terminal_01x08 J1
 U 1 1 5F227FA4
@@ -305,52 +134,6 @@ F 3 "~" H 8250 1600 50  0001 C CNN
 	1    8250 1600
 	-1   0    0    -1  
 $EndComp
-Wire Wire Line
-	9500 2200 9500 1300
-Wire Wire Line
-	9500 1300 8450 1300
-Wire Wire Line
-	9450 1400 8450 1400
-Wire Wire Line
-	9450 1400 9450 2300
-Wire Wire Line
-	9400 2400 9400 1500
-Wire Wire Line
-	9400 1500 8450 1500
-Wire Wire Line
-	9700 2500 9700 1600
-Wire Wire Line
-	9700 1600 8450 1600
-Wire Wire Line
-	9650 2600 9650 1700
-Wire Wire Line
-	9650 1700 8450 1700
-Wire Wire Line
-	8850 4200 8850 4100
-Wire Wire Line
-	8100 4600 8100 2100
-Wire Wire Line
-	8100 2100 8700 2100
-Wire Wire Line
-	8700 2100 8700 1800
-Wire Wire Line
-	8700 1800 8450 1800
-Wire Wire Line
-	8050 4700 8050 2150
-Wire Wire Line
-	8050 2150 8650 2150
-Wire Wire Line
-	8650 2150 8650 1900
-Wire Wire Line
-	8650 1900 8450 1900
-Wire Wire Line
-	8000 4800 8000 2200
-Wire Wire Line
-	8000 2200 8500 2200
-Wire Wire Line
-	8500 2200 8500 2000
-Wire Wire Line
-	8500 2000 8450 2000
 $Comp
 L Connector:Barrel_Jack 12V1
 U 1 1 5F1009A2
@@ -364,7 +147,7 @@ F 3 "~" H 2450 12510 50  0001 C CNN
 $EndComp
 Text Notes 2800 1200 0    118  ~ 0
 Stepper motor drivers\nHandles and Spout motors\n
-Text Notes 1550 7500 0    118  ~ 0
+Text Notes 1600 8300 0    118  ~ 0
 Stimuli - analog output connection
 $Comp
 L Connector:RJ45 J2
@@ -411,168 +194,157 @@ F 3 "" H 3600 10100 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Driver_Motor:Pololu_Breakout_DRV8825 MC-SpoutL1
-U 1 1 5EFB9951
-P 2950 2950
-F 0 "MC-SpoutL1" H 3350 3700 50  0000 C CNN
-F 1 "Pololu_Breakout_DRV8825" H 3500 3550 50  0000 C CNN
-F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 3150 2150 50  0001 L CNN
-F 3 "https://www.pololu.com/product/2982" H 3050 2650 50  0001 C CNN
-	1    2950 2950
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:+5V #PWR0104
 U 1 1 5F25EF9D
-P 2550 2750
-F 0 "#PWR0104" H 2550 2600 50  0001 C CNN
-F 1 "+5V" V 2565 2878 50  0000 L CNN
-F 2 "" H 2550 2750 50  0001 C CNN
-F 3 "" H 2550 2750 50  0001 C CNN
-	1    2550 2750
+P 3250 2350
+F 0 "#PWR0104" H 3250 2200 50  0001 C CNN
+F 1 "+5V" V 3265 2478 50  0000 L CNN
+F 2 "" H 3250 2350 50  0001 C CNN
+F 3 "" H 3250 2350 50  0001 C CNN
+	1    3250 2350
 	0    -1   -1   0   
 $EndComp
 $Comp
 L power:+5V #PWR0105
 U 1 1 5F2624CA
-P 2800 4800
-F 0 "#PWR0105" H 2800 4650 50  0001 C CNN
-F 1 "+5V" V 2815 4928 50  0000 L CNN
-F 2 "" H 2800 4800 50  0001 C CNN
-F 3 "" H 2800 4800 50  0001 C CNN
-	1    2800 4800
+P 3250 4300
+F 0 "#PWR0105" H 3250 4150 50  0001 C CNN
+F 1 "+5V" V 3265 4428 50  0000 L CNN
+F 2 "" H 3250 4300 50  0001 C CNN
+F 3 "" H 3250 4300 50  0001 C CNN
+	1    3250 4300
 	0    -1   -1   0   
 $EndComp
 $Comp
 L power:+5V #PWR0106
 U 1 1 5F2A2DB9
-P 5750 1950
-F 0 "#PWR0106" H 5750 1800 50  0001 C CNN
-F 1 "+5V" V 5765 2078 50  0000 L CNN
-F 2 "" H 5750 1950 50  0001 C CNN
-F 3 "" H 5750 1950 50  0001 C CNN
-	1    5750 1950
+P 5350 2350
+F 0 "#PWR0106" H 5350 2200 50  0001 C CNN
+F 1 "+5V" V 5365 2478 50  0000 L CNN
+F 2 "" H 5350 2350 50  0001 C CNN
+F 3 "" H 5350 2350 50  0001 C CNN
+	1    5350 2350
 	0    -1   -1   0   
 $EndComp
 $Comp
 L power:GND #PWR0108
 U 1 1 5F2EFB61
-P 3200 5800
-F 0 "#PWR0108" H 3200 5550 50  0001 C CNN
-F 1 "GND" H 3205 5627 50  0000 C CNN
-F 2 "" H 3200 5800 50  0001 C CNN
-F 3 "" H 3200 5800 50  0001 C CNN
-	1    3200 5800
+P 3650 5300
+F 0 "#PWR0108" H 3650 5050 50  0001 C CNN
+F 1 "GND" H 3655 5127 50  0000 C CNN
+F 2 "" H 3650 5300 50  0001 C CNN
+F 3 "" H 3650 5300 50  0001 C CNN
+	1    3650 5300
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR0109
 U 1 1 5F2F01FF
-P 3300 5800
-F 0 "#PWR0109" H 3300 5550 50  0001 C CNN
-F 1 "GND" H 3305 5627 50  0000 C CNN
-F 2 "" H 3300 5800 50  0001 C CNN
-F 3 "" H 3300 5800 50  0001 C CNN
-	1    3300 5800
+P 3750 5300
+F 0 "#PWR0109" H 3750 5050 50  0001 C CNN
+F 1 "GND" H 3755 5127 50  0000 C CNN
+F 2 "" H 3750 5300 50  0001 C CNN
+F 3 "" H 3750 5300 50  0001 C CNN
+	1    3750 5300
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR0112
 U 1 1 5F2F2CD1
-P 6150 2950
-F 0 "#PWR0112" H 6150 2700 50  0001 C CNN
-F 1 "GND" H 6155 2777 50  0000 C CNN
-F 2 "" H 6150 2950 50  0001 C CNN
-F 3 "" H 6150 2950 50  0001 C CNN
-	1    6150 2950
+P 5750 3350
+F 0 "#PWR0112" H 5750 3100 50  0001 C CNN
+F 1 "GND" H 5755 3177 50  0000 C CNN
+F 2 "" H 5750 3350 50  0001 C CNN
+F 3 "" H 5750 3350 50  0001 C CNN
+	1    5750 3350
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR0113
 U 1 1 5F2FACF2
-P 6250 2950
-F 0 "#PWR0113" H 6250 2700 50  0001 C CNN
-F 1 "GND" H 6255 2777 50  0000 C CNN
-F 2 "" H 6250 2950 50  0001 C CNN
-F 3 "" H 6250 2950 50  0001 C CNN
-	1    6250 2950
+P 5850 3350
+F 0 "#PWR0113" H 5850 3100 50  0001 C CNN
+F 1 "GND" H 5855 3177 50  0000 C CNN
+F 2 "" H 5850 3350 50  0001 C CNN
+F 3 "" H 5850 3350 50  0001 C CNN
+	1    5850 3350
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR0114
 U 1 1 5F2FBC59
-P 2950 3750
-F 0 "#PWR0114" H 2950 3500 50  0001 C CNN
-F 1 "GND" H 2955 3577 50  0000 C CNN
-F 2 "" H 2950 3750 50  0001 C CNN
-F 3 "" H 2950 3750 50  0001 C CNN
-	1    2950 3750
+P 3650 3350
+F 0 "#PWR0114" H 3650 3100 50  0001 C CNN
+F 1 "GND" H 3655 3177 50  0000 C CNN
+F 2 "" H 3650 3350 50  0001 C CNN
+F 3 "" H 3650 3350 50  0001 C CNN
+	1    3650 3350
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR0115
 U 1 1 5F2FCBF6
-P 3050 3750
-F 0 "#PWR0115" H 3050 3500 50  0001 C CNN
-F 1 "GND" H 3055 3577 50  0000 C CNN
-F 2 "" H 3050 3750 50  0001 C CNN
-F 3 "" H 3050 3750 50  0001 C CNN
-	1    3050 3750
+P 3750 3350
+F 0 "#PWR0115" H 3750 3100 50  0001 C CNN
+F 1 "GND" H 3755 3177 50  0000 C CNN
+F 2 "" H 3750 3350 50  0001 C CNN
+F 3 "" H 3750 3350 50  0001 C CNN
+	1    3750 3350
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR0116
 U 1 1 5F3196D2
-P 4200 2300
-F 0 "#PWR0116" H 4200 2050 50  0001 C CNN
-F 1 "GND" H 4205 2127 50  0000 C CNN
-F 2 "" H 4200 2300 50  0001 C CNN
-F 3 "" H 4200 2300 50  0001 C CNN
-	1    4200 2300
+P 2000 1900
+F 0 "#PWR0116" H 2000 1650 50  0001 C CNN
+F 1 "GND" H 2005 1727 50  0000 C CNN
+F 2 "" H 2000 1900 50  0001 C CNN
+F 3 "" H 2000 1900 50  0001 C CNN
+	1    2000 1900
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:+9V #PWR0117
 U 1 1 5F31A33A
-P 4200 2000
-F 0 "#PWR0117" H 4200 1850 50  0001 C CNN
-F 1 "+9V" H 4215 2173 50  0000 C CNN
-F 2 "" H 4200 2000 50  0001 C CNN
-F 3 "" H 4200 2000 50  0001 C CNN
-	1    4200 2000
+P 2000 1600
+F 0 "#PWR0117" H 2000 1450 50  0001 C CNN
+F 1 "+9V" H 2015 1773 50  0000 C CNN
+F 2 "" H 2000 1600 50  0001 C CNN
+F 3 "" H 2000 1600 50  0001 C CNN
+	1    2000 1600
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:+9V #PWR0118
 U 1 1 5F35B35D
-P 6150 1550
-F 0 "#PWR0118" H 6150 1400 50  0001 C CNN
-F 1 "+9V" H 6165 1723 50  0000 C CNN
-F 2 "" H 6150 1550 50  0001 C CNN
-F 3 "" H 6150 1550 50  0001 C CNN
-	1    6150 1550
+P 5750 1950
+F 0 "#PWR0118" H 5750 1800 50  0001 C CNN
+F 1 "+9V" H 5765 2123 50  0000 C CNN
+F 2 "" H 5750 1950 50  0001 C CNN
+F 3 "" H 5750 1950 50  0001 C CNN
+	1    5750 1950
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:+9V #PWR0119
 U 1 1 5F35CF5B
-P 2950 2350
-F 0 "#PWR0119" H 2950 2200 50  0001 C CNN
-F 1 "+9V" H 2965 2523 50  0000 C CNN
-F 2 "" H 2950 2350 50  0001 C CNN
-F 3 "" H 2950 2350 50  0001 C CNN
-	1    2950 2350
+P 3650 1950
+F 0 "#PWR0119" H 3650 1800 50  0001 C CNN
+F 1 "+9V" H 3665 2123 50  0000 C CNN
+F 2 "" H 3650 1950 50  0001 C CNN
+F 3 "" H 3650 1950 50  0001 C CNN
+	1    3650 1950
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:+9V #PWR0120
 U 1 1 5F35ECD6
-P 3200 4400
-F 0 "#PWR0120" H 3200 4250 50  0001 C CNN
-F 1 "+9V" H 3215 4573 50  0000 C CNN
-F 2 "" H 3200 4400 50  0001 C CNN
-F 3 "" H 3200 4400 50  0001 C CNN
-	1    3200 4400
+P 3650 3900
+F 0 "#PWR0120" H 3650 3750 50  0001 C CNN
+F 1 "+9V" H 3665 4073 50  0000 C CNN
+F 2 "" H 3650 3900 50  0001 C CNN
+F 3 "" H 3650 3900 50  0001 C CNN
+	1    3650 3900
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -646,84 +418,61 @@ Text Notes 1900 11950 0    118  ~ 0
 Power connectors\n
 Text Notes 14550 7150 0    157  ~ 0
 INPUT PINS\n// Inputs for lick sensors\nLEVERSENSOR_L 15 // touch line for lever touch\nLEVERSENSOR_R 16 // touch line for lever touch\nSPOUTSENSOR_L 22 // touch line for left spout\nSPOUTSENSOR_R 23 // touch line for right spout\n// Pins for stepper - spouts\nPIN_SPOUTOUT_L 5\nPIN_SPOUTOUT_R 6\nPIN_SPOUTSTEP_L 13\nPIN_SPOUTDIR_L 14\nPIN_SPOUTSTEP_R 17\nPIN_SPOUTDIR_R 18\n// Pins for stepper - handles\nPIN_LEVEROUT_L 7\nPIN_LEVEROUT_R 8\nPIN_LEVERSTEP_L 9\nPIN_LEVERDIR_L 10\nPIN_LEVERSTEP_R 11\nPIN_LEVERDIR_R 12 \n\nOUTPUT PINS:\nPIN_LEFTLICK 19 // trigger that informs over left licks\nPIN_RIGHTLICK 20 // trigger that informs over right licks\nPIN_STIMTRIG 21 //  (no sync) 'MAKE_STIMTRIGGER' \nPIN_TRIALTRIG 4 // (no sync) 'MAKE_TRIALTRIGGER'\nPIN_CAMTIMER 3 // to trigger camera exposure 'camTrigDur', 'camTrigRate'.\n
-Connection ~ 6550 5150
-Wire Wire Line
-	6550 5150 6450 5150
 $Comp
 L power:+9V #PWR0121
 U 1 1 5F361721
-P 6200 4250
-F 0 "#PWR0121" H 6200 4100 50  0001 C CNN
-F 1 "+9V" H 6215 4423 50  0000 C CNN
-F 2 "" H 6200 4250 50  0001 C CNN
-F 3 "" H 6200 4250 50  0001 C CNN
-	1    6200 4250
+P 5750 3850
+F 0 "#PWR0121" H 5750 3700 50  0001 C CNN
+F 1 "+9V" H 5765 4023 50  0000 C CNN
+F 2 "" H 5750 3850 50  0001 C CNN
+F 3 "" H 5750 3850 50  0001 C CNN
+	1    5750 3850
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR0111
 U 1 1 5F2F15B0
-P 6300 5650
-F 0 "#PWR0111" H 6300 5400 50  0001 C CNN
-F 1 "GND" H 6305 5477 50  0000 C CNN
-F 2 "" H 6300 5650 50  0001 C CNN
-F 3 "" H 6300 5650 50  0001 C CNN
-	1    6300 5650
+P 5850 5250
+F 0 "#PWR0111" H 5850 5000 50  0001 C CNN
+F 1 "GND" H 5855 5077 50  0000 C CNN
+F 2 "" H 5850 5250 50  0001 C CNN
+F 3 "" H 5850 5250 50  0001 C CNN
+	1    5850 5250
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	6600 5150 6700 5150
-Connection ~ 6600 5150
-Wire Wire Line
-	6550 5150 6600 5150
-Connection ~ 6600 5050
-Wire Wire Line
-	6600 5050 6500 5050
-Wire Wire Line
-	6600 5050 6700 5050
-Connection ~ 6600 4850
-Wire Wire Line
-	6600 4850 6550 4850
-Wire Wire Line
-	6600 4750 6600 4850
-Wire Wire Line
-	5100 5050 5800 5050
-Wire Wire Line
-	5150 4950 5800 4950
 $Comp
 L power:+5V #PWR0107
 U 1 1 5F2A5CA9
-P 5800 4650
-F 0 "#PWR0107" H 5800 4500 50  0001 C CNN
-F 1 "+5V" V 5815 4778 50  0000 L CNN
-F 2 "" H 5800 4650 50  0001 C CNN
-F 3 "" H 5800 4650 50  0001 C CNN
-	1    5800 4650
+P 5350 4250
+F 0 "#PWR0107" H 5350 4100 50  0001 C CNN
+F 1 "+5V" V 5365 4378 50  0000 L CNN
+F 2 "" H 5350 4250 50  0001 C CNN
+F 3 "" H 5350 4250 50  0001 C CNN
+	1    5350 4250
 	0    -1   -1   0   
 $EndComp
 $Comp
 L power:GND #PWR0110
 U 1 1 5F2F109D
-P 6200 5650
-F 0 "#PWR0110" H 6200 5400 50  0001 C CNN
-F 1 "GND" H 6205 5477 50  0000 C CNN
-F 2 "" H 6200 5650 50  0001 C CNN
-F 3 "" H 6200 5650 50  0001 C CNN
-	1    6200 5650
+P 5750 5250
+F 0 "#PWR0110" H 5750 5000 50  0001 C CNN
+F 1 "GND" H 5755 5077 50  0000 C CNN
+F 2 "" H 5750 5250 50  0001 C CNN
+F 3 "" H 5750 5250 50  0001 C CNN
+	1    5750 5250
 	1    0    0    -1  
 $EndComp
 $Comp
 L Driver_Motor:Pololu_Breakout_DRV8825 MC-LeverR1
 U 1 1 5EFD3F38
-P 6200 4850
-F 0 "MC-LeverR1" H 6600 5450 50  0000 C CNN
-F 1 "Pololu_Breakout_DRV8825" H 7050 5300 50  0000 C CNN
-F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 6400 4050 50  0001 L CNN
-F 3 "https://www.pololu.com/product/2982" H 6300 4550 50  0001 C CNN
-	1    6200 4850
+P 5750 4450
+F 0 "MC-LeverR1" H 6150 5050 50  0000 C CNN
+F 1 "Pololu_Breakout_DRV8825" H 6600 4900 50  0000 C CNN
+F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 5950 3650 50  0001 L CNN
+F 3 "https://www.pololu.com/product/2982" H 5850 4150 50  0001 C CNN
+	1    5750 4450
 	1    0    0    -1  
 $EndComp
-Connection ~ 3700 5250
 $Comp
 L power:GND #PWR0125
 U 1 1 5F36E1BF
@@ -735,18 +484,6 @@ F 3 "" H 14250 3600 50  0001 C CNN
 	1    14250 3600
 	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	12250 2900 9250 2900
-Wire Wire Line
-	12250 2800 9300 2800
-Wire Wire Line
-	12250 2700 9350 2700
-Wire Wire Line
-	12250 2600 9650 2600
-Wire Wire Line
-	12250 2500 9700 2500
-Wire Wire Line
-	12250 2400 9400 2400
 $Comp
 L power:+5V #PWR0127
 U 1 1 5F36F155
@@ -769,42 +506,6 @@ F 3 "" H 14250 4500 50  0001 C CNN
 	1    14250 4500
 	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	14250 4700 12250 4700
-Wire Wire Line
-	12250 2300 9450 2300
-Wire Wire Line
-	14250 4800 11750 5050
-Wire Wire Line
-	12250 4800 8000 4800
-Wire Wire Line
-	12250 4700 11800 4700
-Wire Wire Line
-	12250 4600 8100 4600
-Wire Wire Line
-	12250 4500 9150 4500
-Wire Wire Line
-	12250 4400 9200 4400
-Wire Wire Line
-	12250 4300 8800 4300
-Wire Wire Line
-	12250 4200 8850 4200
-Wire Wire Line
-	12250 4100 9500 4100
-Wire Wire Line
-	12250 4000 9550 4000
-Wire Wire Line
-	12250 2200 9500 2200
-Wire Wire Line
-	12250 3400 5100 3400
-Wire Wire Line
-	12250 3300 9350 3300
-Wire Wire Line
-	12250 3200 5200 3200
-Wire Wire Line
-	12250 3100 8200 3100
-Wire Wire Line
-	12250 3000 9200 3000
 $Comp
 L power:GND #PWR0124
 U 1 1 5F36BC2C
@@ -827,16 +528,52 @@ F 3 "" H 13250 2700 60  0000 C CNN
 	1    13250 3450
 	1    0    0    -1  
 $EndComp
-Connection ~ 11800 4700
-Wire Wire Line
-	11800 4700 8050 4700
-Connection ~ 12250 4700
-Wire Notes Line
-	10000 750  10050 6650
-Wire Notes Line
-	10050 6650 1600 6650
 Wire Notes Line
 	1600 750  10000 750 
 Wire Notes Line
 	1600 750  1600 6650
+$Comp
+L Driver_Motor:Pololu_Breakout_DRV8825 MC-LeverL1
+U 1 1 5EFD01B1
+P 5750 2550
+F 0 "MC-LeverL1" H 6100 3200 50  0000 C CNN
+F 1 "Pololu_Breakout_DRV8825" H 6250 3100 50  0000 C CNN
+F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 5950 1750 50  0001 L CNN
+F 3 "https://www.pololu.com/product/2982" H 5850 2250 50  0001 C CNN
+	1    5750 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Driver_Motor:Pololu_Breakout_DRV8825 MC-SpoutL1
+U 1 1 5EFB9951
+P 3650 2550
+F 0 "MC-SpoutL1" H 4050 3300 50  0000 C CNN
+F 1 "Pololu_Breakout_DRV8825" H 4200 3150 50  0000 C CNN
+F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 3850 1750 50  0001 L CNN
+F 3 "https://www.pololu.com/product/2982" H 3750 2250 50  0001 C CNN
+	1    3650 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x05 SoundVision
+U 1 1 5F0675E7
+P 5300 7000
+F 0 "SoundVision" H 5218 6575 50  0000 C CNN
+F 1 "Screw_Terminal_01x06" H 5218 6666 50  0000 C CNN
+F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x06_P5.08mm_Horizontal" H 5300 7000 50  0001 C CNN
+F 3 "~" H 5300 7000 50  0001 C CNN
+	1    5300 7000
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x02 J?
+U 1 1 5F069700
+P 5300 12600
+F 0 "J?" H 5380 12592 50  0000 L CNN
+F 1 "Screw_Terminal_01x02" H 5380 12501 50  0000 L CNN
+F 2 "" H 5300 12600 50  0001 C CNN
+F 3 "~" H 5300 12600 50  0001 C CNN
+	1    5300 12600
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
