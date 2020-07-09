@@ -84,7 +84,7 @@ L Connector:Screw_Terminal_01x05 FromTouch1
 U 1 1 5F05C787
 P 7400 6950
 F 0 "FromTouch1" H 7318 6525 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 7318 6616 50  0000 C CNN
+F 1 "Screw_Terminal_01x05" H 7318 6616 50  0000 C CNN
 F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 7400 6950 50  0001 C CNN
 F 3 "~" H 7400 6950 50  0001 C CNN
 	1    7400 6950
@@ -95,7 +95,7 @@ L Connector:Screw_Terminal_01x05 FromZeros1
 U 1 1 5F05AFB3
 P 10500 6950
 F 0 "FromZeros1" H 10418 6525 50  0000 C CNN
-F 1 "Screw_Terminal_01x04" H 10418 6616 50  0000 C CNN
+F 1 "Screw_Terminal_01x05" H 10418 6616 50  0000 C CNN
 F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 10500 6950 50  0001 C CNN
 F 3 "~" H 10500 6950 50  0001 C CNN
 	1    10500 6950
@@ -555,17 +555,6 @@ F 3 "https://www.pololu.com/product/2982" H 3750 2250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x05 SoundVision
-U 1 1 5F0675E7
-P 5300 7000
-F 0 "SoundVision" H 5218 6575 50  0000 C CNN
-F 1 "Screw_Terminal_01x06" H 5218 6666 50  0000 C CNN
-F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x06_P5.08mm_Horizontal" H 5300 7000 50  0001 C CNN
-F 3 "~" H 5300 7000 50  0001 C CNN
-	1    5300 7000
-	-1   0    0    1   
-$EndComp
-$Comp
 L Connector:Screw_Terminal_01x02 J?
 U 1 1 5F069700
 P 5300 12600
@@ -578,4 +567,37 @@ F 3 "~" H 5300 12600 50  0001 C CNN
 $EndComp
 Text Notes 5000 13350 0    50   ~ 0
 4x12 2x5 and 1x9 screw terminals
+$Comp
+L Connector:Screw_Terminal_01x06 SoundVision
+U 1 1 5F0675E7
+P 5450 7250
+F 0 "SoundVision" H 5368 6785 50  0000 C CNN
+F 1 "Screw_Terminal_01x06" H 5368 6876 50  0000 C CNN
+F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x06_P5.08mm_Horizontal" H 5450 7250 50  0001 C CNN
+F 3 "~" H 5450 7250 50  0001 C CNN
+	1    5450 7250
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x06 SoundVision?
+U 1 1 5F080410
+P 3150 7250
+F 0 "SoundVision?" H 3068 6785 50  0000 C CNN
+F 1 "Screw_Terminal_01x06" H 3068 6876 50  0000 C CNN
+F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x06_P5.08mm_Horizontal" H 3150 7250 50  0001 C CNN
+F 3 "~" H 3150 7250 50  0001 C CNN
+	1    3150 7250
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Screw_Terminal_01x05 sync_trigger_out
+U 1 1 5F081E55
+P 8250 2950
+F 0 "sync_trigger_out" H 8168 2525 50  0000 C CNN
+F 1 "Screw_Terminal_01x05" H 8168 2616 50  0000 C CNN
+F 2 "TerminalBlock_TE-Connectivity:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 8250 2950 50  0001 C CNN
+F 3 "~" H 8250 2950 50  0001 C CNN
+	1    8250 2950
+	-1   0    0    1   
+$EndComp
 $EndSCHEMATC
