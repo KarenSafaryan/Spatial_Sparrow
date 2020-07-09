@@ -22,9 +22,9 @@ DefaultSettings.cTrial = 1; %Nr of current trial.
 DefaultSettings.LeverSound = true; %play indicator sound when animal is touching levers correctly
 DefaultSettings.RegularStim = false; %produce regular stimulus sequence
 DefaultSettings.biasSeqLength = 3; %nr of trials on one side after which the oder side is switched with 50% probability
-DefaultSettings.widefieldPath = '\\grid-hs\churchland_hpc_home\smusall\BpodImager\Animals\'; %path to widefield data on server
+DefaultSettings.widefieldPath = '\\grid-hs\churchland_nlsas_data\data\'; %path to widefield data on server
 DefaultSettings.videoDrive = 'C:'; %path to where the system saves video data
-DefaultSettings.serverPath = '\\grid-hs\churchland_nlsas_data\data\Behavior_Simon\'; %path to behavioral data on server
+DefaultSettings.serverPath = '\\grid-hs\churchland_nlsas_data\data\'; %path to data on server
 DefaultSettings.bonsaiEXE = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_2_4\Bonsai\Bonsai64.exe'; %path to bonsai .exe
 DefaultSettings.bonsaiParadim = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_workflow\WorkflowTwoCamera_v07.bonsai'; %path to bonsai workflow
 DefaultSettings.wavePort = 'COM18'; %com port for analog module
@@ -117,7 +117,7 @@ end
 BpodSystem.ProtocolSettings = S; % Adds the currently used settings to the Bpod struct
 BpodSystem.ProtocolSettings.SubjectName = BpodSystem.GUIData.SubjectName; %update subject name
 serverPath = [S.serverPath filesep BpodSystem.ProtocolSettings.SubjectName filesep ...
-    BpodSystem.GUIData.ProtocolName filesep 'Session Data']; %path to data server
+    BpodSystem.GUIData.ProtocolName ]; %path to data server
 BpodSystem.Data.byteLoss = 0; %counter for cases when the teensy didn't send a response byte
 
 %% ensure teensy and analog modules are present and set up communication
@@ -1215,6 +1215,7 @@ for iTrials = 1:maxTrials
                 fwrite(udplabcams,sprintf('quit=1'))
                 fclose(udplabcams);
                 clear udplabcams
+                hasvideo = 1;
             end
             disp("Done stopping video.")
             
@@ -1229,22 +1230,41 @@ for iTrials = 1:maxTrials
         end
         % check for path to server and save behavior + graph
         if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
-            disp(['Writing to server: ',[serverPath bhvFile]])
+            serverPath = [serverPath filesep bhvFile];
             try
                 if ~exist(serverPath,'dir')
                     mkdir(serverPath)
                 end
                 SessionData = BpodSystem.Data; %current session data
                 if ~isempty(SessionData)
-                    save([serverPath bhvFile],'SessionData'); %save datafile
+                    disp(['Writing to server: ',[serverPath filesep bhvFile '.mat']])
+                    save([serverPath filesep bhvFile],'SessionData'); %save datafile
                     
                     %save session graph
-                    sPath = strrep(serverPath,'Session Data','Session Graphs');
+                    sPath = strrep(serverPath,filesep,'session_plots');
                     if ~exist(sPath,'dir')
                         mkdir(sPath)
                     end
                     set(BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control,'PaperOrientation','portrait','PaperPositionMode','auto');
                     saveas(BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control, [sPath filesep bhvFile '.jpg']);
+                    try
+                        if exist('hasvideo','var')
+                            if hasvideo
+                                videoPaths = [dataPath filesep bhvFile];
+                                disp('Copying labcams video data')
+                                filestocp = [dir([videoPaths,'*.avi']);dir([videoPaths,'*.camlog'])];
+                                if length(filestocp)
+                                    for f = 1:length(filestocp)
+                                        [SUCCESS,MESSAGE,MESSAGEID] = copyfile([filestocp(f).folder,...
+                                            filesep,filestocp(f).name],serverPath);
+                                        if ~SUCCESS
+                                            disp(['Copy ',videoPaths,filesep,filestocp{f},' failed'])
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
                 end
                 disp('Done.')
             catch
