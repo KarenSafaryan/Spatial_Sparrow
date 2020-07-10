@@ -1236,7 +1236,7 @@ for iTrials = 1:maxTrials
                     mkdir(serverPath)
                 end
                 SessionData = BpodSystem.Data; %current session data
-                if ~isempty(SessionData)
+                if ~isempty(SessionData) & iTrials > 10
                     disp(['Writing to server: ',[serverPath filesep bhvFile '.mat']])
                     save([serverPath filesep bhvFile],'SessionData'); %save datafile
                     
@@ -1259,6 +1259,8 @@ for iTrials = 1:maxTrials
                                             filesep,filestocp(f).name],serverPath);
                                         if ~SUCCESS
                                             disp(['Copy ',videoPaths,filesep,filestocp{f},' failed'])
+                                        else
+                                            disp(['Copied ',videoPaths,filesep,filestocp{f}])
                                         end
                                     end
                                 end
