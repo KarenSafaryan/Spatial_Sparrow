@@ -132,7 +132,7 @@ F 1 "12V" H 2457 12784 50  0000 C CNN
 F 2 "Connector_BarrelJack:BarrelJack_Horizontal" H 2450 12510 50  0001 C CNN
 F 3 "~" H 2450 12510 50  0001 C CNN
 	1    2400 12550
-	1    0    0    1   
+	1    0    0    -1  
 $EndComp
 Text Notes 2800 1200 0    118  ~ 0
 Stepper motor drivers\nHandles and Spout motors\n

@@ -1263,10 +1263,10 @@ Wire Wire Line
 Wire Wire Line
 	7850 7050 7850 8900
 $Comp
-L Connector:Screw_Terminal_01x02 distractor
+L Connector:Screw_Terminal_01x02 distractor1
 U 1 1 5F566D88
 P 3900 8600
-F 0 "distractor" H 3980 8592 50  0000 L CNN
+F 0 "distractor1" H 3980 8592 50  0000 L CNN
 F 1 "Screw_Terminal_01x02" H 3980 8501 50  0000 L CNN
 F 2 "teensey:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 3900 8600 50  0001 C CNN
 F 3 "~" H 3900 8600 50  0001 C CNN
