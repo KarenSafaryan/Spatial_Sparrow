@@ -27,63 +27,63 @@ $EndComp
 $Comp
 L Connector:Screw_Terminal_01x04 HandleL-ToMotor1
 U 1 1 5F00F6D8
-P 9850 6750
-F 0 "HandleL-ToMotor1" H 9930 6742 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 9930 6651 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 9850 6750 50  0001 C CNN
-F 3 "~" H 9850 6750 50  0001 C CNN
-	1    9850 6750
-	0    1    1    0   
+P 6500 2650
+F 0 "HandleL-ToMotor1" H 6580 2642 50  0000 L CNN
+F 1 "Screw_Terminal_01x04" H 6580 2551 50  0000 L CNN
+F 2 "teensey:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 6500 2650 50  0001 C CNN
+F 3 "~" H 6500 2650 50  0001 C CNN
+	1    6500 2650
+	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:Screw_Terminal_01x04 HandleR-ToMotor1
 U 1 1 5F010C08
-P 6750 6750
-F 0 "HandleR-ToMotor1" H 6830 6742 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 6830 6651 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 6750 6750 50  0001 C CNN
-F 3 "~" H 6750 6750 50  0001 C CNN
-	1    6750 6750
-	0    1    1    0   
+P 6550 4300
+F 0 "HandleR-ToMotor1" H 6550 4550 50  0000 L CNN
+F 1 "Screw_Terminal_01x04" H 6650 4450 50  0000 L CNN
+F 2 "teensey:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 6550 4300 50  0001 C CNN
+F 3 "~" H 6550 4300 50  0001 C CNN
+	1    6550 4300
+	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:Screw_Terminal_01x04 SpoutR-ToMotor1
 U 1 1 5F00E35C
-P 4650 6750
-F 0 "SpoutR-ToMotor1" H 4730 6742 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 4730 6651 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 4650 6750 50  0001 C CNN
-F 3 "~" H 4650 6750 50  0001 C CNN
-	1    4650 6750
-	0    1    1    0   
+P 4500 4550
+F 0 "SpoutR-ToMotor1" H 4200 4200 50  0000 L CNN
+F 1 "Screw_Terminal_01x04" H 4150 4100 50  0000 L CNN
+F 2 "teensey:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 4500 4550 50  0001 C CNN
+F 3 "~" H 4500 4550 50  0001 C CNN
+	1    4500 4550
+	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:Screw_Terminal_01x04 SpoutL-ToMotor1
 U 1 1 5F00C5DF
-P 2250 6800
-F 0 "SpoutL-ToMotor1" H 2330 6792 50  0000 L CNN
-F 1 "Screw_Terminal_01x04" H 2330 6701 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 2250 6800 50  0001 C CNN
-F 3 "~" H 2250 6800 50  0001 C CNN
-	1    2250 6800
-	0    1    1    0   
+P 4500 2600
+F 0 "SpoutL-ToMotor1" H 4250 2300 50  0000 L CNN
+F 1 "Screw_Terminal_01x04" H 4200 2200 50  0000 L CNN
+F 2 "teensey:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 4500 2600 50  0001 C CNN
+F 3 "~" H 4500 2600 50  0001 C CNN
+	1    4500 2600
+	1    0    0    -1  
 $EndComp
 $Comp
 L Driver_Motor:Pololu_Breakout_DRV8825 MC-SpoutR1
 U 1 1 5EFCADAC
 P 3650 4500
 F 0 "MC-SpoutR1" H 4000 5150 50  0000 C CNN
-F 1 "Pololu_Breakout_DRV8825" H 4250 5050 50  0000 C CNN
+F 1 "Pololu_Breakout_DRV8825" V 3750 4500 50  0000 C CNN
 F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 3850 3700 50  0001 L CNN
 F 3 "https://www.pololu.com/product/2982" H 3750 4200 50  0001 C CNN
 	1    3650 4500
 	1    0    0    -1  
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x05 ToHandleR
+L Connector:Screw_Terminal_01x05 ToHandleR1
 U 1 1 5F05C787
 P 7400 6950
-F 0 "ToHandleR" H 7318 6525 50  0000 C CNN
+F 0 "ToHandleR1" H 7318 6525 50  0000 C CNN
 F 1 "Screw_Terminal_01x05" H 7318 6616 50  0000 C CNN
 F 2 "teensey:TerminalBlock_TE_282825-5_1x05_P5.08mm_Horizontal" H 7400 6950 50  0001 C CNN
 F 3 "~" H 7400 6950 50  0001 C CNN
@@ -91,10 +91,10 @@ F 3 "~" H 7400 6950 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x05 ToHandleL
+L Connector:Screw_Terminal_01x05 ToHandleL1
 U 1 1 5F05AFB3
 P 10500 6950
-F 0 "ToHandleL" H 10418 6525 50  0000 C CNN
+F 0 "ToHandleL1" H 10418 6525 50  0000 C CNN
 F 1 "Screw_Terminal_01x05" H 10418 6616 50  0000 C CNN
 F 2 "teensey:TerminalBlock_TE_282825-5_1x05_P5.08mm_Horizontal" H 10500 6950 50  0001 C CNN
 F 3 "~" H 10500 6950 50  0001 C CNN
@@ -136,7 +136,7 @@ F 3 "~" H 2450 12510 50  0001 C CNN
 $EndComp
 Text Notes 2800 1200 0    118  ~ 0
 Stepper motor drivers\nHandles and Spout motors\n
-Text Notes 1600 8300 0    118  ~ 0
+Text Notes 1500 11100 0    118  ~ 0
 Stimuli - analog output connection
 $Comp
 L Connector:RJ45 J2
@@ -227,17 +227,6 @@ F 3 "" H 3650 5300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0109
-U 1 1 5F2F01FF
-P 3750 5300
-F 0 "#PWR0109" H 3750 5050 50  0001 C CNN
-F 1 "GND" H 3755 5127 50  0000 C CNN
-F 2 "" H 3750 5300 50  0001 C CNN
-F 3 "" H 3750 5300 50  0001 C CNN
-	1    3750 5300
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:GND #PWR0112
 U 1 1 5F2F2CD1
 P 5750 3350
@@ -249,17 +238,6 @@ F 3 "" H 5750 3350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0113
-U 1 1 5F2FACF2
-P 5850 3350
-F 0 "#PWR0113" H 5850 3100 50  0001 C CNN
-F 1 "GND" H 5855 3177 50  0000 C CNN
-F 2 "" H 5850 3350 50  0001 C CNN
-F 3 "" H 5850 3350 50  0001 C CNN
-	1    5850 3350
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:GND #PWR0114
 U 1 1 5F2FBC59
 P 3650 3350
@@ -268,28 +246,6 @@ F 1 "GND" H 3655 3177 50  0000 C CNN
 F 2 "" H 3650 3350 50  0001 C CNN
 F 3 "" H 3650 3350 50  0001 C CNN
 	1    3650 3350
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR0115
-U 1 1 5F2FCBF6
-P 3750 3350
-F 0 "#PWR0115" H 3750 3100 50  0001 C CNN
-F 1 "GND" H 3755 3177 50  0000 C CNN
-F 2 "" H 3750 3350 50  0001 C CNN
-F 3 "" H 3750 3350 50  0001 C CNN
-	1    3750 3350
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR0116
-U 1 1 5F3196D2
-P 2000 1900
-F 0 "#PWR0116" H 2000 1650 50  0001 C CNN
-F 1 "GND" H 2005 1727 50  0000 C CNN
-F 2 "" H 2000 1900 50  0001 C CNN
-F 3 "" H 2000 1900 50  0001 C CNN
-	1    2000 1900
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -348,17 +304,6 @@ F 3 "" H 2700 13250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0123
-U 1 1 5F366933
-P 2700 13450
-F 0 "#PWR0123" H 2700 13200 50  0001 C CNN
-F 1 "GND" H 2705 13277 50  0000 C CNN
-F 2 "" H 2700 13450 50  0001 C CNN
-F 3 "" H 2700 13450 50  0001 C CNN
-	1    2700 13450
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:GND #PWR0128
 U 1 1 5F3A37C2
 P 2350 9500
@@ -408,17 +353,6 @@ F 3 "" H 5750 3850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR0111
-U 1 1 5F2F15B0
-P 5850 5250
-F 0 "#PWR0111" H 5850 5000 50  0001 C CNN
-F 1 "GND" H 5855 5077 50  0000 C CNN
-F 2 "" H 5850 5250 50  0001 C CNN
-F 3 "" H 5850 5250 50  0001 C CNN
-	1    5850 5250
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:+5V #PWR0107
 U 1 1 5F2A5CA9
 P 5350 4250
@@ -445,7 +379,7 @@ L Driver_Motor:Pololu_Breakout_DRV8825 MC-LeverR1
 U 1 1 5EFD3F38
 P 5750 4450
 F 0 "MC-LeverR1" H 6150 5050 50  0000 C CNN
-F 1 "Pololu_Breakout_DRV8825" H 6600 4900 50  0000 C CNN
+F 1 "Pololu_Breakout_DRV8825" V 5850 4450 50  0000 C CNN
 F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 5950 3650 50  0001 L CNN
 F 3 "https://www.pololu.com/product/2982" H 5850 4150 50  0001 C CNN
 	1    5750 4450
@@ -501,21 +435,19 @@ U 1 1 5EFE2FDF
 P 13250 3450
 F 0 "U1" H 13250 5087 60  0000 C CNN
 F 1 "Teensy3.2" H 13250 4981 60  0000 C CNN
-F 2 "lib:Teensy30_31_32_LC" H 13250 2700 60  0001 C CNN
+F 2 "teensey:Teensy30_31_32_LC" H 13250 2700 60  0001 C CNN
 F 3 "" H 13250 2700 60  0000 C CNN
 	1    13250 3450
 	1    0    0    -1  
 $EndComp
 Wire Notes Line
 	1600 750  10000 750 
-Wire Notes Line
-	1600 750  1600 6650
 $Comp
 L Driver_Motor:Pololu_Breakout_DRV8825 MC-LeverL1
 U 1 1 5EFD01B1
 P 5750 2550
-F 0 "MC-LeverL1" H 6100 3200 50  0000 C CNN
-F 1 "Pololu_Breakout_DRV8825" H 6250 3100 50  0000 C CNN
+F 0 "MC-LeverL1" H 6050 3150 50  0000 C CNN
+F 1 "Pololu_Breakout_DRV8825" V 5850 2550 50  0000 C CNN
 F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 5950 1750 50  0001 L CNN
 F 3 "https://www.pololu.com/product/2982" H 5850 2250 50  0001 C CNN
 	1    5750 2550
@@ -525,8 +457,8 @@ $Comp
 L Driver_Motor:Pololu_Breakout_DRV8825 MC-SpoutL1
 U 1 1 5EFB9951
 P 3650 2550
-F 0 "MC-SpoutL1" H 4050 3300 50  0000 C CNN
-F 1 "Pololu_Breakout_DRV8825" H 4200 3150 50  0000 C CNN
+F 0 "MC-SpoutL1" H 3950 3200 50  0000 C CNN
+F 1 "Pololu_Breakout_DRV8825" V 3750 2550 50  0000 C CNN
 F 2 "Module:Pololu_Breakout-16_15.2x20.3mm" H 3850 1750 50  0001 L CNN
 F 3 "https://www.pololu.com/product/2982" H 3750 2250 50  0001 C CNN
 	1    3650 2550
@@ -546,10 +478,10 @@ $EndComp
 Text Notes 5000 11900 0    50   ~ 0
 4x12 2x5 and 1x9 screw terminals
 $Comp
-L Connector:Screw_Terminal_01x06 SoundVisionR
+L Connector:Screw_Terminal_01x06 SoundVisionR1
 U 1 1 5F0675E7
 P 5450 7250
-F 0 "SoundVisionR" H 5368 6785 50  0000 C CNN
+F 0 "SoundVisionR1" H 5368 6785 50  0000 C CNN
 F 1 "Screw_Terminal_01x06" H 5368 6876 50  0000 C CNN
 F 2 "teensey:TerminalBlock_TE_282825-6_1x06_P5.08mm_Horizontal" H 5450 7250 50  0001 C CNN
 F 3 "~" H 5450 7250 50  0001 C CNN
@@ -557,10 +489,10 @@ F 3 "~" H 5450 7250 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L Connector:Screw_Terminal_01x06 SoundVisionL
+L Connector:Screw_Terminal_01x06 SoundVisionL1
 U 1 1 5F080410
 P 3150 7250
-F 0 "SoundVisionL" H 3068 6785 50  0000 C CNN
+F 0 "SoundVisionL1" H 3068 6785 50  0000 C CNN
 F 1 "Screw_Terminal_01x06" H 3068 6876 50  0000 C CNN
 F 2 "teensey:TerminalBlock_TE_282825-6_1x06_P5.08mm_Horizontal" H 3150 7250 50  0001 C CNN
 F 3 "~" H 3150 7250 50  0001 C CNN
@@ -589,7 +521,7 @@ Wire Wire Line
 Wire Wire Line
 	11000 7050 10700 7050
 Text Notes 1600 10400 0    50   ~ 0
-2- left audio\n3- right audio\n4-\n5- \n6- \n7- left actuator+\n8- right actuator+
+2- left audio\n3- right audio\n4- left vision\n5- right vision\n6- left handle actuator\n7- right handle actuator\n8- distractor
 Wire Wire Line
 	11100 6950 10700 6950
 Wire Wire Line
@@ -605,14 +537,6 @@ F 3 "" H 11100 7700 50  0001 C CNN
 	1    11100 7700
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	2350 8900 11000 8900
-Wire Wire Line
-	11000 8900 11000 7050
-Wire Wire Line
-	2350 8800 7850 8800
-Wire Wire Line
-	7850 8800 7850 7050
 Wire Wire Line
 	7850 7050 7600 7050
 Wire Wire Line
@@ -805,102 +729,6 @@ Wire Wire Line
 Wire Wire Line
 	9000 2750 8450 2750
 Wire Wire Line
-	4050 4400 4750 4400
-Wire Wire Line
-	4750 4400 4750 6550
-Wire Wire Line
-	4050 4500 4650 4500
-Wire Wire Line
-	4650 4500 4650 6550
-Wire Wire Line
-	4050 4700 4550 4700
-Wire Wire Line
-	4550 4700 4550 6550
-Wire Wire Line
-	4050 4800 4450 4800
-Wire Wire Line
-	4450 4800 4450 6550
-Wire Wire Line
-	4050 2450 4900 2450
-Wire Wire Line
-	4900 2450 4900 5650
-Wire Wire Line
-	4900 5650 2350 5650
-Wire Wire Line
-	2350 5650 2350 6600
-Wire Wire Line
-	4050 2550 4950 2550
-Wire Wire Line
-	4950 2550 4950 5700
-Wire Wire Line
-	2250 5700 2250 6600
-Wire Wire Line
-	2250 5700 4950 5700
-Wire Wire Line
-	4050 2750 5000 2750
-Wire Wire Line
-	5000 2750 5000 5750
-Wire Wire Line
-	5000 5750 2150 5750
-Wire Wire Line
-	2150 5750 2150 6600
-Wire Wire Line
-	4050 2850 5050 2850
-Wire Wire Line
-	5050 2850 5050 5800
-Wire Wire Line
-	5050 5800 2050 5800
-Wire Wire Line
-	2050 5800 2050 6600
-Wire Wire Line
-	6150 4350 6850 4350
-Wire Wire Line
-	6850 4350 6850 6550
-Wire Wire Line
-	6150 4450 6750 4450
-Wire Wire Line
-	6750 4450 6750 6550
-Wire Wire Line
-	6150 4650 6650 4650
-Wire Wire Line
-	6650 4650 6650 6550
-Wire Wire Line
-	6150 4750 6150 5950
-Wire Wire Line
-	6150 5950 6550 5950
-Wire Wire Line
-	6550 5950 6550 6550
-Wire Wire Line
-	6150 2450 7850 2450
-Wire Wire Line
-	7850 2450 7850 5550
-Wire Wire Line
-	7850 5550 9950 5550
-Wire Wire Line
-	9950 5550 9950 6550
-Wire Wire Line
-	6150 2550 7800 2550
-Wire Wire Line
-	7800 2550 7800 5650
-Wire Wire Line
-	7800 5650 9850 5650
-Wire Wire Line
-	9850 5650 9850 6550
-Wire Wire Line
-	6150 2750 7750 2750
-Wire Wire Line
-	7750 2750 7750 5700
-Wire Wire Line
-	7750 5700 9750 5700
-Wire Wire Line
-	9750 5700 9750 6550
-Wire Wire Line
-	6150 2850 7700 2850
-Wire Wire Line
-	7700 2850 7700 5750
-Wire Wire Line
-	9650 5750 9650 6550
-Wire Wire Line
 	12250 4000 9950 4000
 Wire Wire Line
 	9950 4000 9950 900 
@@ -980,8 +808,6 @@ Wire Wire Line
 	11500 3200 12250 3200
 Wire Wire Line
 	11500 2150 11500 3200
-Wire Wire Line
-	7700 5750 9650 5750
 Wire Wire Line
 	5350 4550 5150 4550
 Wire Wire Line
@@ -1213,17 +1039,6 @@ F 3 "" H 4900 13700 50  0001 C CNN
 $EndComp
 Connection ~ 4900 13700
 $Comp
-L power:GND #PWR0142
-U 1 1 5F2C5760
-P 5100 14650
-F 0 "#PWR0142" H 5100 14400 50  0001 C CNN
-F 1 "GND" H 5105 14477 50  0000 C CNN
-F 2 "" H 5100 14650 50  0001 C CNN
-F 3 "" H 5100 14650 50  0001 C CNN
-	1    5100 14650
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:+9V #PWR0143
 U 1 1 5F2C6327
 P 5100 14550
@@ -1232,6 +1047,379 @@ F 1 "+9V" H 5115 14723 50  0000 C CNN
 F 2 "" H 5100 14550 50  0001 C CNN
 F 3 "" H 5100 14550 50  0001 C CNN
 	1    5100 14550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4050 2450 4300 2450
+Wire Wire Line
+	4300 2450 4300 2500
+Wire Wire Line
+	4050 2550 4300 2550
+Wire Wire Line
+	4300 2550 4300 2600
+Wire Wire Line
+	4050 2750 4050 2700
+Wire Wire Line
+	4050 2700 4300 2700
+Wire Wire Line
+	4300 2800 4050 2800
+Wire Wire Line
+	4050 2800 4050 2850
+Wire Wire Line
+	4050 4400 4300 4400
+Wire Wire Line
+	4300 4400 4300 4450
+Wire Wire Line
+	4050 4500 4300 4500
+Wire Wire Line
+	4300 4500 4300 4550
+Wire Wire Line
+	4300 4650 4050 4650
+Wire Wire Line
+	4050 4650 4050 4700
+Wire Wire Line
+	4300 4750 4300 4800
+Wire Wire Line
+	4300 4800 4050 4800
+Wire Wire Line
+	6150 4750 6150 4700
+Wire Wire Line
+	6150 4700 6350 4700
+Wire Wire Line
+	6350 4700 6350 4500
+Wire Wire Line
+	6150 4650 6300 4650
+Wire Wire Line
+	6300 4650 6300 4400
+Wire Wire Line
+	6300 4400 6350 4400
+Wire Wire Line
+	6150 4450 6250 4450
+Wire Wire Line
+	6250 4450 6250 4350
+Wire Wire Line
+	6250 4350 6350 4350
+Wire Wire Line
+	6350 4350 6350 4300
+Wire Wire Line
+	6150 4350 6150 4300
+Wire Wire Line
+	6150 4300 6300 4300
+Wire Wire Line
+	6300 4300 6300 4200
+Wire Wire Line
+	6300 4200 6350 4200
+Wire Wire Line
+	6150 2450 6300 2450
+Wire Wire Line
+	6300 2450 6300 2550
+Wire Wire Line
+	6150 2550 6250 2550
+Wire Wire Line
+	6250 2550 6250 2650
+Wire Wire Line
+	6250 2650 6300 2650
+Wire Wire Line
+	6150 2750 6300 2750
+Wire Wire Line
+	6300 2850 6150 2850
+$Comp
+L power:GND #PWR01
+U 1 1 5F2F8795
+P 12250 3700
+F 0 "#PWR01" H 12250 3450 50  0001 C CNN
+F 1 "GND" V 12255 3572 50  0000 R CNN
+F 2 "" H 12250 3700 50  0001 C CNN
+F 3 "" H 12250 3700 50  0001 C CNN
+	1    12250 3700
+	0    1    1    0   
+$EndComp
+NoConn ~ 14250 4600
+NoConn ~ 14250 4300
+NoConn ~ 14250 4200
+NoConn ~ 14250 4100
+NoConn ~ 14250 4000
+NoConn ~ 12250 3500
+NoConn ~ 12250 3600
+NoConn ~ 12250 3800
+NoConn ~ 12250 3900
+NoConn ~ 14250 3700
+NoConn ~ 14250 2100
+NoConn ~ 14250 2200
+NoConn ~ 14250 2300
+NoConn ~ 14250 2400
+NoConn ~ 14250 2500
+NoConn ~ 14250 2600
+NoConn ~ 14250 2700
+NoConn ~ 14250 2800
+NoConn ~ 14250 2900
+NoConn ~ 14250 3000
+NoConn ~ 14250 3100
+NoConn ~ 14250 3200
+NoConn ~ 14250 3300
+NoConn ~ 14250 3400
+NoConn ~ 14250 3500
+NoConn ~ 12250 2400
+NoConn ~ 12250 2200
+NoConn ~ 12250 2300
+$Comp
+L Device:CP1 C4
+U 1 1 5F4A3CD5
+P 1500 1750
+F 0 "C4" H 1615 1796 50  0000 L CNN
+F 1 "100 uF" H 1615 1705 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L7.2mm_W7.2mm_P5.00mm_FKS2_FKP2_MKS2_MKP2" H 1500 1750 50  0001 C CNN
+F 3 "~" H 1500 1750 50  0001 C CNN
+	1    1500 1750
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+9V #PWR06
+U 1 1 5F4A3CE1
+P 1500 1600
+F 0 "#PWR06" H 1500 1450 50  0001 C CNN
+F 1 "+9V" H 1515 1773 50  0000 C CNN
+F 2 "" H 1500 1600 50  0001 C CNN
+F 3 "" H 1500 1600 50  0001 C CNN
+	1    1500 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:CP1 C3
+U 1 1 5F4B0577
+P 1050 1750
+F 0 "C3" H 1165 1796 50  0000 L CNN
+F 1 "100 uF" H 1165 1705 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L7.2mm_W7.2mm_P5.00mm_FKS2_FKP2_MKS2_MKP2" H 1050 1750 50  0001 C CNN
+F 3 "~" H 1050 1750 50  0001 C CNN
+	1    1050 1750
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+9V #PWR04
+U 1 1 5F4B0583
+P 1050 1600
+F 0 "#PWR04" H 1050 1450 50  0001 C CNN
+F 1 "+9V" H 1065 1773 50  0000 C CNN
+F 2 "" H 1050 1600 50  0001 C CNN
+F 3 "" H 1050 1600 50  0001 C CNN
+	1    1050 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:CP1 C2
+U 1 1 5F4BCEFE
+P 650 1750
+F 0 "C2" H 765 1796 50  0000 L CNN
+F 1 "100 uF" H 765 1705 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L7.2mm_W7.2mm_P5.00mm_FKS2_FKP2_MKS2_MKP2" H 650 1750 50  0001 C CNN
+F 3 "~" H 650 1750 50  0001 C CNN
+	1    650  1750
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+9V #PWR02
+U 1 1 5F4BCF0A
+P 650 1600
+F 0 "#PWR02" H 650 1450 50  0001 C CNN
+F 1 "+9V" H 665 1773 50  0000 C CNN
+F 2 "" H 650 1600 50  0001 C CNN
+F 3 "" H 650 1600 50  0001 C CNN
+	1    650  1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR08
+U 1 1 5F4CD230
+P 3600 9600
+F 0 "#PWR08" H 3600 9450 50  0001 C CNN
+F 1 "+5V" V 3615 9728 50  0000 L CNN
+F 2 "" H 3600 9600 50  0001 C CNN
+F 3 "" H 3600 9600 50  0001 C CNN
+	1    3600 9600
+	0    -1   -1   0   
+$EndComp
+NoConn ~ 3600 10300
+NoConn ~ 3600 10400
+NoConn ~ 3600 9800
+Wire Wire Line
+	2350 9200 3500 9200
+Wire Wire Line
+	3500 9200 3500 6950
+Wire Wire Line
+	3500 6950 3350 6950
+Wire Wire Line
+	2350 9100 6000 9100
+Wire Wire Line
+	6000 9100 6000 6950
+Wire Wire Line
+	6000 6950 5650 6950
+Wire Wire Line
+	2350 9000 11000 9000
+Wire Wire Line
+	11000 7050 11000 9000
+Wire Wire Line
+	7850 8900 2350 8900
+Wire Wire Line
+	7850 7050 7850 8900
+$Comp
+L Connector:Screw_Terminal_01x02 distractor
+U 1 1 5F566D88
+P 3900 8600
+F 0 "distractor" H 3980 8592 50  0000 L CNN
+F 1 "Screw_Terminal_01x02" H 3980 8501 50  0000 L CNN
+F 2 "teensey:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 3900 8600 50  0001 C CNN
+F 3 "~" H 3900 8600 50  0001 C CNN
+	1    3900 8600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3700 8700 2350 8700
+Wire Wire Line
+	2350 8700 2350 8800
+$Comp
+L power:GND #PWR09
+U 1 1 5F588E79
+P 3700 8600
+F 0 "#PWR09" H 3700 8350 50  0001 C CNN
+F 1 "GND" H 3705 8427 50  0000 C CNN
+F 2 "" H 3700 8600 50  0001 C CNN
+F 3 "" H 3700 8600 50  0001 C CNN
+	1    3700 8600
+	-1   0    0    1   
+$EndComp
+NoConn ~ 5350 4450
+NoConn ~ 5350 4850
+NoConn ~ 5350 4950
+NoConn ~ 5350 5050
+NoConn ~ 5350 4150
+NoConn ~ 5350 4050
+NoConn ~ 3250 4100
+NoConn ~ 3250 4200
+NoConn ~ 3250 4500
+NoConn ~ 3250 4900
+NoConn ~ 3250 5000
+NoConn ~ 3250 5100
+NoConn ~ 3250 3150
+NoConn ~ 3250 3050
+NoConn ~ 3250 2950
+NoConn ~ 3250 2150
+NoConn ~ 3250 2250
+NoConn ~ 3250 2550
+NoConn ~ 5350 2150
+NoConn ~ 5350 2250
+NoConn ~ 5350 2550
+NoConn ~ 5350 2950
+NoConn ~ 5350 3050
+NoConn ~ 5350 3150
+$Comp
+L power:GND1 #PWR0109
+U 1 1 5F6F4A10
+P 5850 5250
+F 0 "#PWR0109" H 5850 5000 50  0001 C CNN
+F 1 "GND1" H 5855 5077 50  0000 C CNN
+F 2 "" H 5850 5250 50  0001 C CNN
+F 3 "" H 5850 5250 50  0001 C CNN
+	1    5850 5250
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND1 #PWR0111
+U 1 1 5F6F6E4E
+P 3750 5300
+F 0 "#PWR0111" H 3750 5050 50  0001 C CNN
+F 1 "GND1" H 3755 5127 50  0000 C CNN
+F 2 "" H 3750 5300 50  0001 C CNN
+F 3 "" H 3750 5300 50  0001 C CNN
+	1    3750 5300
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND1 #PWR0113
+U 1 1 5F6F95CD
+P 5850 3350
+F 0 "#PWR0113" H 5850 3100 50  0001 C CNN
+F 1 "GND1" H 5855 3177 50  0000 C CNN
+F 2 "" H 5850 3350 50  0001 C CNN
+F 3 "" H 5850 3350 50  0001 C CNN
+	1    5850 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND1 #PWR0115
+U 1 1 5F6F9C88
+P 3750 3350
+F 0 "#PWR0115" H 3750 3100 50  0001 C CNN
+F 1 "GND1" H 3755 3177 50  0000 C CNN
+F 2 "" H 3750 3350 50  0001 C CNN
+F 3 "" H 3750 3350 50  0001 C CNN
+	1    3750 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND1 #PWR0116
+U 1 1 5F6FB7BD
+P 650 1900
+F 0 "#PWR0116" H 650 1650 50  0001 C CNN
+F 1 "GND1" H 655 1727 50  0000 C CNN
+F 2 "" H 650 1900 50  0001 C CNN
+F 3 "" H 650 1900 50  0001 C CNN
+	1    650  1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND1 #PWR0123
+U 1 1 5F6FBC55
+P 1050 1900
+F 0 "#PWR0123" H 1050 1650 50  0001 C CNN
+F 1 "GND1" H 1055 1727 50  0000 C CNN
+F 2 "" H 1050 1900 50  0001 C CNN
+F 3 "" H 1050 1900 50  0001 C CNN
+	1    1050 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND1 #PWR0129
+U 1 1 5F6FC252
+P 1500 1900
+F 0 "#PWR0129" H 1500 1650 50  0001 C CNN
+F 1 "GND1" H 1505 1727 50  0000 C CNN
+F 2 "" H 1500 1900 50  0001 C CNN
+F 3 "" H 1500 1900 50  0001 C CNN
+	1    1500 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND1 #PWR0142
+U 1 1 5F6FC701
+P 2000 1900
+F 0 "#PWR0142" H 2000 1650 50  0001 C CNN
+F 1 "GND1" H 2005 1727 50  0000 C CNN
+F 2 "" H 2000 1900 50  0001 C CNN
+F 3 "" H 2000 1900 50  0001 C CNN
+	1    2000 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND1 #PWR0144
+U 1 1 5F6FF83C
+P 2700 13450
+F 0 "#PWR0144" H 2700 13200 50  0001 C CNN
+F 1 "GND1" H 2705 13277 50  0000 C CNN
+F 2 "" H 2700 13450 50  0001 C CNN
+F 3 "" H 2700 13450 50  0001 C CNN
+	1    2700 13450
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND1 #PWR0145
+U 1 1 5F700126
+P 5100 14650
+F 0 "#PWR0145" H 5100 14400 50  0001 C CNN
+F 1 "GND1" H 5105 14477 50  0000 C CNN
+F 2 "" H 5100 14650 50  0001 C CNN
+F 3 "" H 5100 14650 50  0001 C CNN
+	1    5100 14650
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC
