@@ -98,6 +98,7 @@ DefaultSettings.PunishSoundDur = 0; % (s) Duration of white noise punish sound w
 % Stimulus presentation settings
 DefaultSettings.ProbRight = 0.5; %Probability for occurence of a target presentation on the right.
 DefaultSettings.ServoPos = zeros(1,2); % position of left and right spout, relative to their inner limit. these values will be changed by anti-bias correction to correct spout position.
+DefaultSettings.maxServoPos = zeros(1,2)+3;
 
 %% Load default settings and update with pre-defined settings if required
 defaultFieldParamVals = struct2cell(DefaultSettings);defaultFieldNames = fieldnames(DefaultSettings);
@@ -470,6 +471,12 @@ for iTrials = 1:maxTrials
                     if round(BpodSystem.ProtocolSettings.ServoPos(cInd(1)),2) < round(lim(1)-lim(2),2) %if spout is not at its outer limit
                         BpodSystem.ProtocolSettings.ServoPos(cInd(1)) = lim(1)-lim(2); %move spout to its outer limit
                     end
+                end
+            end
+            %limit the max bias
+            for i = 1:length(BpodSystem.ProtocolSettings.ServoPos)
+                if BpodSystem.ProtocolSettings.ServoPos(i) > BpodSystem.ProtocolSettings.maxServoPos(i)
+                    BpodSystem.ProtocolSettings.ServoPos(i) = BpodSystem.ProtocolSettings.maxServoPos(i);
                 end
             end
             set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
