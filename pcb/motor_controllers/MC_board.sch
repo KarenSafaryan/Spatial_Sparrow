@@ -1422,4 +1422,29 @@ F 3 "" H 5100 14650 50  0001 C CNN
 	1    5100 14650
 	1    0    0    -1  
 $EndComp
+$Comp
+L Jumper:Jumper_2_Open JP1
+U 1 1 5F0D8BE7
+P 3600 13100
+F 0 "JP1" H 3600 13335 50  0000 C CNN
+F 1 "gnd jumper" H 3600 13244 50  0000 C CNN
+F 2 "" H 3600 13100 50  0001 C CNN
+F 3 "~" H 3600 13100 50  0001 C CNN
+	1    3600 13100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2650 14150 2700 14150
+Wire Wire Line
+	3400 14150 3400 13100
+Connection ~ 2700 14150
+Wire Wire Line
+	2700 14150 3400 14150
+Wire Wire Line
+	2650 13450 2700 13450
+Wire Wire Line
+	3800 13450 3800 13100
+Connection ~ 2700 13450
+Wire Wire Line
+	2700 13450 3800 13450
 $EndSCHEMATC
