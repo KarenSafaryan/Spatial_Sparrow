@@ -304,7 +304,7 @@ F 3 "" H 2350 9500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L MC_board-rescue:MAX98306-spatialsparrow U2
+L spatialsparrow:MAX98306 U2
 U 1 1 5F0C05CB
 P 3850 9750
 F 0 "U2" V 3475 9800 50  0000 C CNN
@@ -419,7 +419,7 @@ F 3 "" H 12250 2100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L MC_board-rescue:Teensy3.2-teensy U1
+L teensy:Teensy3.2 U1
 U 1 1 5EFE2FDF
 P 13250 3450
 F 0 "U1" H 13250 5087 60  0000 C CNN

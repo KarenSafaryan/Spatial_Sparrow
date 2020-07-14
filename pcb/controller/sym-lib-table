@@ -1,3 +1,4 @@
 (sym_lib_table
-  (lib (name MC_board-rescue)(type Legacy)(uri ${KIPRJMOD}/MC_board-rescue.lib)(options "")(descr ""))
+  (lib (name spatialsparrow)(type Legacy)(uri ${KIPRJMOD}/../lib/spatialsparrow.lib)(options "")(descr ""))
+  (lib (name teensy)(type Legacy)(uri ${KIPRJMOD}/../lib/teensy.lib)(options "")(descr ""))
 )
