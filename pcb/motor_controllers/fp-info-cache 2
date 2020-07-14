@@ -1,4 +1,4 @@
-18655884802042674
+18652659974346220
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -56147,13 +56147,6 @@ PocketBeagle
 72
 72
 Module
-DRV8834_breakout
-
-
-0
-16
-15
-Module
 Maple_Mini
 Maple Mini, http://docs.leaflabs.com/static.leaflabs.com/pub/leaflabs/maple-docs/0.0.12/hardware/maple-mini.html
 Maple Mini
@@ -76838,111 +76831,6 @@ Logo WEEE
 0
 0
 0
-Teensey
-RJ45_sparkfun
-1 port ethernet throughhole connector, https://en.ninigi.com/product/rj45ge/pdf
-RJ45 ethernet 8p8c
-0
-10
-9
-Teensey
-Teensy1.0
-11
-
-0
-27
-27
-Teensey
-Teensy1.0++
-20
-
-0
-51
-51
-Teensey
-Teensy2.0
-11
-
-0
-31
-31
-Teensey
-Teensy2.0++
-20
-
-0
-52
-52
-Teensey
-Teensy30_31_32_LC
-
-
-0
-39
-38
-Teensey
-Teensy35_36
-
-
-0
-62
-62
-Teensey
-Teensy40
-
-
-0
-44
-44
-Teensey
-Teensy40_SMT
-
-
-0
-54
-54
-Teensey
-TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal
-Terminal Block TE 282834-6, 6 pins, pitch 2.54mm, size 15.7x6.5mm^2, drill diamater 1.1mm, pad diameter 2.1mm, see http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F282834%7FC1%7Fpdf%7FEnglish%7FENG_CD_282834_C1.pdf, script-generated using https://github.com/pointhi/kicad-footprint-generator/scripts/TerminalBlock_TE-Connectivity
-THT Terminal Block TE 282834-6 pitch 2.54mm size 15.7x6.5mm^2 drill 1.1mm pad 2.1mm
-0
-2
-2
-Teensey
-TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal
-Terminal Block TE 282834-6, 6 pins, pitch 2.54mm, size 15.7x6.5mm^2, drill diamater 1.1mm, pad diameter 2.1mm, see http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F282834%7FC1%7Fpdf%7FEnglish%7FENG_CD_282834_C1.pdf, script-generated using https://github.com/pointhi/kicad-footprint-generator/scripts/TerminalBlock_TE-Connectivity
-THT Terminal Block TE 282834-6 pitch 2.54mm size 15.7x6.5mm^2 drill 1.1mm pad 2.1mm
-0
-4
-4
-Teensey
-TerminalBlock_TE_282825-5_1x05_P5.08mm_Horizontal
-Terminal Block TE 282834-6, 6 pins, pitch 2.54mm, size 15.7x6.5mm^2, drill diamater 1.1mm, pad diameter 2.1mm, see http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F282834%7FC1%7Fpdf%7FEnglish%7FENG_CD_282834_C1.pdf, script-generated using https://github.com/pointhi/kicad-footprint-generator/scripts/TerminalBlock_TE-Connectivity
-THT Terminal Block TE 282834-6 pitch 2.54mm size 15.7x6.5mm^2 drill 1.1mm pad 2.1mm
-0
-5
-5
-Teensey
-TerminalBlock_TE_282825-6_1x06_P5.08mm_Horizontal
-Terminal Block TE 282834-6, 6 pins, pitch 2.54mm, size 15.7x6.5mm^2, drill diamater 1.1mm, pad diameter 2.1mm, see http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F282834%7FC1%7Fpdf%7FEnglish%7FENG_CD_282834_C1.pdf, script-generated using https://github.com/pointhi/kicad-footprint-generator/scripts/TerminalBlock_TE-Connectivity
-THT Terminal Block TE 282834-6 pitch 2.54mm size 15.7x6.5mm^2 drill 1.1mm pad 2.1mm
-0
-6
-6
-Teensey
-churchland_lab_logo
-
-
-0
-0
-0
-Teensey
-mx98306
-
-
-0
-1
-1
 TerminalBlock
 TerminalBlock_Altech_AK300-2_P5.00mm
 Altech AK300 terminal block, pitch 5.0mm, 45 degree angled, see http://www.mouser.com/ds/2/16/PCBMETRC-24178.pdf
@@ -79737,13 +79625,6 @@ THT Terminal Block TE 1-282834-2 pitch 2.54mm size 30.94x6.5mm^2 drill 1.1mm pad
 12
 12
 TerminalBlock_TE-Connectivity
-TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal
-Terminal Block TE 282834-4, 4 pins, pitch 2.54mm, size 10.620000000000001x6.5mm^2, drill diamater 1.1mm, pad diameter 2.1mm, see http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F282834%7FC1%7Fpdf%7FEnglish%7FENG_CD_282834_C1.pdf, script-generated using https://github.com/pointhi/kicad-footprint-generator/scripts/TerminalBlock_TE-Connectivity
-THT Terminal Block TE 282834-4 pitch 2.54mm size 10.620000000000001x6.5mm^2 drill 1.1mm pad 2.1mm
-0
-4
-4
-TerminalBlock_TE-Connectivity
 TerminalBlock_TE_282834-2_1x02_P2.54mm_Horizontal
 Terminal Block TE 282834-2, 2 pins, pitch 2.54mm, size 5.54x6.5mm^2, drill diamater 1.1mm, pad diameter 2.1mm, see http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F282834%7FC1%7Fpdf%7FEnglish%7FENG_CD_282834_C1.pdf, script-generated using https://github.com/pointhi/kicad-footprint-generator/scripts/TerminalBlock_TE-Connectivity
 THT Terminal Block TE 282834-2 pitch 2.54mm size 5.54x6.5mm^2 drill 1.1mm pad 2.1mm
@@ -82158,3 +82039,115 @@ varistor SIOV
 0
 2
 2
+spatialsparrow
+MAX98306
+
+
+0
+21
+21
+teensey
+RJ45_sparkfun
+1 port ethernet throughhole connector, https://en.ninigi.com/product/rj45ge/pdf
+RJ45 ethernet 8p8c
+0
+10
+9
+teensey
+Teensy1.0
+11
+
+0
+27
+27
+teensey
+Teensy1.0++
+20
+
+0
+51
+51
+teensey
+Teensy2.0
+11
+
+0
+31
+31
+teensey
+Teensy2.0++
+20
+
+0
+52
+52
+teensey
+Teensy30_31_32_LC
+
+
+0
+39
+38
+teensey
+Teensy35_36
+
+
+0
+62
+62
+teensey
+Teensy40
+
+
+0
+44
+44
+teensey
+Teensy40_SMT
+
+
+0
+54
+54
+teensey
+TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal
+Terminal Block TE 282834-6, 6 pins, pitch 2.54mm, size 15.7x6.5mm^2, drill diamater 1.1mm, pad diameter 2.1mm, see http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F282834%7FC1%7Fpdf%7FEnglish%7FENG_CD_282834_C1.pdf, script-generated using https://github.com/pointhi/kicad-footprint-generator/scripts/TerminalBlock_TE-Connectivity
+THT Terminal Block TE 282834-6 pitch 2.54mm size 15.7x6.5mm^2 drill 1.1mm pad 2.1mm
+0
+2
+2
+teensey
+TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal
+Terminal Block TE 282834-6, 6 pins, pitch 2.54mm, size 15.7x6.5mm^2, drill diamater 1.1mm, pad diameter 2.1mm, see http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F282834%7FC1%7Fpdf%7FEnglish%7FENG_CD_282834_C1.pdf, script-generated using https://github.com/pointhi/kicad-footprint-generator/scripts/TerminalBlock_TE-Connectivity
+THT Terminal Block TE 282834-6 pitch 2.54mm size 15.7x6.5mm^2 drill 1.1mm pad 2.1mm
+0
+4
+4
+teensey
+TerminalBlock_TE_282825-5_1x05_P5.08mm_Horizontal
+Terminal Block TE 282834-6, 6 pins, pitch 2.54mm, size 15.7x6.5mm^2, drill diamater 1.1mm, pad diameter 2.1mm, see http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F282834%7FC1%7Fpdf%7FEnglish%7FENG_CD_282834_C1.pdf, script-generated using https://github.com/pointhi/kicad-footprint-generator/scripts/TerminalBlock_TE-Connectivity
+THT Terminal Block TE 282834-6 pitch 2.54mm size 15.7x6.5mm^2 drill 1.1mm pad 2.1mm
+0
+5
+5
+teensey
+TerminalBlock_TE_282825-6_1x06_P5.08mm_Horizontal
+Terminal Block TE 282834-6, 6 pins, pitch 2.54mm, size 15.7x6.5mm^2, drill diamater 1.1mm, pad diameter 2.1mm, see http://www.te.com/commerce/DocumentDelivery/DDEController?Action=showdoc&DocId=Customer+Drawing%7F282834%7FC1%7Fpdf%7FEnglish%7FENG_CD_282834_C1.pdf, script-generated using https://github.com/pointhi/kicad-footprint-generator/scripts/TerminalBlock_TE-Connectivity
+THT Terminal Block TE 282834-6 pitch 2.54mm size 15.7x6.5mm^2 drill 1.1mm pad 2.1mm
+0
+6
+6
+teensey
+churchland_lab_logo
+
+
+0
+0
+0
+teensey
+mx98306
+
+
+0
+1
+1
