@@ -167,7 +167,7 @@ int stepPulse = 10; // duration of stepper pulse in microseconds
 int stimDur = 5; // duration of stimulus trigger in ms
 int trialDur = 50; // duration of trial trigger in ms
 float temp[10]; // temporary variable for general purposes
-int camTrigRate = 100; // rate of camera trigger in Hz.
+int camTrigRate = 90; // rate of camera trigger in Hz.
 
 /* #################################################
 ##################### CAMERA TRIGGER ###############
