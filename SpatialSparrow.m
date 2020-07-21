@@ -218,11 +218,11 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
         % start camera
         % Create a string for the arguments to apss to Bonsai during starting
-        WorkflowArg1 = sprintf('-p:VideoFileName0="%s"', [dataPath filesep bhvFile '_' 'video1.mp4']);
-        WorkflowArg2 = sprintf('-p:VideoFileName1="%s"', [dataPath filesep bhvFile '_' 'video2.mp4']);
-        WorkflowArg3 = sprintf('-p:CsvFileName1="%s"', [dataPath filesep bhvFile '_' 'frameTimes.csv']);
-        WorkflowArg4 = sprintf('-p:CsvFileName2="%s"', [dataPath filesep bhvFile '_' 'data_stream.csv']);
-        WorkflowArg5 = sprintf('-p:CsvFileName3="%s"', [dataPath filesep bhvFile '_' 'data_times.csv']);
+        WorkflowArg1 = sprintf('-p:VideoFileName0="%s"', [dataPath filesep bhvFile filesep bhvFile '_' 'video1.mp4']);
+        WorkflowArg2 = sprintf('-p:VideoFileName1="%s"', [dataPath filesep bhvFile filesep bhvFile '_' 'video2.mp4']);
+        WorkflowArg3 = sprintf('-p:CsvFileName1="%s"', [dataPath filesep bhvFile filesep bhvFile '_' 'frameTimes.csv']);
+        WorkflowArg4 = sprintf('-p:CsvFileName2="%s"', [dataPath filesep bhvFile filesep bhvFile '_' 'data_stream.csv']);
+        WorkflowArg5 = sprintf('-p:CsvFileName3="%s"', [dataPath filesep bhvFile filesep bhvFile '_' 'data_times.csv']);
         WorkflowArgs = [WorkflowArg1 ' ' WorkflowArg2 ' ' WorkflowArg3 ' ' WorkflowArg4 ' ' WorkflowArg5];
     
         cPath = pwd;
@@ -950,19 +950,18 @@ for iTrials = 1:maxTrials
         sma = NewStateMatrix();
         sma = AddState(sma, 'Name', 'Sync', ... %trigger to signal trialstart to attached hardware. Only works when using 'WaitForCam'.
             'Timer', 0.1, ...
-            'StateChangeConditions', {'Tup','TrialStart'},... %
-	    'StateChangeConditions', {CamTrig,'TriggerDowntime','Tup','TriggerDowntime'},... %wait for imager before producing barcode sequence
+            'StateChangeConditions', {CamTrig,'TrialStart'},... %wait for imager before producing barcode sequence
             'OutputActions', {'BNCState',1}); % BNC 1 is high, all others are low
         
         if exist('i2c','var') % does this have I2C communication to scanimage?
             sma = AddState(sma, 'Name', 'TrialStart', ... %trigger to signal trialstart to attached hardware. Only works when using 'WaitForCam'.
                 'Timer', S.WaitForCam, ...
-                'StateChangeConditions', {CamTrig,'TriggerDowntime','Tup','TriggerDowntime'},... %wait for imager before producing barcode sequence
+                'StateChangeConditions', {CamTrig,'CheckForLever'},... %wait for imager before producing barcode sequence
                 'OutputActions', {'BNCState',1,'I2C1', [1 34]}); % BNC 1 is high, all others are low, sends message to scan image
         else
             sma = AddState(sma, 'Name', 'TrialStart', ... %trigger to signal trialstart to attached hardware. Only works when using 'WaitForCam'.
                 'Timer', S.WaitForCam, ...
-                'StateChangeConditions', {CamTrig,'TriggerDowntime','Tup','TriggerDowntime'},... %wait for imager before producing barcode sequence
+                'StateChangeConditions', {CamTrig,'CheckForLever'},... %wait for imager before producing barcode sequence
                 'OutputActions', {'BNCState',1}); % BNC 1 is high, all others are low
         end
         
@@ -1259,6 +1258,8 @@ for iTrials = 1:maxTrials
             if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
                 oscsend(udpObj,udpPath,'i',1000) % stop video capture
                 stopBonsai(); %shut down bonsai
+                hasvideo = 1;
+
             end
             
             if exist('udplabcams','var')
@@ -1304,8 +1305,9 @@ for iTrials = 1:maxTrials
                         if exist('hasvideo','var')
                             if hasvideo
                                 videoPaths = [dataPath filesep bhvFile];
-                                disp('Copying labcams video data')
-                                filestocp = [dir([videoPaths,'*.avi']);dir([videoPaths,'*.camlog'])];
+                                disp('Copying video data')
+                                filestocp = [dir([videoPaths,'*.avi']);dir([videoPaths,'*.camlog']); ...
+                                    dir([videoPaths,'*.csv'])];
                                 if length(filestocp)
                                     for f = 1:length(filestocp)
                                         [SUCCESS,MESSAGE,MESSAGEID] = copyfile([filestocp(f).folder,...
