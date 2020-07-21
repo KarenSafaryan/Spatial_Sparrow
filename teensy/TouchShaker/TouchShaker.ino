@@ -1,6 +1,7 @@
 
 #include "Arduino.h"
 #include "ArCOM.h"
+#include "HX711.h" //This load-cell library can be obtained here http://librarymanager/All#Avia_HX711
 
 // –--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--
 // This version includes:
@@ -26,11 +27,14 @@ const int sRateLever = 10; // This is the number of ms for outputs to be during 
 ############## PIN CONFIGURATION ###################
 #################################################### */
 // TTL Outputs
-#define PIN_LEFTLICK 19 // trigger that informs over left licks
-#define PIN_RIGHTLICK 20 // trigger that informs over right licks
 #define PIN_STIMTRIG 21 // stimulus trigger that can be switched by serial command 'MAKE_STIMTRIGGER'
 #define PIN_TRIALTRIG 4 // trial-start trigger that can be switched by serial command 'MAKE_TRIALTRIGGER'
 #define PIN_CAMTIMER 3 // Trigger to synchronize camera acquisition. Sends TTL for 'camTrigDur' with an inter-pulse of 'camTrigRate'.
+
+// load cell pins
+#define LOADCELL_SCK_PIN  19
+#define LOADCELL_DOUT_PIN  20
+HX711 scale;
 
 // Inputs for lick sensors
 #define LEVERSENSOR_L 15 // touch line for lever touch
@@ -75,6 +79,9 @@ const int sRateLever = 10; // This is the number of ms for outputs to be during 
 #define DECREASE_LEVERTHRESH_L 85 // identifier to decrease touch threshold for the left LEVER
 #define INCREASE_LEVERTHRESH_R 86 // identifier to increase touch threshold for the right LEVER
 #define DECREASE_LEVERTHRESH_R 87 // identifier to decrease touch threshold for the right LEVER
+#define START_SCALE 91 // identifier to start logging data from the load cell
+#define STOP_SCALE 92 // identifier to stop logging data from the load cell
+#define SEND_DATA_SCALE 93 // identifier to return data from load cell recording
 
 // outputs
 #define LEFT_SPOUT_TOUCH 1 // byte to indicate left spout is being touched
@@ -168,7 +175,17 @@ int stimDur = 5; // duration of stimulus trigger in ms
 int trialDur = 50; // duration of trial trigger in ms
 float temp[10]; // temporary variable for general purposes
 int camTrigRate = 90; // rate of camera trigger in Hz.
+unsigned long scaleClocker = millis(); // timer for load-cell measurements
+bool readScale = false; // flag to collect data from load-cell
+int scaleRate = 10; // duration between samples from load-cell in ms (default is 10ms).
+unsigned long scaleCnt = 0; //counter to fill readings into scaleVals
+#define SCALE_READS 100 // maximum samples from load-cell per trial. Default duration for readout at 100Hz is 1 minute. decrease from 60000 for memory
+long scaleVals[SCALE_READS]; //array for scale readings. 
+bool scaleWrap = false; // flag that scale reacording was above maximum. In this case, the full scaleVals array and the current scaleCnt is sent to Bpod.
+int weight_val = 0;
 
+unsigned long usbClocker = millis();
+int usbRate = 10; 
 /* #################################################
 ##################### CAMERA TRIGGER ###############
 #################################################### */
@@ -179,7 +196,8 @@ void setup() {
   // put your setup code here, to run once:
   Serial1.begin(1312500); //baud rate for UART bpod serial communication
   Serial.begin(9600); // USB baud rate
-
+  scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN); // communication with load cell amp
+  //digitalWrite(LOADCELL_SCK_PIN, HIGH);
   // Set servo pins to output mode
   pinMode(PIN_SPOUTSTEP_L, OUTPUT);
   pinMode(PIN_SPOUTSTEP_R, OUTPUT);
@@ -192,8 +210,6 @@ void setup() {
   pinMode(PIN_LEVERDIR_R, OUTPUT);
 
   // Set pin modes for digital output lines
-  pinMode(PIN_LEFTLICK, OUTPUT);
-  pinMode(PIN_RIGHTLICK, OUTPUT);
   pinMode(PIN_STIMTRIG, OUTPUT);
   pinMode(PIN_TRIALTRIG, OUTPUT);
 
@@ -483,6 +499,30 @@ void loop() {
       Serial1.write(GOT_BYTE);
       midRead = 0;
     }
+
+    else if (FSMheader >= START_SCALE && FSMheader <= SEND_DATA_SCALE){ // byte for scale recording
+      if (FSMheader == START_SCALE){ // reset counter and start load-cell recording
+        scaleCnt = 0; 
+        scaleWrap = false;
+        scaleClocker = millis();
+        readScale = true;
+      }
+      else if (FSMheader == STOP_SCALE) {  // stop reading from load-cell
+        readScale = false;
+      }
+      else if (FSMheader == SEND_DATA_SCALE) { // return data from load-cell to bpod
+        Serial1COM.writeUint32(scaleCnt); // send current array index
+        if (scaleWrap){
+          Serial1COM.writeInt32Array(scaleVals,SCALE_READS); // write full array
+        }
+        else{
+          Serial1COM.writeInt32Array(scaleVals,scaleCnt); // write partial array
+        }
+      }
+
+      Serial1.write(GOT_BYTE);
+      midRead = 0;
+    }
     
     else {
       midRead = 0; Serial1.write(DID_ABORT);
@@ -541,7 +581,6 @@ void loop() {
   // check touch lines and create according output
   if (!touchAdjust) {
     if (touchData[0] > (meanTouchVals[0]+(stdTouchVals[0]*touchThresh))) { // signal above 'stdTouchVals' standard deviations indicate lick event. only when spouts dont move.
-      digitalWriteFast(PIN_LEFTLICK, HIGH); // set left lick trigger to high
       spoutClocker_L = millis(); //update time when spout was last touched
       if (!spoutTouch_L) {
         Serial1.write(LEFT_SPOUT_TOUCH); // send a byte to bpod if this is an onset event
@@ -550,7 +589,6 @@ void loop() {
     }
     else {
       if ((millis() - spoutClocker_L) >= sRateLicks) { // check when lever was last touched and set output to low if it happened too long ago.
-        digitalWriteFast(PIN_LEFTLICK, LOW); // set spoutTouch trigger to low
         if (spoutTouch_L) {
           Serial1.write(LEFT_SPOUT_RELEASE); // send a byte to bpod if this is an offset event
         }
@@ -560,7 +598,6 @@ void loop() {
 
     
     if (touchData[1] > (meanTouchVals[1]+(stdTouchVals[1]*touchThresh))) { // signal above 'stdTouchVals' standard deviations indicate lick event. only when spouts dont move.
-      digitalWriteFast(PIN_RIGHTLICK, HIGH); // set right lick trigger to high
       spoutClocker_R = millis(); //update time when spout was last touched
       if (!spoutTouch_R) {
         Serial1.write(RIGHT_SPOUT_TOUCH); // send a byte to bpod if this is an onset event
@@ -569,7 +606,6 @@ void loop() {
     }
     else {
       if ((millis() - spoutClocker_R) >= sRateLicks) { // check when lever was last touched and set output to low if it happened too long ago.
-        digitalWriteFast(PIN_RIGHTLICK, LOW); // set levertouch trigger to low
         if (spoutTouch_R) {
           Serial1.write(RIGHT_SPOUT_RELEASE); // send a byte to bpod if this is an offset event
         }
@@ -831,18 +867,35 @@ void loop() {
     }
   }
 
-  ///////////////////////////////////////////////////
-  // send touch data for serial monitor
-  for (int i = 0; i < 4; i++) { // send some feedback about touch events
-
-    touchVal = ((touchData[i] / pow(2,16)) * pow(2,8) + (i*20)); // convert value from 16 to 8 bit number
-    Serial.print(byte(touchVal)); Serial.print(" ");
-
-    touchVal = (((meanTouchVals[i]+(stdTouchVals[i]*touchThresh))/ pow(2,16)) * pow(2,8) + (i*20)); // convert bound from 16 to 8 bit number
-    Serial.print(byte(touchVal)); Serial.print(" ");
-    
+  ////////////////////////////////////////////////
+  /////// check load-cell inputs /////////////////
+  if (scale.is_ready() && readScale && ((millis() - scaleClocker) >= scaleRate)){
+    scaleVals[scaleCnt] = scale.read();
+    ++scaleCnt;
+    if (scaleCnt > SCALE_READS){
+      scaleCnt = 0;
+      scaleWrap = true;
+    }
   }
-  Serial.println();
+
+  if ((millis() - usbClocker) >= usbRate){
+    usbClocker = millis();
+//    long wv_tmp = scale.read();
+    ///////////////////////////////////////////////////
+    // send touch data for serial monitor
+    for (int i = 0; i < 4; i++) { // send some feedback about touch events
+
+      touchVal = ((touchData[i] / pow(2,16)) * pow(2,8) + (i*20)); // convert value from 16 to 8 bit number
+      Serial.print(byte(touchVal)); Serial.print(",");
+    
+      touchVal = (((meanTouchVals[i]+(stdTouchVals[i]*touchThresh))/ pow(2,16)) * pow(2,8) + (i*20)); // convert bound from 16 to 8 bit number
+      Serial.print(byte(touchVal)); Serial.print(",");
+    }
+//    weight_val = ((wv_tmp / pow(2,16)) * pow(2,8) + (4*20)); // convert value from 16 to 8 bit number
+  //  weight_val = ((scaleVals[scaleCnt] / pow(2,16)) * pow(2,8) + (4*20)); // convert value from 16 to 8 bit number
+//    Serial.print(byte(weight_val));
+    Serial.println();
+  }
   
 } // end of void loop
 
