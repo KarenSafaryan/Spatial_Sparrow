@@ -293,6 +293,8 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     SpatialSparrow_SpoutControl; %call spout control gui
     movegui(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1,'northwest');
     uiwait(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1); %wait for spout control and clear handle afterwards
+    S.AdjustSpoutes = false;
+    set(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value',false); %set GUI back to false
     set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
 end
                 
