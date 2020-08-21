@@ -72,7 +72,7 @@ Settings for `trial timing` :
 | ITIlambda | 10 (AU) | bariability between minITI and maxITI. High lambda -> closer to minITI |
 | WaitingTime | 1 (s) | minimum waiting time before a response can be made, early licks are ignored |
 | TimeToChoose | 3 (s) | how long to wait for choice report |
-| TimeToConfirm | 0.5 (s) | ??? |
+| TimeToConfirm | 0.5 (s) | how long to wait for a 2nd (confirmation) lick |
 | Timeout | 3 (s) | timeout to punish wrong responses |
 | LeverWait | 10 (s) | time to wait for handle grasp |
 | MoveLever | TRUE | move levers or not (set to FALSE during habituation)|
