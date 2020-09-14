@@ -30,7 +30,7 @@ U 1 1 5F00F6D8
 P 6500 2650
 F 0 "HandleL-ToMotor1" H 6580 2642 50  0000 L CNN
 F 1 "Screw_Terminal_01x04" H 6580 2551 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 6500 2650 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 6500 2650 50  0001 C CNN
 F 3 "~" H 6500 2650 50  0001 C CNN
 	1    6500 2650
 	1    0    0    -1  
@@ -41,7 +41,7 @@ U 1 1 5F010C08
 P 6550 4300
 F 0 "HandleR-ToMotor1" H 6550 4550 50  0000 L CNN
 F 1 "Screw_Terminal_01x04" H 6650 4450 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 6550 4300 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 6550 4300 50  0001 C CNN
 F 3 "~" H 6550 4300 50  0001 C CNN
 	1    6550 4300
 	1    0    0    -1  
@@ -52,7 +52,7 @@ U 1 1 5F00E35C
 P 4500 4550
 F 0 "SpoutR-ToMotor1" H 4200 4200 50  0000 L CNN
 F 1 "Screw_Terminal_01x04" H 4150 4100 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 4500 4550 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 4500 4550 50  0001 C CNN
 F 3 "~" H 4500 4550 50  0001 C CNN
 	1    4500 4550
 	1    0    0    -1  
@@ -63,7 +63,7 @@ U 1 1 5F00C5DF
 P 4500 2600
 F 0 "SpoutL-ToMotor1" H 4250 2300 50  0000 L CNN
 F 1 "Screw_Terminal_01x04" H 4200 2200 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 4500 2600 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-4_1x04_P5.08mm_Horizontal" H 4500 2600 50  0001 C CNN
 F 3 "~" H 4500 2600 50  0001 C CNN
 	1    4500 2600
 	1    0    0    -1  
@@ -85,7 +85,7 @@ U 1 1 5F05C787
 P 7400 6950
 F 0 "ToHandleR1" H 7318 6525 50  0000 C CNN
 F 1 "Screw_Terminal_01x05" H 7318 6616 50  0000 C CNN
-F 2 "teensey:TerminalBlock_TE_282825-5_1x05_P5.08mm_Horizontal" H 7400 6950 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-5_1x05_P5.08mm_Horizontal" H 7400 6950 50  0001 C CNN
 F 3 "~" H 7400 6950 50  0001 C CNN
 	1    7400 6950
 	-1   0    0    1   
@@ -96,7 +96,7 @@ U 1 1 5F05AFB3
 P 10500 6950
 F 0 "ToHandleL1" H 10418 6525 50  0000 C CNN
 F 1 "Screw_Terminal_01x05" H 10418 6616 50  0000 C CNN
-F 2 "teensey:TerminalBlock_TE_282825-5_1x05_P5.08mm_Horizontal" H 10500 6950 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-5_1x05_P5.08mm_Horizontal" H 10500 6950 50  0001 C CNN
 F 3 "~" H 10500 6950 50  0001 C CNN
 	1    10500 6950
 	-1   0    0    1   
@@ -133,7 +133,7 @@ U 1 1 5F1887E1
 P 1950 9200
 F 0 "J2" H 2007 9867 50  0000 C CNN
 F 1 "RJ45" H 2007 9776 50  0000 C CNN
-F 2 "teensey:RJ45_sparkfun" V 1950 9225 50  0001 C CNN
+F 2 "teensy:RJ45_sparkfun" V 1950 9225 50  0001 C CNN
 F 3 "~" V 1950 9225 50  0001 C CNN
 	1    1950 9200
 	1    0    0    -1  
@@ -424,7 +424,7 @@ U 1 1 5EFE2FDF
 P 13250 3450
 F 0 "U1" H 13250 5087 60  0000 C CNN
 F 1 "Teensy3.2" H 13250 4981 60  0000 C CNN
-F 2 "teensey:Teensy30_31_32_LC" H 13250 2700 60  0001 C CNN
+F 2 "teensy:Teensy30_31_32_LC" H 13250 2700 60  0001 C CNN
 F 3 "" H 13250 2700 60  0000 C CNN
 	1    13250 3450
 	1    0    0    -1  
@@ -459,7 +459,7 @@ U 1 1 5F069700
 P 5300 12600
 F 0 "J12V2" H 5380 12592 50  0000 L CNN
 F 1 "Screw_Terminal_01x02" H 5380 12501 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 12600 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 12600 50  0001 C CNN
 F 3 "~" H 5300 12600 50  0001 C CNN
 	1    5300 12600
 	1    0    0    -1  
@@ -472,7 +472,7 @@ U 1 1 5F0675E7
 P 5450 7250
 F 0 "SoundVisionR1" H 5368 6785 50  0000 C CNN
 F 1 "Screw_Terminal_01x06" H 5368 6876 50  0000 C CNN
-F 2 "teensey:TerminalBlock_TE_282825-6_1x06_P5.08mm_Horizontal" H 5450 7250 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-6_1x06_P5.08mm_Horizontal" H 5450 7250 50  0001 C CNN
 F 3 "~" H 5450 7250 50  0001 C CNN
 	1    5450 7250
 	-1   0    0    1   
@@ -483,7 +483,7 @@ U 1 1 5F080410
 P 3150 7250
 F 0 "SoundVisionL1" H 3068 6785 50  0000 C CNN
 F 1 "Screw_Terminal_01x06" H 3068 6876 50  0000 C CNN
-F 2 "teensey:TerminalBlock_TE_282825-6_1x06_P5.08mm_Horizontal" H 3150 7250 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-6_1x06_P5.08mm_Horizontal" H 3150 7250 50  0001 C CNN
 F 3 "~" H 3150 7250 50  0001 C CNN
 	1    3150 7250
 	-1   0    0    1   
@@ -494,7 +494,7 @@ U 1 1 5F081E55
 P 8250 2950
 F 0 "sync_trigger_out1" H 8168 2525 50  0000 C CNN
 F 1 "Screw_Terminal_01x05" H 8168 2616 50  0000 C CNN
-F 2 "teensey:TerminalBlock_TE_282825-5_1x05_P5.08mm_Horizontal" H 8250 2950 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-5_1x05_P5.08mm_Horizontal" H 8250 2950 50  0001 C CNN
 F 3 "~" H 8250 2950 50  0001 C CNN
 	1    8250 2950
 	-1   0    0    1   
@@ -831,7 +831,7 @@ U 1 1 5F16A0F3
 P 5300 12900
 F 0 "J12V3" H 5380 12892 50  0000 L CNN
 F 1 "Screw_Terminal_01x02" H 5380 12801 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 12900 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 12900 50  0001 C CNN
 F 3 "~" H 5300 12900 50  0001 C CNN
 	1    5300 12900
 	1    0    0    -1  
@@ -842,7 +842,7 @@ U 1 1 5F1756AC
 P 5300 13200
 F 0 "J12V4" H 5380 13192 50  0000 L CNN
 F 1 "Screw_Terminal_01x02" H 5380 13101 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 13200 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 13200 50  0001 C CNN
 F 3 "~" H 5300 13200 50  0001 C CNN
 	1    5300 13200
 	1    0    0    -1  
@@ -853,7 +853,7 @@ U 1 1 5F180A13
 P 5300 13700
 F 0 "J5V1" H 5380 13692 50  0000 L CNN
 F 1 "Screw_Terminal_01x02" H 5380 13601 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 13700 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 13700 50  0001 C CNN
 F 3 "~" H 5300 13700 50  0001 C CNN
 	1    5300 13700
 	1    0    0    -1  
@@ -864,7 +864,7 @@ U 1 1 5F18BEE5
 P 5300 14050
 F 0 "J5V2" H 5380 14042 50  0000 L CNN
 F 1 "Screw_Terminal_01x02" H 5380 13951 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 14050 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 14050 50  0001 C CNN
 F 3 "~" H 5300 14050 50  0001 C CNN
 	1    5300 14050
 	1    0    0    -1  
@@ -875,7 +875,7 @@ U 1 1 5F19722B
 P 5300 12300
 F 0 "J12V1" H 5380 12292 50  0000 L CNN
 F 1 "Screw_Terminal_01x02" H 5380 12201 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 12300 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 12300 50  0001 C CNN
 F 3 "~" H 5300 12300 50  0001 C CNN
 	1    5300 12300
 	1    0    0    -1  
@@ -886,7 +886,7 @@ U 1 1 5F1A2427
 P 5300 14550
 F 0 "J9V1" H 5380 14542 50  0000 L CNN
 F 1 "Screw_Terminal_01x02" H 5380 14451 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 14550 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 5300 14550 50  0001 C CNN
 F 3 "~" H 5300 14550 50  0001 C CNN
 	1    5300 14550
 	1    0    0    -1  
@@ -1257,7 +1257,7 @@ U 1 1 5F566D88
 P 3900 8600
 F 0 "distractor1" H 3980 8592 50  0000 L CNN
 F 1 "Screw_Terminal_01x02" H 3980 8501 50  0000 L CNN
-F 2 "teensey:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 3900 8600 50  0001 C CNN
+F 2 "teensy:TerminalBlock_TE_282825-2_1x02_P5.08mm_Horizontal" H 3900 8600 50  0001 C CNN
 F 3 "~" H 3900 8600 50  0001 C CNN
 	1    3900 8600
 	1    0    0    -1  
@@ -1417,7 +1417,7 @@ U 1 1 5F0D8BE7
 P 3550 13750
 F 0 "JP1" H 3550 13985 50  0000 C CNN
 F 1 "gnd jumper" H 3550 13894 50  0000 C CNN
-F 2 "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm" H 3550 13750 50  0001 C CNN
+F 2 "TestPoint:TestPoint_2Pads_Pitch5.08mm_Drill1.3mm" H 3550 13750 50  0001 C CNN
 F 3 "~" H 3550 13750 50  0001 C CNN
 	1    3550 13750
 	0    1    1    0   
