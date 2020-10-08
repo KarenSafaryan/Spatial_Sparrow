@@ -54,7 +54,10 @@ void setup() {
   }
 
   for (int i = 0; i < lightCount; ++i) {
+    digitalWriteFast(outOffset + i, HIGH);
+    delayMicroseconds(50000);
     digitalWriteFast(outOffset + i, LOW);
+
   }
   // for debugging
   Serial.begin(9600);
@@ -65,15 +68,23 @@ void setup() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void loop() { // check stim trigger and control display
+  for (int i = 0; i < lightCount; ++i) {
+    digitalWriteFast(outOffset + i, HIGH);
+    delayMicroseconds(50000);
+    digitalWriteFast(outOffset + i, LOW);
+
+  }
+ 
  if (serialTrigger == true) {
  int offsetCount = 0;
     for (int i = 0; i < lightCount; ++i) {
         digitalWriteFast((i+offset)%lightCount, HIGH);
   }
-  delayMicroseconds(100000);
+  delayMicroseconds(1000000);
     for (int i = 0; i < lightCount; ++i) {
         digitalWriteFast((i+offset)%lightCount, LOW);
   }
+  delayMicroseconds(1000000);
 
  }
   if (digitalReadFast(IN_STIM) == HIGH) {  // new trigger. read signal and set state.

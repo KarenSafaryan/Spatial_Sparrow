@@ -151,7 +151,7 @@ unsigned long spoutClocker_R = millis(); // timer to measure duration of right l
 
 // Touch variables
 int touchAdjustDur = 2000; // time used to re-adjust touch levels if neccessary. This will infer the mean (in the first hald) and standard deviation (in the second half) of the read-noise to infer decent thresholds for touch.
-int touchThresh = 5; // threshold for touch event in standard deviation units.
+int touchThresh = 3; // threshold for touch event in standard deviation units.
 int touchThreshOffset = 50; // additional offset for touch threshold.
 bool touchAdjust = true; // flag to determine values to detect touches. Do this on startup.
 float touchData[4]; // current values for the four touch lines (left spout, right spout, left, handle, right handle)

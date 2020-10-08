@@ -22,15 +22,18 @@ DefaultSettings.cTrial = 1; %Nr of current trial.
 DefaultSettings.LeverSound = true; %play indicator sound when animal is touching levers correctly
 DefaultSettings.RegularStim = false; %produce regular stimulus sequence
 DefaultSettings.biasSeqLength = 3; %nr of trials on one side after which the oder side is switched with 50% probability
-DefaultSettings.widefieldPath = '\\grid-hs\churchland_hpc_home\smusall\BpodImager\Animals\'; %path to widefield data on server
+DefaultSettings.widefieldPath = '\\grid-hs\churchland_nlsas_data\data\'; %path to widefield data on server
 DefaultSettings.videoDrive = 'C:'; %path to where the system saves video data
-DefaultSettings.serverPath = '\\grid-hs\churchland_nlsas_data\data\Behavior_Simon\'; %path to behavioral data on server
+DefaultSettings.serverPath = '\\grid-hs\churchland_nlsas_data\data\'; %path to data on server
 DefaultSettings.bonsaiEXE = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_2_4\Bonsai\Bonsai64.exe'; %path to bonsai .exe
 DefaultSettings.bonsaiParadim = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_workflow\WorkflowTwoCamera_v07.bonsai'; %path to bonsai workflow
 DefaultSettings.wavePort = 'COM18'; %com port for analog module
 DefaultSettings.i2cPort = 'COM12'; %com port for analog module
 DefaultSettings.TrainingMode = false; %flag if training is being used
 DefaultSettings.labcamsAddress = '127.0.0.1:9999';
+DefaultSettings.labcamsWidefield = '';%'peanutbread.cshl.edu:9998'
+DefaultSettings.triggerWidefield = 0; 
+
 % Spout settings
 DefaultSettings.SpoutSpeed = 25; % Duration of spout movement from start to endpoint when moving in or out (value in ms)
 DefaultSettings.rInnerLim = 1.5; % Servo position to move right spoute close the animal (value between 0 and 100)
@@ -97,6 +100,7 @@ DefaultSettings.PunishSoundDur = 0; % (s) Duration of white noise punish sound w
 % Stimulus presentation settings
 DefaultSettings.ProbRight = 0.5; %Probability for occurence of a target presentation on the right.
 DefaultSettings.ServoPos = zeros(1,2); % position of left and right spout, relative to their inner limit. these values will be changed by anti-bias correction to correct spout position.
+DefaultSettings.maxServoPos = zeros(1,2)+3;
 
 %% Load default settings and update with pre-defined settings if required
 defaultFieldParamVals = struct2cell(DefaultSettings);defaultFieldNames = fieldnames(DefaultSettings);
@@ -116,7 +120,7 @@ end
 BpodSystem.ProtocolSettings = S; % Adds the currently used settings to the Bpod struct
 BpodSystem.ProtocolSettings.SubjectName = BpodSystem.GUIData.SubjectName; %update subject name
 serverPath = [S.serverPath filesep BpodSystem.ProtocolSettings.SubjectName filesep ...
-    BpodSystem.GUIData.ProtocolName filesep 'Session Data']; %path to data server
+    BpodSystem.GUIData.ProtocolName ]; %path to data server
 BpodSystem.Data.byteLoss = 0; %counter for cases when the teensy didn't send a response byte
 
 %% ensure teensy, I2C, and analog modules are present and set up communication
@@ -194,21 +198,12 @@ PrevProbRight = S.ProbRight;
 BpodSystem.Data.cTrial = 1; BpodSystem.Data.Rewarded = logical([]); %needed for cam streamer to work in first trial
 [dataPath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile); %behavioral file and data path
 dataPath(1:2) = S.videoDrive; %switch HDD with current selection
-if ~exist(dataPath,'dir') 
+if ~exist(dataPath,'dir')
     try
         mkdir(dataPath);
-    catch
-        ret = {}; %for drive letters
-        for i = double('c') : double('z')
-            if exist(['' i ':\'], 'dir') == 7
-                ret{end+1} = [i ':'];
-            end
-        end
-        [a,b] = listdlg('ListString', ret, 'PromptString', ['Change video drive letter.']);
-        if ~b; a = 1; end
-        dataPath(1:2) = ret{a};
-        S.videoDrive = dataPath(1:2); %update settings
-        BpodSystem.ProtocolSettings.videoDrive = dataPath(1:2); %update settings
+    catch 
+        disp(['Could not create ',dataPath])
+        dataPath = uigetdir(pwd,'Select video folder');
     end
 end
 
@@ -223,18 +218,18 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
         % start camera
         % Create a string for the arguments to apss to Bonsai during starting
-        WorkflowArg1 = sprintf('-p:VideoFileName0="%s"', [dataPath filesep bhvFile '_' 'video1.mp4']);
-        WorkflowArg2 = sprintf('-p:VideoFileName1="%s"', [dataPath filesep bhvFile '_' 'video2.mp4']);
-        WorkflowArg3 = sprintf('-p:CsvFileName1="%s"', [dataPath filesep bhvFile '_' 'frameTimes.csv']);
-        WorkflowArg4 = sprintf('-p:CsvFileName2="%s"', [dataPath filesep bhvFile '_' 'data_stream.csv']);
-        WorkflowArg5 = sprintf('-p:CsvFileName3="%s"', [dataPath filesep bhvFile '_' 'data_times.csv']);
+        WorkflowArg1 = sprintf('-p:VideoFileName0="%s"', [dataPath filesep bhvFile filesep bhvFile '_' 'video1.mp4']);
+        WorkflowArg2 = sprintf('-p:VideoFileName1="%s"', [dataPath filesep bhvFile filesep bhvFile '_' 'video2.mp4']);
+        WorkflowArg3 = sprintf('-p:CsvFileName1="%s"', [dataPath filesep bhvFile filesep bhvFile '_' 'frameTimes.csv']);
+        WorkflowArg4 = sprintf('-p:CsvFileName2="%s"', [dataPath filesep bhvFile filesep bhvFile '_' 'data_stream.csv']);
+        WorkflowArg5 = sprintf('-p:CsvFileName3="%s"', [dataPath filesep bhvFile filesep bhvFile '_' 'data_times.csv']);
         WorkflowArgs = [WorkflowArg1 ' ' WorkflowArg2 ' ' WorkflowArg3 ' ' WorkflowArg4 ' ' WorkflowArg5];
     
         cPath = pwd;
         cd(fileparts(BpodSystem.ProtocolSettings.bonsaiParadim));
         vidStatus = startBonsai(BpodSystem.ProtocolSettings.bonsaiEXE, BpodSystem.ProtocolSettings.bonsaiParadim, WorkflowArgs);
         cd(cPath);
-    
+        
         % Use UDP to trigger both cameras to start recording
         pause(2);
         udpAddress = '127.0.0.1'; % configure Bonsai OSC "ReceiveMessage" object using these parameters
@@ -243,7 +238,7 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
         udpObj = udp(udpAddress,udpPort);
         fopen(udpObj);
         oscsend(udpObj,udpPath,'i',0) % this uses UDP as a software trigger to start video aquisition by sending the integer 0, which is programmed in the Bonsai OSC ReceiveMessage object as the state triggering video capture
-    
+        
         if strcmpi(vidStatus, 'Error')
             disp('An error occured while trying to start Bonsai! Stopping paradigm.');
             BpodSystem.Status.BeingUsed = false;
@@ -251,40 +246,45 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
         
     elseif isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
         if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
-           tmp = strsplit(BpodSystem.ProtocolSettings.labcamsAddress,':');
-           udpAddress = tmp{1};
-           udpPort = str2num(tmp{2});
-           udpObj = udp(udpAddress,udpPort);
-           fopen(udpObj);
-           % check if labcams is connected already.
-           fwrite(udpObj,'ping');
-           if udpObj.BytesAvailable
-               fgetl(udpObj);
-               disp(' -> labcams connected.');
-           else
-               %%
-               disp(' -> starting labcams');               
-               labcamsproc=System.Diagnostics.Process.Start('labcams.exe','-w');
-               while true
-                   fwrite(udpObj,'ping')
-                   tmp = fgetl(udpObj);
-                   if labcamsproc.HasExited
-                       break
-                   end
-                   if ~isempty(tmp)
-                       break
-                   end
-               end
-               fwrite(udpObj,['expname=' dataPath filesep bhvFile])
-               fgetl(udpObj);
-               fwrite(udpObj,'manualsave=1')
-               fgetl(udpObj);
-               fwrite(udpObj,'softtrigger=1')
-               fgetl(udpObj);
-           end
+            tmp = strsplit(BpodSystem.ProtocolSettings.labcamsAddress,':');
+            udpAddress = tmp{1};
+            udpPort = str2num(tmp{2});
+            udplabcams = udp(udpAddress,udpPort);
+            fopen(udplabcams);
+            % check if labcams is connected already.
+            fwrite(udplabcams,'ping');
+            if udplabcams.BytesAvailable
+                fgetl(udplabcams);
+                disp(' -> labcams connected.');
+            else
+                %%
+                disp(' -> starting labcams');
+                labcamsproc=System.Diagnostics.Process.Start('labcams.exe','-w');
+                while true
+                    fwrite(udplabcams,'ping')
+                    tmp = fgetl(udplabcams);
+                    if labcamsproc.HasExited
+                        disp('Labcams has exited?')
+                        clear udplabcams
+                        break
+                    end
+                    if ~isempty(tmp)
+                        break
+                    end
+                end
+            end
+            if exist('udplabcams','var')
+                fwrite(udplabcams,['expname=' dataPath filesep bhvFile])
+                fgetl(udplabcams);
+                fwrite(udplabcams,'manualsave=0') % Dont save while adjusting
+                fgetl(udplabcams);
+                fwrite(udplabcams,'softtrigger=1')
+                fgetl(udplabcams);
+            end
         end
     end
 end
+
 
 BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1 = []; %handle needs to exist so code does not crash when trying to close all figures
 if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
@@ -293,7 +293,35 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     SpatialSparrow_SpoutControl; %call spout control gui
     movegui(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1,'northwest');
     uiwait(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1); %wait for spout control and clear handle afterwards
+    S.AdjustSpoutes = false;
+    set(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value',false); %set GUI back to false
     set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
+end
+                
+if BpodSystem.ProtocolSettings.triggerWidefield
+    if isfield(BpodSystem.ProtocolSettings,'labcamsWidefield')
+        if ~isempty(BpodSystem.ProtocolSettings.labcamsWidefield)
+            tmp = strsplit(BpodSystem.ProtocolSettings.labcamsWidefield,':');
+            udpAddress = tmp{1};
+            udpPort = str2num(tmp{2});
+            udpWF = udp(udpAddress,udpPort);
+            fopen(udpWF);
+            % check if labcams WIDEFIELD is connected already.
+            fwrite(udpWF,'ping');
+            fgetl(udpWF);
+            fwrite(udpWF,'manualsave=0')
+            fgetl(udpWF)
+            fwrite(udpWF,'softtrigger=0')
+            fgetl(udpWF)
+            fwrite(udpWF,['expname=' BpodSystem.ProtocolSettings.SubjectName filesep 'onephoton' filesep bhvFile filesep bhvFile '_2']); % 2 is the number of widefield channels
+            fgetl(udpWF)
+            disp(' -> WIDEFIELD labcams connected.');
+        
+    else
+        disp(' -> WIDEFIELD labcams not connected.');
+        clear udpWF
+        end
+    end
 end
 
 %% Initialize some arrays
@@ -303,6 +331,26 @@ LastBias = 1; %last trial were bias correction was used
 PrevStimLoudness = S.StimLoudness; %variable to check if loudness has changed
 singleSpoutBias = false; %flag to indicate if single spout was presented to counter bias
 
+%% Start saving labcams if connected
+if exist('udplabcams','var')
+    fwrite(udplabcams,'softtrigger=0')
+    fgetl(udplabcams);
+    fwrite(udplabcams,'manualsave=1')
+    fgetl(udplabcams);
+    fwrite(udplabcams,'softtrigger=1')
+    fgetl(udplabcams);
+end                
+
+%% Start WF if connected
+if exist('udpWF', 'var')
+    pause(1)
+    fwrite(udpWF,'softtrigger=0')
+    fgetl(udpWF)
+    fwrite(udpWF,'manualsave=1')
+    fgetl(udpWF)
+    fwrite(udpWF,'softtrigger=1')
+    fgetl(udpWF)
+end
 %% Main loop for single trials
 for iTrials = 1:maxTrials
     % only run this code if protocol is still active
@@ -316,10 +364,6 @@ for iTrials = 1:maxTrials
         sRate = BpodSystem.ProtocolSettings.sRate;
         if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
             oscsend(udpObj,udpPath,'i',iTrials) % send current trialnr to bonsai
-        elseif isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
-            if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
-                fwrite(udpObj,sprintf('log=trial:%d',iTrials))
-            end
         end
         %% create sounds - recreate if loudness has changed
         if iTrials == 1 || PrevStimLoudness ~= S.StimLoudness
@@ -366,10 +410,10 @@ for iTrials = 1:maxTrials
         end
         
         % update touch threshold every 50 trials
-%         if iTrials > 1 && rem(iTrials,50) == 0
-%             cVal = num2str(BpodSystem.ProtocolSettings.TouchThresh);
-%             teensyWrite([75 length(cVal) cVal]);
-%         end
+        %         if iTrials > 1 && rem(iTrials,50) == 0
+        %             cVal = num2str(BpodSystem.ProtocolSettings.TouchThresh);
+        %             teensyWrite([75 length(cVal) cVal]);
+        %         end
         
         % if stimulus probability has changed, compute a new sidelist and re-initate outcome plot
         if PrevProbRight ~= S.ProbRight
@@ -447,6 +491,12 @@ for iTrials = 1:maxTrials
                     if round(BpodSystem.ProtocolSettings.ServoPos(cInd(1)),2) < round(lim(1)-lim(2),2) %if spout is not at its outer limit
                         BpodSystem.ProtocolSettings.ServoPos(cInd(1)) = lim(1)-lim(2); %move spout to its outer limit
                     end
+                end
+            end
+            %limit the max bias
+            for i = 1:length(BpodSystem.ProtocolSettings.ServoPos)
+                if BpodSystem.ProtocolSettings.ServoPos(i) > BpodSystem.ProtocolSettings.maxServoPos(i)
+                    BpodSystem.ProtocolSettings.ServoPos(i) = BpodSystem.ProtocolSettings.maxServoPos(i);
                 end
             end
             set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
@@ -847,14 +897,14 @@ for iTrials = 1:maxTrials
         a = min(min(Signal));b = max(max(Signal));
         plotoffset = b - a ;
         plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), Signal(1,:), 'r'); %update stimulus plot - audio1
-        hold(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,'on')    
+        hold(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,'on')
         plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), Signal(2,:), 'k'); %update stimulus plot - audio2
         plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), plotoffset + Signal(3,:), 'r'); %update stimulus plot - vision1
         plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), plotoffset + Signal(4,:), 'k'); %update stimulus plot - vision2
         plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), 2*plotoffset + Signal(5,:), 'r'); %update stimulus plot - somatosensory1
         plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), 2*plotoffset + Signal(6,:), 'k'); %update stimulus plot - somatosensory1
         hold(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,'off')
-%         ylim(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,[a-a/5 b+b/5]);
+        %         ylim(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,[a-a/5 b+b/5]);
         ylim(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,[a 3*plotoffset]);
         xlim(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,[0 stimDur]);
         set(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot,'ytick',[0,1,2].*plotoffset,'yticklabel', {'Aud','Vis','Som'});
@@ -891,7 +941,7 @@ for iTrials = 1:maxTrials
         teensyWrite(103); % Move right spout to outer position
         teensyWrite(105); % Move handles to outer position
         BpodSystem.StopModuleRelay('TouchShaker1'); % Stop relaying bytes from teensy to allow communication with state machine
-        
+
         % prepare I2C messages to ScanImage
         if exist('i2c','var') % does this have I2C communication to scanimage?
             i2c.setMessage(34, int2str(iTrials), 1); % message#, message, slaveAddress (This should be 1, set on scanimage)
@@ -900,51 +950,57 @@ for iTrials = 1:maxTrials
         end
         %% Build state matrix        
         sma = NewStateMatrix();
+        sma = AddState(sma, 'Name', 'Sync', ... %trigger to signal trialstart to attached hardware. Only works when using 'WaitForCam'.
+            'Timer', 0.1, ...
+            'StateChangeConditions', {CamTrig,'TrialStart'},... %wait for imager before producing barcode sequence
+            'OutputActions', {'BNCState',1}); % BNC 1 is high, all others are low
         
         if exist('i2c','var') % does this have I2C communication to scanimage?
             sma = AddState(sma, 'Name', 'TrialStart', ... %trigger to signal trialstart to attached hardware. Only works when using 'WaitForCam'.
                 'Timer', S.WaitForCam, ...
-                'StateChangeConditions', {CamTrig,'TriggerDowntime','Tup','TriggerDowntime'},... %wait for imager before producing barcode sequence
+                'StateChangeConditions', {CamTrig,'CheckForLever'},... %wait for imager before producing barcode sequence
                 'OutputActions', {'BNCState',1,'I2C1', [1 34]}); % BNC 1 is high, all others are low, sends message to scan image
         else
             sma = AddState(sma, 'Name', 'TrialStart', ... %trigger to signal trialstart to attached hardware. Only works when using 'WaitForCam'.
                 'Timer', S.WaitForCam, ...
-                'StateChangeConditions', {CamTrig,'TriggerDowntime','Tup','TriggerDowntime'},... %wait for imager before producing barcode sequence
+                'StateChangeConditions', {CamTrig,'CheckForLever'},... %wait for imager before producing barcode sequence
                 'OutputActions', {'BNCState',1}); % BNC 1 is high, all others are low
         end
         
-        sma = AddState(sma, 'Name', 'TriggerDowntime', ... %give a 50ms downtime of the trigger before sending the barcode. Might help with to ensure that data is correctly recorded.
-            'Timer', 0.05, ...
-            'StateChangeConditions', {'Tup','trialCode1'},...
-            'OutputActions', {'TouchShaker1', 78}); % all outpouts are low but make teensy send a trial-onset trigger
-        
         % generate barcode to identify trialNr on adjacent hardware
-        Cnt = 0;
-        code = encode2of5(iTrials);
-        codeModuleDurs = [0.0025 0.0055]; %Durations for each module of the trial code sent over the TTL line
-        
-        for iCode = 1:size(code,2)
-            Cnt = Cnt+1;
-            stateName = ['trialCode' num2str(Cnt)];
-            nextState = [stateName 'Low'];
-            
-            sma = AddState(sma, 'Name', stateName, ... %produce high state
-                'Timer', codeModuleDurs(code(1,iCode)), ...
-                'StateChangeConditions', {'Tup',nextState},... %move to next low state
-                'OutputActions',{'BNCState',1}); %send output to BNC1 to send barcode to adjacent hardware
-            
-            stateName = nextState;
-            if iCode == size(code,2)
-                nextState = 'CheckForLever';
-            else
-                nextState = ['trialCode' num2str(Cnt + 1)];
-            end
-            
-            sma = AddState(sma, 'Name', stateName, ... %produce low state
-                'Timer', codeModuleDurs(code(2, iCode)), ...
-                'StateChangeConditions', {'Tup',nextState},... %move to next low state
-                'OutputActions',{});
-        end
+        % No need to send codes, not used anywhere, better to send a rise
+        % when trial starts
+        %         sma = AddState(sma, 'Name', 'TriggerDowntime', ... %give a 50ms downtime of the trigger before sending the barcode. Might help with to ensure that data is correctly recorded.
+        %             'Timer', 0.05, ...
+        %             'StateChangeConditions', {'Tup','trialCode1'},...
+        %             'OutputActions', {'TouchShaker1', 78}); % all outpouts are low but make teensy send a trial-onset trigger
+        %         Cnt = 0;
+        %
+        %         code = encode2of5(iTrials);
+        %         codeModuleDurs = [0.0025 0.0055]; %Durations for each module of the trial code sent over the TTL line
+        %
+        %         for iCode = 1:size(code,2)
+        %             Cnt = Cnt+1;
+        %             stateName = ['trialCode' num2str(Cnt)];
+        %             nextState = [stateName 'Low'];
+        %
+        %             sma = AddState(sma, 'Name', stateName, ... %produce high state
+        %                 'Timer', codeModuleDurs(code(1,iCode)), ...
+        %                 'StateChangeConditions', {'Tup',nextState},... %move to next low state
+        %                 'OutputActions',{'BNCState',1}); %send output to BNC1 to send barcode to adjacent hardware
+        %
+        %             stateName = nextState;
+        %             if iCode == size(code,2)
+        %                 nextState = 'CheckForLever';
+        %             else
+        %                 nextState = ['trialCode' num2str(Cnt + 1)];
+        %             end
+        %
+        %             sma = AddState(sma, 'Name', stateName, ... %produce low state
+        %                 'Timer', codeModuleDurs(code(2, iCode)), ...
+        %                 'StateChangeConditions', {'Tup',nextState},... %move to next low state
+        %                 'OutputActions',{});
+        %         end
         
         sma = AddState(sma, 'Name', 'CheckForLever', ... %check if lever is part of the paradigm
             'Timer', 0, ...
@@ -1030,38 +1086,39 @@ for iTrials = 1:maxTrials
         
         sma = AddState(sma, 'Name', 'HappyTime', ... %wait for a moment to collect water
             'Timer', S.happyTime, ...
-            'StateChangeConditions', {'Tup', 'StopStim'}, ...
+            'StateChangeConditions', {'Tup', 'TrialEnd'}, ...
             'OutputActions', {});
         
         sma = AddState(sma, 'Name', 'HardPunish', ... %punish for incorrect response - timeout + punish sound
             'Timer', 1,... %skip this state for now and pause in Matlab instead. This is to make sure behavioral videos are not longer as in rewarded trials.
-            'StateChangeConditions', {'Tup','StopStim', 'TouchShaker1_14','StopStim'},...
+            'StateChangeConditions', {'Tup','TrialEnd', 'TouchShaker1_14','TrialEnd'},...
             'OutputActions', {'WavePlayer1',['P' 11], 'TouchShaker1', WirePunishOut}); %play punish sound
         
         sma = AddState(sma, 'Name', 'DidNotLever', ... %if animal did not touch the lever move on to next trial
             'Timer', 0.01, ...
-            'StateChangeConditions', {'Tup', 'StopStim'}, ...
+            'StateChangeConditions', {'Tup', 'TrialEnd'}, ...
             'OutputActions', {'BNCState', 2});
         
         sma = AddState(sma, 'Name', 'DidNotChoose', ... %if animal did not respond move on to next trial
             'Timer', 0.01, ...
-            'StateChangeConditions', {'Tup', 'StopStim'}, ...
+            'StateChangeConditions', {'Tup', 'TrialEnd'}, ...
             'OutputActions', {'BNCState', 2});
+
         if exist('i2c','var') % does this have I2C communication to scanimage?
-            sma = AddState(sma, 'Name', 'StopStim', ... %move to next trials after a randomly varying waiting period.
+            sma = AddState(sma, 'Name', 'TrialEnd', ... %move to next trials after a randomly varying waiting period.
                 'Timer', 1, ...
                 'StateChangeConditions', {'Tup', 'exit', 'TouchShaker1_14','exit'}, ...
-                'OutputActions', {'WavePlayer1','X', 'TouchShaker1', 105,'I2C1', [1 36]});  %make sure all stimuli are off and move handles out
+                'OutputActions', {'WavePlayer1','X', 'TouchShaker1', 105,'BNCState',0,'I2C1', [1 36]});  %make sure all stimuli are off and move handles out
         else
-            sma = AddState(sma, 'Name', 'StopStim', ... %move to next trials after a randomly varying waiting period.
+            sma = AddState(sma, 'Name', 'TrialEnd', ... %move to next trials after a randomly varying waiting period.
                 'Timer', 1, ...
                 'StateChangeConditions', {'Tup', 'exit', 'TouchShaker1_14','exit'}, ...
-                'OutputActions', {'WavePlayer1','X', 'TouchShaker1', 105});  %make sure all stimuli are off and move handles out
+                'OutputActions', {'WavePlayer1','X', 'TouchShaker1', 105, 'BNCState',0});  %make sure all stimuli are off and move handles out
         end
         %% send state machine to bpod and create ITI jitter
         SendStateMachine(sma);
         pause(0.1);
-                
+        
         trialPrep = toc; %check how much time was used to prepare trial and subtract from ITI
         if S.minITI >= 0 && S.maxITI > 0
             x = -log(rand)/S.ITIlambda;
@@ -1084,10 +1141,23 @@ for iTrials = 1:maxTrials
             pause(0.01);
             BpodSystem.Data.weirdBytes = true;
         end
-        
+        % set the frame number just before starting
+        if exist('udplabcams','var')
+                fwrite(udplabcams,sprintf('log=trial_start:%d',iTrials));
+        end
+        if exist('udpWF','var')
+            fwrite(udpWF,sprintf('log=trial_start:%d',iTrials));
+        end
         %% run bpod and save data after trial is finished
+        
         RawEvents = RunStateMachine; % Send and run state matrix
-
+        % set the frame number just after starting
+        if exist('udplabcams','var')
+            fwrite(udplabcams,sprintf('log=trial_end:%d',iTrials));
+        end
+        if exist('udpWF','var')
+            fwrite(udpWF,sprintf('log=trial_end:%d',iTrials));
+        end
         % Save events and data
         if length(fieldnames(RawEvents)) > 1
             
@@ -1187,42 +1257,73 @@ for iTrials = 1:maxTrials
         
         % stop video
         try
-            disp("Stopping video.")
             if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
                 oscsend(udpObj,udpPath,'i',1000) % stop video capture
                 stopBonsai(); %shut down bonsai
-            elseif isfield(BpodSystem.ProtocolSettings,'labcamsAddress')
-                if ~isempty(BpodSystem.ProtocolSettings.labcamsAddress)
-                    fwrite(udpObj,sprintf('log=end'));fgetl(udpObj);
-                    fwrite(udpObj,sprintf('softtrigger=0'));fgetl(udpObj);
-                    fwrite(udpObj,sprintf('manualsave=0'));fgetl(udpObj);
-                    
-                    fwrite(udpObj,sprintf('quit=1'))
-                end
-            end
-            disp("Done.")
+                hasvideo = 1;
 
-        catch
+            end
+            
+            if exist('udplabcams','var')
+                fwrite(udplabcams,sprintf('log=end'));fgetl(udplabcams);
+                fwrite(udplabcams,sprintf('softtrigger=0'));fgetl(udplabcams);
+                fwrite(udplabcams,sprintf('manualsave=0'));fgetl(udplabcams);
+                fwrite(udplabcams,sprintf('quit=1'))
+                fclose(udplabcams);
+                clear udplabcams
+                hasvideo = 1;
+            end
+            disp("Done stopping video.")
+            
+        catch err
             disp("Error stopping video.")
+            disp(err.message)
+        end
+        if exist('udpWF', 'var')
+            fwrite(udpWF,'softtrigger=0');fgetl(udpWF);
+            fwrite(udpWF,'manualsave=0');
+            fclose(udpWF);
         end
         % check for path to server and save behavior + graph
         if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
-            disp(['Writing to server: ',[serverPath bhvFile]])
+            serverPath = [serverPath filesep bhvFile];
             try
                 if ~exist(serverPath,'dir')
                     mkdir(serverPath)
                 end
                 SessionData = BpodSystem.Data; %current session data
-                if ~isempty(SessionData)
-                    save([serverPath bhvFile],'SessionData'); %save datafile
+                if ~isempty(SessionData) & (iTrials > 10)
+                    disp(['Writing to server: ',[serverPath filesep bhvFile '.mat']])
+                    save([serverPath filesep bhvFile],'SessionData'); %save datafile
                     
                     %save session graph
-                    sPath = strrep(serverPath,'Session Data','Session Graphs');
+                    sPath = strrep(serverPath,filesep,'session_plots');
                     if ~exist(sPath,'dir')
                         mkdir(sPath)
                     end
                     set(BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control,'PaperOrientation','portrait','PaperPositionMode','auto');
                     saveas(BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control, [sPath filesep bhvFile '.jpg']);
+                    try
+                        if exist('hasvideo','var')
+                            if hasvideo
+                                videoPaths = [dataPath filesep bhvFile];
+                                disp('Copying video data')
+                                filestocp = [dir([videoPaths,'*.avi']);dir([videoPaths,'*.camlog']); ...
+                                    dir([videoPaths,'*.csv'])];
+                                if ~isempty(filestocp)
+                                    for f = 1:length(filestocp)
+                                        [SUCCESS,MESSAGE,MESSAGEID] = copyfile([filestocp(f).folder,...
+                                            filesep,filestocp(f).name],serverPath);
+                                        if ~SUCCESS
+                                            disp(['ERRROR - Copy ',videoPaths,filesep,filestocp(f).name,' failed'])
+                                        else
+                                            disp(['Copied ',videoPaths,filesep,filestocp(f).name])
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
                 end
                 disp('Done.')
             catch

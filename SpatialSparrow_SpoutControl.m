@@ -22,7 +22,7 @@ function varargout = SpatialSparrow_SpoutControl(varargin)
 
 % Edit the above text to modify the response to help SpatialSparrow_SpoutControl
 
-% Last Modified by GUIDE v2.5 10-Mar-2020 13:23:49
+% Last Modified by GUIDE v2.5 26-Jun-2020 15:43:30
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -780,3 +780,55 @@ function decreaseLeverR_Callback(hObject, eventdata, handles)
 teensyWrite(87); % move to zero position 
 
 
+% --- Executes on button press in GiveWater.
+function GiveWater_Callback(hObject, eventdata, handles)
+% hObject    handle to GiveWater (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+global BpodSystem
+duration = BpodSystem.ProtocolSettings.leftRewardVolume/1000.; % give water for the regular time
+smavalve = NewStateMachine;
+
+smavalve = AddState(smavalve, 'Name', 'GiveReward', ...
+    'Timer', duration,...
+    'StateChangeConditions', {'Tup', '>exit'},...
+    'OutputActions', {'ValveState', 3}); % Use 3 for valve 1 and 2 (1100) 5 for (1010)
+
+SendStateMachine(smavalve)
+
+RunStateMachine()
+        
+
+
+% --- Executes on button press in scanimageTrigger.
+function scanimageTrigger_Callback(hObject, eventdata, handles)
+% hObject    handle to scanimageTrigger (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of scanimageTrigger
+disp("This is a placeholder to trigger the 2p scanimage. Send TCP/IP to set names and start recording here.")
+disp('Here: http://scanimage.vidriotechnologies.com/pages/viewpage.action?pageId=28377470')
+% --- Executes on button press in widefieldTrigger.
+function widefieldTrigger_Callback(hObject, eventdata, handles)
+% hObject    handle to widefieldTrigger (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of widefieldTrigger
+value = get(hObject,'Value');
+global BpodSystem
+if value
+    BpodSystem.ProtocolSettings.triggerWidefield = 1;
+else
+    BpodSystem.ProtocolSettings.triggerWidefield = 0;
+end
+
+% --- Executes during object creation, after setting all properties.
+function widefieldTrigger_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to widefieldTrigger (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+global BpodSystem
+set(hObject,'Value',BpodSystem.ProtocolSettings.triggerWidefield)
