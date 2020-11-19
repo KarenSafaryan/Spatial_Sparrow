@@ -1,5 +1,5 @@
 %% connect to ao
-W = BpodWavePlayer('COM18');
+W = BpodWavePlayer('COM5');
 %%
 W.OutputRange = '-5V:5V'; % make sure output range is correct
 W.TriggerProfileEnable = 'Off'; % use trigger profiles to produce different waveforms across channels
