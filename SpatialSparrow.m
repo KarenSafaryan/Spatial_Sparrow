@@ -22,15 +22,25 @@ DefaultSettings.cTrial = 1; %Nr of current trial.
 DefaultSettings.LeverSound = true; %play indicator sound when animal is touching levers correctly
 DefaultSettings.RegularStim = false; %produce regular stimulus sequence
 DefaultSettings.biasSeqLength = 3; %nr of trials on one side after which the oder side is switched with 50% probability
-DefaultSettings.widefieldPath = '\\grid-hs\churchland_nlsas_data\data\'; %path to widefield data on server
-DefaultSettings.videoDrive = 'C:'; %path to where the system saves video data
-DefaultSettings.serverPath = '\\grid-hs\churchland_nlsas_data\data\'; %path to data on server
-DefaultSettings.bonsaiEXE = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_2_4\Bonsai\Bonsai64.exe'; %path to bonsai .exe
-DefaultSettings.bonsaiParadim = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_workflow\WorkflowTwoCamera_v07.bonsai'; %path to bonsai workflow
+if isunix
+    DefaultSettings.widefieldPath = ''; %path to widefield data on server
+    DefaultSettings.videoDrive = '/home/anne/data'; %path to where the system saves video data
+    DefaultSettings.serverPath = ''; %path to data on server
+    DefaultSettings.bonsaiEXE = ''; %path to bonsai .exe
+    DefaultSettings.bonsaiParadim = ''; %path to bonsai workflow
+    DefaultSettings.labcamsAddress = 'localhost:9999';  
+else
+    DefaultSettings.widefieldPath = '\\grid-hs\churchland_nlsas_data\data\'; %path to widefield data on server
+    DefaultSettings.videoDrive = 'C:'; %path to where the system saves video data
+    DefaultSettings.serverPath = '\\grid-hs\churchland_nlsas_data\data\'; %path to data on server
+    DefaultSettings.bonsaiEXE = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_2_4\Bonsai\Bonsai64.exe'; %path to bonsai .exe
+    DefaultSettings.bonsaiParadim = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_workflow\WorkflowTwoCamera_v07.bonsai'; %path to bonsai workflow
+    DefaultSettings.labcamsAddress = '127.0.0.1:9999';
+end
 DefaultSettings.wavePort = 'COM18'; %com port for analog module
 DefaultSettings.i2cPort = 'COM12'; %com port for analog module
 DefaultSettings.TrainingMode = false; %flag if training is being used
-DefaultSettings.labcamsAddress = '127.0.0.1:9999';
+
 DefaultSettings.labcamsWidefield = '';%'peanutbread.cshl.edu:9998'
 DefaultSettings.triggerWidefield = 0; 
 
@@ -145,7 +155,11 @@ try
 catch
     % check for analog module by finding a serial device that can create a waveplayer object
     W = [];
-    Ports = FindSerialPorts; % get available serial com ports
+    if isunix
+        Ports = {'/dev/ttyACM1','/dev/ttyACM2','/dev/ttyACM0'};
+    else
+        Ports = FindSerialPorts; % get available serial com ports
+    end
     for i = 1 : length(Ports)
         try
             W = BpodWavePlayer(Ports{i});
@@ -215,7 +229,7 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     BpodSystem.Data.animalWeight = str2double(newid('Enter animal weight (in grams)')); %ask for animal weight and save
     
     %start bonsai
-    if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
+    if ~isunix && ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
         % start camera
         % Create a string for the arguments to apss to Bonsai during starting
         WorkflowArg1 = sprintf('-p:VideoFileName0="%s"', [dataPath filesep bhvFile filesep bhvFile '_' 'video1.mp4']);
@@ -259,17 +273,19 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
             else
                 %%
                 disp(' -> starting labcams');
-                labcamsproc=System.Diagnostics.Process.Start('labcams.exe','-w');
-                while true
-                    fwrite(udplabcams,'ping')
-                    tmp = fgetl(udplabcams);
-                    if labcamsproc.HasExited
-                        disp('Labcams has exited?')
-                        clear udplabcams
-                        break
-                    end
-                    if ~isempty(tmp)
-                        break
+                if ~isunix
+                    labcamsproc=System.Diagnostics.Process.Start('labcams.exe','-w');
+                    while true
+                        fwrite(udplabcams,'ping')
+                        tmp = fgetl(udplabcams);
+                        if labcamsproc.HasExited
+                            disp('Labcams has exited?')
+                            clear udplabcams
+                            break
+                        end
+                        if ~isempty(tmp)
+                            break
+                        end
                     end
                 end
             end
