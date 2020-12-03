@@ -22,7 +22,7 @@ function varargout = SpatialSparrow_SpoutControl(varargin)
 
 % Edit the above text to modify the response to help SpatialSparrow_SpoutControl
 
-% Last Modified by GUIDE v2.5 02-Dec-2020 15:39:49
+% Last Modified by GUIDE v2.5 02-Dec-2020 16:43:35
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;

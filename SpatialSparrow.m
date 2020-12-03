@@ -7,13 +7,13 @@ DefaultSettings.SubjectName = 'Dummy';
 DefaultSettings.RewardedModality = 'AudioVisual'; % modality that is rewarded - 'Vision' for flashes, 'Audio' for beeps, 'AudioVisual' for multisensory
 DefaultSettings.leftRewardVolume = 2;  % ul
 DefaultSettings.rightRewardVolume = 2; % ul
+DefaultSettings.UseAntiBias = false; % Spout correction | Do not use during experiments
 DefaultSettings.AutoReward = 0; % automaticunt of self-performed trials with audio stimulation. Default is 1 (fully self-performed).
 DefaultSettings.autoRewardVision = 1; % Amount of self-performed trials with visual stimulation. Default is 1 (fully self-performed).
 DefaultSettings.autoRewardPiezo = 1; % Amount of self-performed trials with somatosensory stimulation. Default is 1 (fully self-performed).
 DefaultSettings.autoRewardAudio = 1; % Amount of self-performed trials with auditory stimulation. Default is 1 (fully self-performed).
 DefaultSettings.autoRewardMixed = 1; % Amount of self-performed trials with mixed stimulation. Default is 1 (fully self-performed).
 DefaultSettings.SaveSettings = false; % Allows to save current settings to file
-DefaultSettings.AdjustSpoutes = 0; % Calls the spout adjustment window if it got closed or if changes to spout position are needed.
 DefaultSettings.PerformanceSwitch = 'Performed'; % Switch to show performance over all trials (including trials that were not self-performed)
 DefaultSettings.DoFit = false; % flag to do curve fitting in the performance window
 DefaultSettings.modSelect = 'Combined'; % selector which part of the data show in the performance curve window
@@ -28,14 +28,14 @@ RightPortValveState = 1;%2^1; % ports are numbered 0-7. Need to convert to 8bit 
            
 if isunix
     DefaultSettings.widefieldPath = ''; %path to widefield data on server
-    DefaultSettings.videoDrive = '/home/anne/data'; %path to where the system saves video data
+    %DefaultSettings.videoDrive = '/home/anne/data'; %path to where the system saves video data
     DefaultSettings.serverPath = ''; %path to data on server
     DefaultSettings.bonsaiEXE = ''; %path to bonsai .exe
     DefaultSettings.bonsaiParadim = ''; %path to bonsai workflow
     DefaultSettings.labcamsAddress = 'localhost:9999';  
 else
     DefaultSettings.widefieldPath = '\\grid-hs\churchland_nlsas_data\data\'; %path to widefield data on server
-    DefaultSettings.videoDrive = 'C:'; %path to where the system saves video data
+    %DefaultSettings.videoDrive = 'C:'; %path to where the system saves video data
     DefaultSettings.serverPath = '\\grid-hs\churchland_nlsas_data\data\'; %path to data on server
     DefaultSettings.bonsaiEXE = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_2_4\Bonsai\Bonsai64.exe'; %path to bonsai .exe
     DefaultSettings.bonsaiParadim = 'C:\Users\Anne\Dropbox\Users\Richard\Bonsai_workflow\WorkflowTwoCamera_v07.bonsai'; %path to bonsai workflow
@@ -211,11 +211,11 @@ pause(2); %give some time for calibration
 
 %% Stimulus parameters - Create trial types list (single vs double stimuli)
 maxTrials = 5000;
-TrialSidesList = double(rand(1,maxTrials) < S.ProbRight);
+TrialSidesList = double(rand(1,maxTrials) < S.ProbRight); % ONE MEANS RIGHT TRIAL
 PrevProbRight = S.ProbRight;
 BpodSystem.Data.cTrial = 1; BpodSystem.Data.Rewarded = logical([]); %needed for cam streamer to work in first trial
 [dataPath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile); %behavioral file and data path
-dataPath(1:2) = S.videoDrive; %switch HDD with current selection
+%dataPath(1:2) = S.videoDrive; %switch HDD with current selection
 if ~exist(dataPath,'dir')
     try
         mkdir(dataPath);
@@ -315,8 +315,7 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     SpatialSparrow_SpoutControl; %call spout control gui
     movegui(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1,'northwest');
     uiwait(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1); %wait for spout control and clear handle afterwards
-    S.AdjustSpoutes = false;
-    set(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value',false); %set GUI back to false
+    set(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value',0); %set GUI back to false
     set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
 end
                 
@@ -407,12 +406,11 @@ for iTrials = 1:maxTrials
             W.TriggerProfiles(12, 1:2) = 12; %this will play waveform 12 (punishSound) on ch1+2
         end
         
-        if S.AdjustSpoutes
+        if get(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value')
             disp('Waiting for spout adjustment - hit OK in the SpoutControl window to continue')
             SpatialSparrow_SpoutControl; %call spout control gui
             uiwait(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1); %wait for spout control and clear handle afterwards
-            S.AdjustSpoutes = false; %set variable back to false
-            set(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value',false); %set GUI back to false
+            set(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value',0); %set GUI back to false
         end
         
         %update valve times
@@ -429,7 +427,7 @@ for iTrials = 1:maxTrials
             BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'Update','modality',TrialSidesList,OutcomeRecord,AssistRecord});drawnow; clear temp % update performance curves
         end
         
-        % update touch threshold every 50 trials
+        % update toukeyboardch threshold every 50 trials
         %         if iTrials > 1 && rem(iTrials,50) == 0
         %             cVal = num2str(BpodSystem.ProtocolSettings.TouchThresh);
         %             teensyWrite([75 length(cVal) cVal]);
@@ -449,6 +447,7 @@ for iTrials = 1:maxTrials
         end
         
         % if the same side was repeated more than 'biasSeqLength'
+        % THIS PREVENTS MORE THAN biasSeqLength STIM DISPLAYED ON THE SAME SIDE
         if iTrials > S.biasSeqLength
             if length(unique(TrialSidesList(iTrials-S.biasSeqLength:iTrials))) == 1
                 if rand > 0.5
@@ -462,8 +461,9 @@ for iTrials = 1:maxTrials
         end
         
         %% Move servo based on difference between left and right performance
-        temp = TrialSidesList(LastBias:end); %get sides for all trials since the last check
-        temp = temp(AssistRecord(LastBias:end)); %get sides for all performed trials
+        if S.UseAntiBias
+            temp = TrialSidesList(LastBias:end); %get sides for all trials since the last check
+            temp = temp(AssistRecord(LastBias:end)); %get sides for all performed trials
         
         if sum(temp == 0) > 5 && sum(temp == 1) > 5 %if more than 5 trials were performed on both sides
             LastBias = iTrials;
@@ -519,14 +519,18 @@ for iTrials = 1:maxTrials
                     BpodSystem.ProtocolSettings.ServoPos(i) = BpodSystem.ProtocolSettings.maxServoPos(i);
                 end
             end
-            set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
+            
         end
-        
+        else
+            BpodSystem.ProtocolSettings.ServoPos(:) = 0;
+        end
+        set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
+            
         %% Assign stimuli and create output variables
         % Determine stimulus presentation
         TargStim = Sample(S.TargRate);
         if TrialType == 2 % present distractor stimulus
-            DistStim = Sample(S.DistFractions);
+            DistStim = Sample(S.DistFractions); % ASSIGN A DISTRACTOR
             if DistStim < 0 || DistStim > 1
                 warning(['Current DistFraction = ' num2str(Distractor) '; Set to 0 instead.']);
                 DistStim = 0;
@@ -536,7 +540,7 @@ for iTrials = 1:maxTrials
             DistStim = 0;
         end
         StimRates = repmat([TargStim;DistStim],1,3);
-        if TrialSidesList(iTrials) == 1
+        if TrialSidesList(iTrials) == 0
             StimRates = flipud(StimRates); %first row is left target, second row is right target
         end
         
@@ -557,7 +561,7 @@ for iTrials = 1:maxTrials
         
         % check rewarded modality.
         if strcmpi(S.RewardedModality,'Vision')
-            StimType = 1;
+         rightRewardVolume    StimType = 1;
         elseif strcmpi(S.RewardedModality,'Audio')
             StimType = 2;
         elseif strcmpi(S.RewardedModality,'Somatosensory')
@@ -616,7 +620,7 @@ for iTrials = 1:maxTrials
         UseChannels = zeros(2,3); %1st column auditory, 2nd column visual, 3rd column somatosensory; 1st row left, 2nd row right
         % audio
         if ismember(StimType,[2 3 6 7]) %if auditory stimulation is required
-            if TrialSidesList(iTrials) == 0
+            if TrialSidesList(iTrials) == 1
                 UseChannels(1) = 1; %use left channel
             else
                 UseChannels(2) = 1; %use right channel
@@ -627,7 +631,7 @@ for iTrials = 1:maxTrials
         end
         % vision
         if ismember(StimType,[1 3 5 7]) %if visual stimulation is required
-            if TrialSidesList(iTrials) == 0
+            if TrialSidesList(iTrials) == 1
                 UseChannels(3) = 1; %use left channel
             else
                 UseChannels(4) = 1; %use right channel
@@ -638,7 +642,7 @@ for iTrials = 1:maxTrials
         end
         % somatosensory
         if ismember(StimType,4:7) %if somatosensory stimulation is required
-            if TrialSidesList(iTrials) == 0
+            if TrialSidesList(iTrials) == 1
                 UseChannels(5) = 1; %use left channel
             else
                 UseChannels(6) = 1; %use right channel
@@ -802,37 +806,38 @@ for iTrials = 1:maxTrials
             set(BpodSystem.GUIHandles.SpatialSparrow_Control.autoRewardPiezo,'string','1')
         end
         
-        % check for additional single spout if animal keeps making mistakes on the same side
-        if singleSpoutBias
-            seqLength = 1;
-        else
-            seqLength = S.biasSeqLength*2;
-        end
-        singleSpoutBias = false;
-        
-        if iTrials > seqLength && S.ProbRight == 0.5
-            %provide single spout if animal is strictly going to one side
-            if length(unique(BpodSystem.Data.ResponseSide(iTrials-seqLength : iTrials - 1))) == 1 %animal always goes to the same side
-                if (TrialSidesList(iTrials)+1) ~= unique(BpodSystem.Data.ResponseSide(iTrials-seqLength : iTrials - 1)) %current trial is non-preferred side
-                    if rand > 0.75
-                        SingleSpout = true;
-                        singleSpoutBias = true;
-                    end
-                end
-            end
-            
-            %provide autoreward if animal does not touch lever anymore
-            if sum(ismember(OutcomeRecord(iTrials-seqLength:iTrials-1),4)) == 3
-                if rand > 0.5
-                    GiveReward = true;
-                end
-            end
-        end
-        
-        if SingleSpout && ~isnan(optoSide) %dont give optogenetic stimulus in single spout trials
-            optoType = NaN; optoSide = NaN;
-            Signal(7:8,:) = zeros(2,size(Signal,2));
-        end
+        %% TODO: SEE IF THIS IS USEFUL WHEN THINGS ARE WORKING
+%         % check for additional single spout if animal keeps making mistakes on the same side
+%         if singleSpoutBias
+%             seqLength = 1;
+%         else
+%             seqLength = S.biasSeqLength*2;
+%         end
+%         singleSpoutBias = false;
+%         
+%         if iTrials > seqLength && S.ProbRight == 0.5
+%             %provide single spout if animal is strictly going to one side
+%             if length(unique(BpodSystem.Data.ResponseSide(iTrials-seqLength : iTrials - 1))) == 1 %animal always goes to the same side
+%                 if (TrialSidesList(iTrials)+1) ~= unique(BpodSystem.Data.ResponseSide(iTrials-seqLength : iTrials - 1)) %current trial is non-preferred side
+%                     if rand > 0.75
+%                         SingleSpout = true;
+%                         singleSpoutBias = true;
+%                     end
+%                 end
+%             end
+%             
+%             %provide autoreward if animal does not touch lever anymore
+%             if sum(ismember(OutcomeRecord(iTrials-seqLength:iTrials-1),4)) == 3
+%                 if rand > 0.5
+%                     GiveReward = true;
+%                 end
+%             end
+%         end
+%         
+%         if SingleSpout && ~isnan(optoSide) %dont give optogenetic stimulus in single spout trials
+%             optoType = NaN; optoSide = NaN;
+%             Signal(7:8,:) = zeros(2,size(Signal,2));
+%         end
         
         %% move signal to analog module
         for iChans = 1 : size(Signal,1)
@@ -852,7 +857,7 @@ for iTrials = 1:maxTrials
             CamTrig = 'BNC1High';
         end
         
-        if TrialSidesList(iTrials) == 0 %target is left
+        if TrialSidesList(iTrials) ~= 0 %target is left
             LeftPortAction = 'CheckReward';
             pLeftPortAction = 'CheckReward';
             cLeftPortAction = 'Reward';

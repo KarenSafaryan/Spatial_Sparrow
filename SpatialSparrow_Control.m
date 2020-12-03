@@ -22,7 +22,7 @@ function varargout = SpatialSparrow_Control(varargin)
 
 % Edit the above text to modify the response to help SpatialSparrow_Control
 
-% Last Modified by GUIDE v2.5 02-Nov-2019 16:20:21
+% Last Modified by GUIDE v2.5 02-Dec-2020 17:15:48
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
@@ -291,7 +291,7 @@ if ~isempty(varargin)  %if additional input was provided. The first input should
                         
                         %Plot current trial
                         set(BpodSystem.GUIHandles.CurrentTrialCircle, 'xdata', CurrentTrial, 'ydata', SideList(CurrentTrial));
-                        set(BpodSystem.GUIHandles.CurrentTrialCross, 'xdata', CurrentTrial, 'ydata', SideList(CurrentTrial));
+                        set(BpodSystem.GUIHandles.CurrentTrialCross, 'xdata',    CurrentTrial, 'ydata', SideList(CurrentTrial));
                         
                         %Plot past trials
                         if ~isempty(OutcomeRecord)
@@ -366,8 +366,8 @@ if ~isempty(varargin)  %if additional input was provided. The first input should
                         plot(AxesHandle,mn-1:mx+1,0.5*ones(size(mn-1:mx+1)),'k--'); %plot midline
                         h1 = plot(AxesHandle,PerformanceVec(1:CurrentTrial-1),'-o','MarkerFaceColor',[0.5 0.5 0.5],'Color',[0.5 0.5 0.5],'MarkerSize',5); %plot performance
                         h2 = plot(AxesHandle,BpodSystem.Data.Performance(1:CurrentTrial-1),':x','MarkerFaceColor','k','Color','k','MarkerSize',5); %plot performance
-                        h3 = plot(AxesHandle,BpodSystem.Data.lPerformance(1:CurrentTrial-1),':x','MarkerFaceColor','g','Color','g','MarkerSize',5); %plot performance
-                        h4 = plot(AxesHandle,BpodSystem.Data.rPerformance(1:CurrentTrial-1),':x','MarkerFaceColor','r','Color','r','MarkerSize',5); %plot performance
+                        h3 = plot(AxesHandle,BpodSystem.Data.lPerformance(1:CurrentTrial-1),':x','MarkerFaceColor','b','Color','b','MarkerSize',5); %left
+                        h4 = plot(AxesHandle,BpodSystem.Data.rPerformance(1:CurrentTrial-1),':x','MarkerFaceColor','m','Color','m','MarkerSize',5); %right
                         legend(AxesHandle,[h1 h2 h3 h4],{'All(GrandAvg)','All','Left','Right'},'Location','east','Orientation','vertical') %add legend
                         xlabel(AxesHandle,'# Trials')
                         hold(AxesHandle, 'off');
@@ -404,6 +404,7 @@ function AutoReward_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % Hint: get(hObject,'Value') returns toggle state of AutoReward
+global BPodSystem
 if get(hObject, 'Value')
     disp('AutoReward is ON')
     BpodSystem.ProtocolSettings.AutoReward = true;
@@ -440,6 +441,8 @@ function RewardedModality_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 S = get(hObject, 'string');
 disp(['Rewarded modality set to ' S{handles.RewardedModality.Value}]);
+global BPodSystem
+BPodSystem.ProtocolSettings.RewardedModality = S{handles.RewardedModality.Value};
 
 % Hints: contents = cellstr(get(hObject,'String')) returns RewardedModality contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from RewardedModality
@@ -736,8 +739,11 @@ function TrainingMode_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 if get(hObject, 'Value')
     disp('Training mode is ON')
+    global BpodSystem
+    BpodSystem.ProtocolSettings.TrainingMode = 1;
 else
     disp('Training mode is OFF')
+    BpodSystem.ProtocolSettings.TrainingMode = 0;
 end
 % Hint: get(hObject,'Value') returns toggle state of TrainingMode
 
@@ -1597,26 +1603,3 @@ function trialCounter_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to trialCounter (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
-
-
-% --- Executes on selection change in videoDrive.
-function videoDrive_Callback(hObject, eventdata, handles)
-% hObject    handle to videoDrive (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns videoDrive contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from videoDrive
-
-
-% --- Executes during object creation, after setting all properties.
-function videoDrive_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to videoDrive (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
