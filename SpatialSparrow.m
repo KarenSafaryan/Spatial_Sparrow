@@ -22,6 +22,10 @@ DefaultSettings.cTrial = 1; %Nr of current trial.
 DefaultSettings.LeverSound = true; %play indicator sound when animal is touching levers correctly
 DefaultSettings.RegularStim = false; %produce regular stimulus sequence
 DefaultSettings.biasSeqLength = 3; %nr of trials on one side after which the oder side is switched with 50% probability
+
+LeftPortValveState = 2;%2^0;
+RightPortValveState = 1;%2^1; % ports are numbered 0-7. Need to convert to 8bit values for bpod
+           
 if isunix
     DefaultSettings.widefieldPath = ''; %path to widefield data on server
     DefaultSettings.videoDrive = '/home/anne/data'; %path to where the system saves video data
@@ -287,6 +291,8 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
                             break
                         end
                     end
+                else
+                    system('nohup labcams -w ')
                 end
             end
             if exist('udplabcams','var')
@@ -383,8 +389,6 @@ for iTrials = 1:maxTrials
         end
         %% create sounds - recreate if loudness has changed
         if iTrials == 1 || PrevStimLoudness ~= S.StimLoudness
-            LeftPortValveState = 2^0;
-            RightPortValveState = 2^1; % ports are numbered 0-7. Need to convert to 8bit values for bpod
             PunishSound = ((rand(1,sRate*S.PunishSoundDur) * 5) - 2.5)/10; %white noise for punishment
             RewardSound = zeros(1,sRate*0.02);RewardSound(1:sRate*0.01) = 1; %20ms click sound for reward
             RewardSound = RewardSound*0.5;
@@ -412,8 +416,8 @@ for iTrials = 1:maxTrials
         end
         
         %update valve times
-        LeftValveTime = GetValveTimes(S.leftRewardVolume, 1);
-        RightValveTime = GetValveTimes(S.rightRewardVolume, 2);
+        LeftValveTime = GetValveTimes(S.leftRewardVolume, LeftPortValveState);
+        RightValveTime = GetValveTimes(S.rightRewardVolume, RightPortValveState);
         
         % update performance plot
         if iTrials > 1
