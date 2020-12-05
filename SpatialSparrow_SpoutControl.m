@@ -787,13 +787,15 @@ function WaterL_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global BpodSystem
+global LeftPortValveState 
+
 duration = BpodSystem.ProtocolSettings.leftRewardVolume/1000.; % give water for the regular time
 smavalve = NewStateMachine;
 
 smavalve = AddState(smavalve, 'Name', 'GiveReward', ...
     'Timer', duration,...
     'StateChangeConditions', {'Tup', '>exit'},...
-    'OutputActions', {'ValveState', 2}); % Use 3 for valve 1 and 2 (1100) 5 for (1010)
+    'OutputActions', {'ValveState', LeftPortValveState}); % Use 3 for valve 1 and 2 (1100) 5 for (1010)
 
 SendStateMachine(smavalve)
 
@@ -840,13 +842,14 @@ function WaterR_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global BpodSystem
+global RightPortValveState
 duration = BpodSystem.ProtocolSettings.leftRewardVolume/1000.; % give water for the regular time
 smavalve = NewStateMachine;
 
 smavalve = AddState(smavalve, 'Name', 'GiveReward', ...
     'Timer', duration,...
     'StateChangeConditions', {'Tup', '>exit'},...
-    'OutputActions', {'ValveState', 1}); % Use 3 for valve 1 and 2 (1100) 5 for (1010)
+    'OutputActions', {'ValveState', RightPortValveState}); % Use 3 for valve 1 and 2 (1100) 5 for (1010)
 
 SendStateMachine(smavalve)
 

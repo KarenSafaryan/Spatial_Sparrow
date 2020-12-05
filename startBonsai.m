@@ -12,7 +12,7 @@ function returnValue = startBonsai(pathBonsai, pathWorkflow, workflowArgs)
 %
 % pathWorkflow: Fully-qualified (absolute) path to the workflow to be opened  as a string
 %               E.g.: 'C:\Users\<username>\Documents\Bosnai\Workflow.bonsai'
-% 
+%
 % workflowArgs: List of arguments to the workflow as a string
 %               '-p:Arg1="value_for_Arg_1" -p:Arg2="value_for_Arg_2"'
 %
@@ -26,7 +26,7 @@ function returnValue = startBonsai(pathBonsai, pathWorkflow, workflowArgs)
 % -----------------------
 % This script makes use of the Windows Script Host to start Bonsai. For ore
 % information, please see following references:
-% - Reference (Windows Script Host): 
+% - Reference (Windows Script Host):
 %   https://docs.microsoft.com/en-us/previous-versions//98591fh7%28v%3dvs.85%29
 % - Methods (Windows Script Host):
 %   https://docs.microsoft.com/en-us/previous-versions//2x3w20xf%28v%3dvs.85%29
@@ -36,7 +36,7 @@ function returnValue = startBonsai(pathBonsai, pathWorkflow, workflowArgs)
 %   https://docs.microsoft.com/en-us/previous-versions//d5fk67ky%28v%3dvs.85%29
 % - SendKeys Method
 %   https://docs.microsoft.com/en-us/previous-versions//8c6yea83%28v%3dvs.85%29
-% 
+%
 %
 % Author: Michael Wulf
 %         Cold Spring Harbor Laboratory
@@ -53,7 +53,7 @@ function returnValue = startBonsai(pathBonsai, pathWorkflow, workflowArgs)
 returnValue = 'Start';
 try
     % Get an instance of scripting shell
-    % 
+    %
     hndlWScript = actxserver('WScript.Shell');
     
     % First, try to close all open bonsai windows
@@ -61,8 +61,8 @@ try
     
     % Counter for keeping track of how many Bonsai-windows have been closed so
     % far. If too many Bonsai-windows are opened the user might have opened
-    % additional Bonsai instances and this script will terminate with an error 
-    % stating that circumstance. 
+    % additional Bonsai instances and this script will terminate with an error
+    % stating that circumstance.
     closingCntr = 0;
     
     while(stillOpenFlag == 1)
@@ -94,14 +94,18 @@ try
     fprintf('Trying to open Bonsai...\n');
     
     % Wait for Bonsai to start
-    pause(4);
+    pause(6);
     
     % Bring Bonsai to foreground
-    hndlWScript.AppActivate('Bonsai');
+    check = hndlWScript.AppActivate('Bonsai');
     % Send F5-hotkey to start workflow
-    hndlWScript.SendKeys('{F5}');
-    fprintf('Starting workflow...\n');
-    pause(1);
+    if check
+        hndlWScript.SendKeys('{F5}');
+        fprintf('Starting workflow...\n');
+        pause(1);
+    else
+        error('Could not bring Bonsay to foreground.');
+    end
     
 catch ME
     returnValue = 'Error';

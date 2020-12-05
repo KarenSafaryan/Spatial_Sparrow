@@ -51,22 +51,27 @@ try
     % Wait a bit
     pause(0.5);
     
-    % Bring Bonsai to foreground
-    hndlWScript.AppActivate('Bonsai');
+    % Bring Bonsai to foreground and check if appActivate was succesful
+    check = hndlWScript.AppActivate('Bonsai');
     
-    % Send hotkey to stop workflow
-    hndlWScript.SendKeys('+{F5}');
-    fprintf('Stopping workflow...\n');
-    
-    % Wait a bit
-    pause(0.5);
-    
-    % Bring Bonsai to foreground again
-    hndlWScript.AppActivate('Bonsai');
-    
-    % Send hotkey to close Bonsai
-    hndlWScript.SendKeys('%{F4}');
-    fprintf('Closing Bonsai...\n');
+    if check
+        % Send hotkey to stop workflow
+        hndlWScript.SendKeys('+{F5}');
+        fprintf('Stopping workflow...\n');
+        
+        % Wait a bit
+        pause(0.5);
+        
+        % Bring Bonsai to foreground again
+        hndlWScript.AppActivate('Bonsai');
+        
+        % Send hotkey to close Bonsai
+        hndlWScript.SendKeys('%{F4}');
+        fprintf('Closing Bonsai...\n');
+        
+    else
+        fprintf('Bonsai was not found. Shutdown skipped.\n');
+    end
     
 catch ME
     returnValue = 'Error';

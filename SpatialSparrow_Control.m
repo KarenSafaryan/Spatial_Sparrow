@@ -22,7 +22,7 @@ function varargout = SpatialSparrow_Control(varargin)
 
 % Edit the above text to modify the response to help SpatialSparrow_Control
 
-% Last Modified by GUIDE v2.5 02-Dec-2020 17:15:48
+% Last Modified by GUIDE v2.5 04-Dec-2020 17:08:01
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
@@ -398,7 +398,7 @@ function varargout = SpatialSparrow_Control_OutputFcn(hObject, eventdata, handle
 varargout{1} = handles;
 
 
-% --- Executes on button press in AutoReward.
+% --- Executes on button press in fractionTraining.
 function AutoReward_Callback(hObject, eventdata, handles)
 % hObject    handle to AutoReward (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -407,10 +407,10 @@ function AutoReward_Callback(hObject, eventdata, handles)
 global BPodSystem
 if get(hObject, 'Value')
     disp('AutoReward is ON')
-    BpodSystem.ProtocolSettings.AutoReward = true;
+    BpodSystem.ProtocolSettings.AutoReward = 1;
 else
     disp('AutoReward is OFF')
-    BpodSystem.ProtocolSettings.AutoReward = false;
+    BpodSystem.ProtocolSettings.AutoReward = 0;
 end
 
 % --- Executes on button press in UseAntiBias.
@@ -887,13 +887,13 @@ function PerformanceSwitch_Callback(hObject, eventdata, handles)
 
 
 
-function autoRewardMixed_Callback(hObject, eventdata, handles)
-% hObject    handle to autoRewardMixed (see GCBO)
+function fractionTrainingMixed_Callback(hObject, eventdata, handles)
+% hObject    handle to fractionTrainingMixed (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of autoRewardMixed as text
-%        str2double(get(hObject,'String')) returns contents of autoRewardMixed as a double
+% Hints: get(hObject,'String') returns contents of fractionTrainingMixed as text
+%        str2double(get(hObject,'String')) returns contents of fractionTrainingMixed as a double
 
 global BpodSystem
 cVal = str2num(get(hObject,'String'));
@@ -906,25 +906,11 @@ elseif cVal > 1 %Self-performed should not be higher as 1
 end
 
 if ~isnan(cVal)
-    BpodSystem.ProtocolSettings.autoRewardMixed = cVal; %update Bpod object
+    BpodSystem.ProtocolSettings.fractionTrainingMixed = cVal; %update Bpod object
 else
     disp([get(hObject,'String') ' is not a valid input to change the training status.'])
-    set(hObject,'string',num2str(BpodSystem.ProtocolSettings.autoRewardMixed))
+    set(hObject,'string',num2str(BpodSystem.ProtocolSettings.fractionTrainingMixed))
 end
-
-
-% --- Executes during object creation, after setting all properties.
-function autoRewardMixed_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to autoRewardMixed (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
 
 
 function DistProb_Callback(hObject, eventdata, handles)
@@ -1287,13 +1273,13 @@ line(AxesHandle.XLim,[0.5 0.5],'linestyle','--','linewidth',1,'color',[0.5 0.5 0
 end
 
 
-function autoRewardAudio_Callback(hObject, eventdata, handles)
-% hObject    handle to autoRewardAudio (see GCBO)
+function fractionTrainingAudio_Callback(hObject, eventdata, handles)
+% hObject    handle to fractionTrainingAudio (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of autoRewardAudio as text
-%        str2double(get(hObject,'String')) returns contents of autoRewardAudio as a double
+% Hints: get(hObject,'String') returns contents of fractionTrainingAudio as text
+%        str2double(get(hObject,'String')) returns contents of fractionTrainingAudio as a double
 
 global BpodSystem
 cVal = str2num(get(hObject,'String'));
@@ -1306,33 +1292,21 @@ elseif cVal > 1 %Self-performed should not be higher as 1
 end
 
 if ~isnan(cVal)
-    BpodSystem.ProtocolSettings.autoRewardAudio = cVal; %update Bpod object
+    BpodSystem.ProtocolSettings.fractionTrainingAudio = cVal; %update Bpod object
 else
     disp([get(hObject,'String') ' is not a valid input to change the training status.'])
-    set(hObject,'string',num2str(BpodSystem.ProtocolSettings.autoRewardAudio))
+    set(hObject,'string',num2str(BpodSystem.ProtocolSettings.fractionTrainingAudio))
 end
 
 
-% --- Executes during object creation, after setting all properties.
-function autoRewardAudio_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to autoRewardAudio (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-function autoRewardVision_Callback(hObject, eventdata, handles)
-% hObject    handle to autoRewardVision (see GCBO)
+function fractionTrainingVision_Callback(hObject, eventdata, handles)
+% hObject    handle to fractionTrainingVision (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of autoRewardVision as text
-%        str2double(get(hObject,'String')) returns contents of autoRewardVision as a double
+% Hints: get(hObject,'String') returns contents of fractionTrainingVision as text
+%        str2double(get(hObject,'String')) returns contents of fractionTrainingVision as a double
 
 global BpodSystem
 cVal = str2num(get(hObject,'String'));
@@ -1345,16 +1319,16 @@ elseif cVal > 1 %Self-performed should not be higher as 1
 end
 
 if ~isnan(cVal)
-    BpodSystem.ProtocolSettings.autoRewardVision = cVal; %update Bpod object
+    BpodSystem.ProtocolSettings.fractionTrainingVision = cVal; %update Bpod object
 else
     disp([get(hObject,'String') ' is not a valid input to change the training status.'])
-    set(hObject,'string',num2str(BpodSystem.ProtocolSettings.autoRewardVision))
+    set(hObject,'string',num2str(BpodSystem.ProtocolSettings.fractionTrainingVision))
 end
 
 
 % --- Executes during object creation, after setting all properties.
-function autoRewardVision_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to autoRewardVision (see GCBO)
+function fractionTrainingVision_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fractionTrainingVision (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -1443,13 +1417,13 @@ end
 
 
 
-function autoRewardPiezo_Callback(hObject, eventdata, handles)
-% hObject    handle to autoRewardPiezo (see GCBO)
+function fractionTrainingPiezo_Callback(hObject, eventdata, handles)
+% hObject    handle to fractionTrainingPiezo (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of autoRewardPiezo as text
-%        str2double(get(hObject,'String')) returns contents of autoRewardPiezo as a double
+% Hints: get(hObject,'String') returns contents of fractionTrainingPiezo as text
+%        str2double(get(hObject,'String')) returns contents of fractionTrainingPiezo as a double
 
 global BpodSystem
 cVal = str2num(get(hObject,'String'));
@@ -1462,24 +1436,11 @@ elseif cVal > 1 %Self-performed should not be higher as 1
 end
 
 if ~isnan(cVal)
-    BpodSystem.ProtocolSettings.autoRewardPiezo = cVal; %update Bpod object
+    BpodSystem.ProtocolSettings.fractionTrainingPiezo = cVal; %update Bpod object
 else
     disp([get(hObject,'String') ' is not a valid input to change the training status.'])
-    set(hObject,'string',num2str(BpodSystem.ProtocolSettings.autoRewardPiezo))
+    set(hObject,'string',num2str(BpodSystem.ProtocolSettings.fractionTrainingPiezo))
 end
-
-% --- Executes during object creation, after setting all properties.
-function autoRewardPiezo_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to autoRewardPiezo (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
 
 function ProbPiezo_Callback(hObject, eventdata, handles)
 % hObject    handle to ProbPiezo (see GCBO)
@@ -1603,3 +1564,40 @@ function trialCounter_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to trialCounter (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
+
+
+% --- Executes during object creation, after setting all properties.
+function fractionTrainingMixed_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fractionTrainingMixed (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes during object creation, after setting all properties.
+function fractionTrainingAudio_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fractionTrainingAudio (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes during object creation, after setting all properties.
+function fractionTrainingPiezo_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to fractionTrainingPiezo (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
