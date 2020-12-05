@@ -2,12 +2,12 @@
 % BPod Init
 global BpodSystem
 BpodSystem.Data.byteLoss = 0; %counter for cases when the teensy didn't send a response byte
-global LeftPortValveState 
+global LeftPortValveState
 global RightPortValveState
 
 LeftPortValveState = 2;%2^0;
 RightPortValveState = 1;%2^1; % ports are numbered 0-7. Need to convert to 8bit values for bpod
- 
+
 %% Load default settings and update with pre-defined settings if required
 defaultFieldParamVals = struct2cell(DefaultSettings);defaultFieldNames = fieldnames(DefaultSettings);
 BpodSystem.ProtocolSettings.ServoPos = [0 0];
@@ -30,7 +30,7 @@ serverPath = [S.serverPath filesep BpodSystem.ProtocolSettings.SubjectName files
 
 
 %% ensure teensy, I2C, and analog modules are present and set up communication
-if ~isempty(find(contains(BpodSystem.Modules.Name,'I2C1'))) % check to see if this system has an I2C 
+if ~isempty(find(contains(BpodSystem.Modules.Name,'I2C1'))) % check to see if this system has an I2C
     if isfield(BpodSystem.ModuleUSB, 'I2C1')
         i2c= I2CMessenger(BpodSystem.ModuleUSB.I2C1);
     else
@@ -113,7 +113,7 @@ BpodSystem.Data.cTrial = 1; BpodSystem.Data.Rewarded = logical([]); %needed for 
 if ~exist(dataPath,'dir')
     try
         mkdir(dataPath);
-    catch 
+    catch
         disp(['Could not create ',dataPath])
         dataPath = uigetdir(pwd,'Specify the data folder');
     end
@@ -122,7 +122,7 @@ end
 if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     %%
     BpodNotebook('init');
-
+    
     BpodSystem.GUIHandles.SpatialSparrow_Control = SpatialSparrow_Control; %get handle for control GUI
     BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'init',TrialSidesList,60'}); %initiate control GUI and show outcome plot for the next 60 trials
     BpodSystem.Data.animalWeight = str2double(newid('Enter animal weight (in grams)')); %ask for animal weight and save
@@ -137,7 +137,7 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
         WorkflowArg4 = sprintf('-p:CsvFileName2="%s"', [dataPath filesep bhvFile filesep bhvFile '_' 'data_stream.csv']);
         WorkflowArg5 = sprintf('-p:CsvFileName3="%s"', [dataPath filesep bhvFile filesep bhvFile '_' 'data_times.csv']);
         WorkflowArgs = [WorkflowArg1 ' ' WorkflowArg2 ' ' WorkflowArg3 ' ' WorkflowArg4 ' ' WorkflowArg5];
-    
+        
         cPath = pwd;
         cd(fileparts(BpodSystem.ProtocolSettings.bonsaiParadim));
         vidStatus = startBonsai(BpodSystem.ProtocolSettings.bonsaiEXE, BpodSystem.ProtocolSettings.bonsaiParadim, WorkflowArgs);
@@ -178,7 +178,7 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
                         fwrite(udplabcams,'ping')
                         tmp = fgetl(udplabcams);
                         if labcamsproc.HasExited
-          SpatialSparrow_Init                  disp('Labcams has exited?')
+                            disp('Labcams has exited?')
                             clear udplabcams
                             break
                         end
@@ -187,7 +187,20 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
                         end
                     end
                 else
-                    system('nohup labcams -w ')
+                    % labcams needs to be installed to use system python
+                    % for this to work
+                    system('LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/:$LD_LIBRARY_PATH export LD_LIBRARY_PATH;gnome-terminal -- labcams -w')
+                    for i =  1:100
+                        fwrite(udplabcams,'ping')
+                        tmp = fgetl(udplabcams);
+                        pause(0.1)
+                        if ~isempty(tmp)
+                            break
+                        end
+                    end
+                    if isempty(tmp)
+                        clear udplabcams
+                    end
                 end
             end
             if exist('udplabcams','var')
@@ -213,7 +226,7 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     set(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value',0); %set GUI back to false
     set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
 end
-                
+
 if BpodSystem.ProtocolSettings.triggerWidefield
     if isfield(BpodSystem.ProtocolSettings,'labcamsWidefield')
         if ~isempty(BpodSystem.ProtocolSettings.labcamsWidefield)
@@ -232,10 +245,10 @@ if BpodSystem.ProtocolSettings.triggerWidefield
             fwrite(udpWF,['expname=' BpodSystem.ProtocolSettings.SubjectName filesep 'onephoton' filesep bhvFile filesep bhvFile '_2']); % 2 is the number of widefield channels
             fgetl(udpWF)
             disp(' -> WIDEFIELD labcams connected.');
-        
-    else
-        disp(' -> WIDEFIELD labcams not connected.');
-        clear udpWF
+            
+        else
+            disp(' -> WIDEFIELD labcams not connected.');
+            clear udpWF
         end
     end
 end
