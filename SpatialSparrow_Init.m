@@ -108,7 +108,7 @@ maxTrials = 5000;
 TrialSidesList = double(rand(1,maxTrials) < S.ProbRight); % ONE MEANS RIGHT TRIAL
 PrevProbRight = S.ProbRight;
 BpodSystem.Data.cTrial = 1; BpodSystem.Data.Rewarded = logical([]); %needed for cam streamer to work in first trial
-[dataPath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile); %behavioral file and data path
+  [dataPath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile); %behavioral file and data path
 
 if ~exist(dataPath,'dir')
     try
@@ -122,10 +122,11 @@ end
 if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     %%
     BpodNotebook('init');
-    
-    BpodSystem.GUIHandles.SpatialSparrow_Control = SpatialSparrow_Control; %get handle for control GUI
-    BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'init',TrialSidesList,60'}); %initiate control GUI and show outcome plot for the next 60 trials
-    BpodSystem.Data.animalWeight = str2double(newid('Enter animal weight (in grams)')); %ask for animal weight and save
+    BpodSystem.GUIHandles.spatialsparrow = SpatialSparrow_GUI
+    BpodSystem.GUIHandles.spatialsparrow.getSettingsFromBpod()
+    %BpodSystem.GUIHandles.SpatialSparrow_Control = SpatialSparrow_Control; %get handle for control GUI
+    %BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'init',TrialSidesList,60'}); %initiate control GUI and show outcome plot for the next 60 trials
+    %BpodSystem.Data.animalWeight = str2double(newid('Enter animal weight (in grams)')); %ask for animal weight and save
     
     %start bonsai
     if ~isunix && ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
@@ -216,16 +217,16 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
 end
 
 
-BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1 = []; %handle needs to exist so code does not crash when trying to close all figures
-if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
+%BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1 = []; %handle needs to exist so code does not crash when trying to close all figures
+%if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     % start spout adjustment
-    disp('Waiting for spout adjustment - hit OK in the SpoutControl window to continue')
-    SpatialSparrow_SpoutControl; %call spout control gui
-    movegui(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1,'northwest');
-    uiwait(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1); %wait for spout control and clear handle afterwards
-    set(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value',0); %set GUI back to false
-    set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
-end
+%    disp('Waiting for spout adjustment - hit OK in the SpoutControl window to continue')
+%    SpatialSparrow_SpoutControl; %call spout control gui
+%    movegui(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1,'northwest');
+%    uiwait(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1); %wait for spout control and clear handle afterwards
+%    set(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value',0); %set GUI back to false
+%    set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
+%end
 
 if BpodSystem.ProtocolSettings.triggerWidefield
     if isfield(BpodSystem.ProtocolSettings,'labcamsWidefield')

@@ -538,7 +538,7 @@ function AdjustLeverSpeed_Callback(hObject, eventdata, handles)
 global BpodSystem
 LeftIn = round(BpodSystem.ProtocolSettings.lInnerLim,2) - BpodSystem.ProtocolSettings.ServoPos(1); %left inner position + bias offset
 RightIn = round(BpodSystem.ProtocolSettings.rInnerLim,2) - BpodSystem.ProtocolSettings.ServoPos(2); %right inner position + bias offset
-LeftOut = LeftIn + BpodSystem.ProtocolSettings.spoutOffset; %left outer position
+100LeftOut = LeftIn + BpodSystem.ProtocolSettings.spoutOffset; %left outer position
 RightOut = RightIn + BpodSystem.ProtocolSettings.spoutOffset; %right outer position
 
 % convert to strings and combine as teensy output
@@ -707,7 +707,7 @@ end
 function TouchThresh_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to TouchThresh (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
+teensyWrite(80)% handles    empty - handles not created until after all CreateFcns called
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.

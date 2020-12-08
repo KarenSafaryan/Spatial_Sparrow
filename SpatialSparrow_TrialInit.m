@@ -28,12 +28,12 @@ if iTrials == 1 || PrevStimLoudness ~= S.StimLoudness
     W.TriggerProfiles(12, 1:2) = 12; %this will play waveform 12 (punishSound) on ch1+2
 end
 
-if get(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value')
-    disp('Waiting for spout adjustment - hit OK in the SpoutControl window to continue')
-    SpatialSparrow_SpoutControl; %call spout control gui
-    uiwait(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1); %wait for spout control and clear handle afterwards
-    set(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value',0); %set GUI back to false
-end
+%if get(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value')
+%    disp('Waiting for spout adjustment - hit OK in the SpoutControl window to continue')
+%    SpatialSparrow_SpoutControl; %call spout control gui
+%    uiwait(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1); %wait for spout control and clear handle afterwards
+%    set(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value',0); %set GUI back to false
+%end
 
 %update valve times
 LeftValveTime = GetValveTimes(S.leftRewardVolume, LeftPortValveState);
@@ -124,7 +124,7 @@ if sum(temp == 0) > 5 && sum(temp == 1) > 5 %if more than 5 trials were performe
     end
     %limit the max bias
     for i = 1:length(BpodSystem.ProtocolSettings.ServoPos)
-        if BpodSystem.ProtocolSettings.ServoPos(i) > BpodSystem.ProtocolSettings.maxServoPos(i)
+      if BpodSystem.ProtocolSettings.ServoPos(i) > BpodSystem.ProtocolSettings.maxServoPos(i)
             BpodSystem.ProtocolSettings.ServoPos(i) = BpodSystem.ProtocolSettings.maxServoPos(i);
         end
     end
@@ -153,6 +153,6 @@ end
 if iTrials > 1 && rem(iTrials,10) == 0
     BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'Update','modality',TrialSidesList,OutcomeRecord,AssistRecord});drawnow; clear temp % update performance curves
 end 
-set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
+%set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
 
 
