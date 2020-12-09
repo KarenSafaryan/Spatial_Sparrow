@@ -2,6 +2,25 @@
 #include "Arduino.h"
 #include "ArCOM.h"
 
+#define HANDLE_MOTOR_BOTTOM 1
+#ifdef HANDLES_MOTOR_BOTTOM
+  #define LOW_DIR_H HIGH
+  #define HIGH_DIR_H LOW
+#else
+  #define LOW_DIR_H LOW
+  #define HIGH_DIR_H HIGH
+#endif
+
+#define SPOUT_MOTOR_BOTTOM 1
+#ifdef SPOUT_MOTOR_BOTTOM
+  #define LOW_DIR_S HIGH
+  #define HIGH_DIR_S LOW
+#else
+  #define LOW_DIR_S LOW
+  #define HIGH_DIR_S HIGH
+#endif
+
+
 //#define USE_LOAD_CELL 1
 #ifdef USE_LOAD_CELL
   #include "HX711.h" //This load-cell library can be obtained here http://librarymanager/All#Avia_HX711
@@ -681,7 +700,7 @@ void loop() {
   
         // find absolute outer limits, this happens when requestion a movement to position zero
         if (findSpoutOut[0]) { // left spout is moving to zero position
-          digitalWriteFast(PIN_SPOUTDIR_L, LOW); // make sure stepper is moving in the right direction
+          digitalWriteFast(PIN_SPOUTDIR_L, LOW_DIR_S); // make sure stepper is moving in the right direction
           delayMicroseconds(10); // short delay to ensure direction has changed
           sendStep(PIN_SPOUTSTEP_L, stepPulse); // make a step
            if (!digitalReadFast(PIN_SPOUTOUT_L)) { // check if outer limit has been reached
@@ -744,7 +763,7 @@ void loop() {
   
         // find absolute outer limits, this happens when requestion a movement to position zero
         if (findSpoutOut[1]) { // right spout is moving to zero position
-          digitalWriteFast(PIN_SPOUTDIR_R, HIGH); // make sure stepper is moving in the right direction
+          digitalWriteFast(PIN_SPOUTDIR_R, HIGH_DIR_S); // make sure stepper is moving in the right direction
           delayMicroseconds(10); // short delay to ensure direction has changed
           sendStep(PIN_SPOUTSTEP_R, stepPulse); // make a step
            if (!digitalReadFast(PIN_SPOUTOUT_R)) { // check if outer limit has been reached
@@ -812,7 +831,7 @@ void loop() {
 
       // find absolute outer limits, this happens when requestion a movement to position zero
       if (findLeverOut[0]) { // left stepper is moving to zero position
-        digitalWriteFast(PIN_LEVERDIR_L, LOW); // make sure stepper is moving in the right direction
+        digitalWriteFast(PIN_LEVERDIR_L, LOW_DIR_H); // make sure stepper is moving in the right direction
         delayMicroseconds(10); // short delay to ensure direction has changed
         sendStep(PIN_LEVERSTEP_L, stepPulse); // make a step
          if (!digitalReadFast(PIN_LEVEROUT_L)) { // check if outer limit has been reached
@@ -822,7 +841,7 @@ void loop() {
       }
       
       if (findLeverOut[1]) { // right stepper is moving to zero position
-         digitalWriteFast(PIN_LEVERDIR_R, HIGH); // make sure stepper is moving in the right direction
+         digitalWriteFast(PIN_LEVERDIR_R, HIGH_DIR_H); // make sure stepper is moving in the right direction
          delayMicroseconds(10); // short delay to ensure direction has changed
          sendStep(PIN_LEVERSTEP_R, stepPulse); // make a step
          if (!digitalReadFast(PIN_LEVEROUT_R)) { // check if outer limit has been reached
@@ -942,14 +961,15 @@ void sendStep(int cPin, int pulseTime) { // send stepper pulse as long as contro
     digitalWriteFast(cPin,LOW);
 }
 
+
 float moveHandles(float current, float target, int pulseDur){
   if (current < target) { // levers move towards the animal
-  digitalWriteFast(PIN_LEVERDIR_R, LOW); // make sure handle is moving in the right direction
-  digitalWriteFast(PIN_LEVERDIR_L, HIGH); // make sure handle is moving in the right direction
+  digitalWriteFast(PIN_LEVERDIR_R, LOW_DIR_H); // make sure handle is moving in the right direction
+  digitalWriteFast(PIN_LEVERDIR_L, HIGH_DIR_H); // make sure handle is moving in the right direction
   }
   else {  // levers move away from the animal
-  digitalWriteFast(PIN_LEVERDIR_R, HIGH); // make sure handle is moving in the right direction
-  digitalWriteFast(PIN_LEVERDIR_L, LOW); // make sure handle is moving in the right direction
+  digitalWriteFast(PIN_LEVERDIR_R, HIGH_DIR_H); // make sure handle is moving in the right direction
+  digitalWriteFast(PIN_LEVERDIR_L, LOW_DIR_H); // make sure handle is moving in the right direction
   }
   delayMicroseconds(10); // short delay to ensure direction has changed
   sendStep(PIN_LEVERSTEP_L, pulseDur); // make a step
@@ -964,10 +984,10 @@ float moveHandles(float current, float target, int pulseDur){
 
 float moveLeftSpout(float current, float target, int pulseDur){
   if (current < target) { // spout moves towards the animal
-  digitalWriteFast(PIN_SPOUTDIR_L, HIGH); // make sure spout is moving in the right direction
+  digitalWriteFast(PIN_SPOUTDIR_L, HIGH_DIR_S); // make sure spout is moving in the correct direction
   }
   else {  // spout move away from the animal
-  digitalWriteFast(PIN_SPOUTDIR_L, LOW); // make sure spout is moving in the right direction
+  digitalWriteFast(PIN_SPOUTDIR_L, LOW_DIR_S); // make sure spout is moving in the right direction
   }
   delayMicroseconds(10); // short delay to ensure direction has changed
   sendStep(PIN_SPOUTSTEP_L, pulseDur); // make a step
@@ -980,10 +1000,10 @@ float moveLeftSpout(float current, float target, int pulseDur){
 
 float moveRightSpout(float current, float target, int pulseDur){
   if (current < target) { // spout moves towards the animal
-  digitalWriteFast(PIN_SPOUTDIR_R, LOW); // make sure spout is moving in the right direction
+  digitalWriteFast(PIN_SPOUTDIR_R, LOW_DIR_S); // make sure spout is moving in the correct direction
   }
   else {  // spout move away from the animal
-  digitalWriteFast(PIN_SPOUTDIR_R, HIGH); // make sure spout is moving in the right direction
+  digitalWriteFast(PIN_SPOUTDIR_R, HIGH_DIR_S); // make sure spout is moving in the correct direction
   }
   delayMicroseconds(10); // short delay to ensure direction has changed
   sendStep(PIN_SPOUTSTEP_R, pulseDur); // make a step
@@ -993,6 +1013,7 @@ float moveRightSpout(float current, float target, int pulseDur){
     
   }
   current = AdjustServo(current, target, 1); // adjust current servo position
+  
   return current;
 }
 
