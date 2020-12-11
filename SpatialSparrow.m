@@ -1,4 +1,5 @@
 function SpatialSparrow
+global BpodSystem
 
 SpatialSparrow_Settings
 SpatialSparrow_Init
@@ -9,8 +10,8 @@ AssistRecord = false(1,maxTrials);
 LastBias = 1; %last trial were bias correction was used
 PrevStimLoudness = S.StimLoudness; %variable to check if loudness has changed
 singleSpoutBias = false; %flag to indicate if single spout was presented to counter bias
-
-BpodSystem.Status.SpatialSparrowPause = false;
+global BpodSystem
+BpodSystem.Status.SpatialSparrowPause = true;
 while BpodSystem.Status.SpatialSparrowPause
     drawnow; pause(0.03);
 end
@@ -59,6 +60,7 @@ for iTrials = 1:maxTrials
         SpatialSparrow_AutoReward
         SpatialSparrow_BpodTrialInit
         SpatialSparrow_DisplayTrialData
+        BpodSystem.GUIHandles.spatialsparrow.prepareTrial(TrialSidesList)
         SpatialSparrow_StateMachine
         %% create ITI jitter
         trialPrep = toc; %check how much time was used to prepare trial and subtract from ITI
@@ -106,7 +108,7 @@ for iTrials = 1:maxTrials
 end
 
 %% close figures
-try;close(BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control);end
-try;close(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1);end
-try;close(BpodSystem.GUIHandles.ParamFig);end
+% try;close(BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control);end
+% try;close(BpodSystem.GUIHandles.SpatialSparrow_SpoutControl.figure1);end
+% try;close(BpodSystem.GUIHandles.ParamFig);end
 end

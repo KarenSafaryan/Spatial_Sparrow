@@ -1,3 +1,4 @@
+global BpodSystem
 %SpatialSparrow_SaveTrial
 % Save events and data
 if length(fieldnames(RawEvents)) > 1

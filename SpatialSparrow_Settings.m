@@ -1,4 +1,5 @@
 % SpatialSparrow_Settings
+global BpodSystem
 
 
 % Define or load default settings for protocol

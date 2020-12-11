@@ -1,4 +1,5 @@
 %SpatialSparrow_DispalyTrialData
+global BpodSystem
 
 %% display some stimulus information
 cModality = {'Vision only' 'Audio only' 'AudioVisual' 'Somatosensory' 'SomatoVisual' 'SomatoAudio' 'AllMixed'};

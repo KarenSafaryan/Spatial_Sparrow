@@ -1,5 +1,5 @@
 %SpatialSparrow_TrialInit
-
+global BpodSystem
 BpodSystem.ProtocolSettings.cTrial = iTrials; %log current trial ID in bpod object
 BpodSystem.Data.cTrial = iTrials; %log current trial ID in bpod object
 
@@ -144,15 +144,15 @@ end
 
 %% Update GUI
 % update performance plot
-if iTrials > 1
-    BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'Update','Performance',TrialSidesList,OutcomeRecord,AssistRecord});drawnow; clear temp % update PMF plots
-%update outcome plot
-    BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'Update','Outcome',TrialSidesList,OutcomeRecord,AssistRecord});drawnow; % update outcome plot
-end
-% update modality plot
-if iTrials > 1 && rem(iTrials,10) == 0
-    BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'Update','modality',TrialSidesList,OutcomeRecord,AssistRecord});drawnow; clear temp % update performance curves
-end 
+% if iTrials > 1
+%     BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'Update','Performance',TrialSidesList,OutcomeRecord,AssistRecord});drawnow; clear temp % update PMF plots
+% %update outcome plot
+%     BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'Update','Outcome',TrialSidesList,OutcomeRecord,AssistRecord});drawnow; % update outcome plot
+% end
+% % update modality plot
+% if iTrials > 1 && rem(iTrials,10) == 0
+%     BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'Update','modality',TrialSidesList,OutcomeRecord,AssistRecord});drawnow; clear temp % update performance curves
+% end 
 %set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
 
 

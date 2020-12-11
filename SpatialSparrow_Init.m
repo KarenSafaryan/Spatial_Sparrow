@@ -118,12 +118,18 @@ if ~exist(dataPath,'dir')
         dataPath = uigetdir(pwd,'Specify the data folder');
     end
 end
+if isfield(BpodSystem.GUIHandles,"spatialsparrow")
+    try
+        close(BpodSystem.GUIHandles.spatialsparrow)
+    end
+end
 %% Initialize camera, control GUI and feedback plots
 if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     %%
     BpodNotebook('init');
-    BpodSystem.GUIHandles.spatialsparrow = SpatialSparrow_GUI
-    BpodSystem.GUIHandles.spatialsparrow.getSettingsFromBpod()
+    BpodSystem.GUIHandles.spatialsparrow = SpatialSparrow_GUI;
+    BpodSystem.GUIHandles.spatialsparrow.getSettingsFromBpod();
+    BpodSystem.GUIHandles.spatialsparrow.init_plots();
     %BpodSystem.GUIHandles.SpatialSparrow_Control = SpatialSparrow_Control; %get handle for control GUI
     %BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'init',TrialSidesList,60'}); %initiate control GUI and show outcome plot for the next 60 trials
     %BpodSystem.Data.animalWeight = str2double(newid('Enter animal weight (in grams)')); %ask for animal weight and save

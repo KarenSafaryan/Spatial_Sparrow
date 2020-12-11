@@ -1,17 +1,18 @@
 %SpatialSparrow_CloseSession
+global BpodSystem
 
 if S.SaveSettings %if current settings should be saved to file
     S.SaveSettings = false; %set variable back to false before saving
     ProtocolSettings = BpodSystem.ProtocolSettings;
-    save(BpodSystem.GUIData.SettingsFileName, 'ProtocolSettings'); % save protocol settings file to directory
-    set(BpodSystem.GUIHandles.SpatialSparrow_Control.SaveSettings,'Value',false); %set GUI back to false after saving
+    %save(BpodSystem.GUIData.SettingsFileName, 'ProtocolSettings'); % save protocol settings file to directory
+    %set(BpodSystem.GUIHandles.SpatialSparrow_Control.SaveSettings,'Value',false); %set GUI back to false after saving
 else
     % check if settings should be saved when ending current session
-    button = questdlg('Save current settings?','Save settings','Yes','No','Yes'); %creates a question dialog box with two push buttons labeled 'str1' and 'str2'. default specifies the default button selection and must be 'str1' or 'str2'.
-    if strcmp(button,'Yes')
-        ProtocolSettings = BpodSystem.ProtocolSettings;
-        save(BpodSystem.GUIData.SettingsFileName, 'ProtocolSettings'); % save protocol settings file to directory
-    end
+    %button = questdlg('Save current settings?','Save settings','Yes','No','Yes'); %creates a question dialog box with two push buttons labeled 'str1' and 'str2'. default specifies the default button selection and must be 'str1' or 'str2'.
+    %if strcmp(button,'Yes')
+    %    ProtocolSettings = BpodSystem.ProtocolSettings;
+     %   save(BpodSystem.GUIData.SettingsFileName, 'ProtocolSettings'); % save protocol settings file to directory
+    %end
 end
 % Move spouts to reset position.
 try BpodSystem.StartModuleRelay('TouchShaker1'); java.lang.Thread.sleep(10); end % Relay bytes from Teensy
