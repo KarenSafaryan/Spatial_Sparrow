@@ -156,3 +156,4 @@ end
 
 %% create analog waveforms
 [Signal,stimEvents] = SpatialSparrow_GetStimSequence(StimRates, StimIntensities, sRate, stimDur, cStimOn, S); %produce stim sequences and event log
+BpodSystem.GUIData.Stimuli = Signal;

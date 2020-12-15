@@ -15,7 +15,6 @@ else
     %end
 end
 % Move spouts to reset position.
-try BpodSystem.StartModuleRelay('TouchShaker1'); java.lang.Thread.sleep(10); end % Relay bytes from Teensy
 teensyWrite([71 1 '0' 1 '0']); % Move spouts to zero position
 teensyWrite([72 1 '0']); % Move handles to zero position
 

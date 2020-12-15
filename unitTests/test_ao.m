@@ -10,6 +10,7 @@ W.SamplingRate = 20000; %adjust sampling rate
 %%
 % addpath('Bpod_Gen2\Functions\Internal Functions\GenerateSineWave.m')
 sound = GenerateSineWave(W.SamplingRate, 2000, 1) / 1;
+sound = ((rand(1,sRate*S.PunishSoundDur) * 5) - 2.5)/10;
 % W.TriggerProfiles(10, 1:2) = 10;
 %
 W.loadWaveform(10,sound); % load signal to waveform object

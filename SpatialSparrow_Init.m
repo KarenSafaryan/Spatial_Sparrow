@@ -5,8 +5,8 @@ BpodSystem.Data.byteLoss = 0; %counter for cases when the teensy didn't send a r
 global LeftPortValveState
 global RightPortValveState
 
-LeftPortValveState = 2;%2^0;
-RightPortValveState = 1;%2^1; % ports are numbered 0-7. Need to convert to 8bit values for bpod
+LeftPortValveState = 1;%2^0;
+RightPortValveState = 2;%2^1; % ports are numbered 0-7. Need to convert to 8bit values for bpod
 
 %% Load default settings and update with pre-defined settings if required
 defaultFieldParamVals = struct2cell(DefaultSettings);defaultFieldNames = fieldnames(DefaultSettings);
@@ -91,13 +91,12 @@ if checker
 end
 
 %% check teensy module
-try BpodSystem.StartModuleRelay('TouchShaker1'); java.lang.Thread.sleep(10); end % Relay bytes from Teensy
 
 % send trialstart info and check response
-teensyWrite([70 ones(1,6) '550050']); %set high touch threshold to avoid confusing bytes
+% teensyWrite([70 ones(1,6) '550050']); %set high touch threshold to avoid confusing bytes
 
 %% TODO: Move the handles and the spouts to the zero position before doing this.
-
+setMotorsToZero;
 %set touch threshold
 cVal = num2str(BpodSystem.ProtocolSettings.TouchThresh);
 teensyWrite([75 length(cVal) cVal]);
@@ -127,6 +126,7 @@ end
 if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     %%
     BpodNotebook('init');
+  
     BpodSystem.GUIHandles.spatialsparrow = SpatialSparrow_GUI;
     BpodSystem.GUIHandles.spatialsparrow.getSettingsFromBpod();
     BpodSystem.GUIHandles.spatialsparrow.init_plots();

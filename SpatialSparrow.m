@@ -61,6 +61,7 @@ for iTrials = 1:maxTrials
         SpatialSparrow_BpodTrialInit
         SpatialSparrow_DisplayTrialData
         BpodSystem.GUIHandles.spatialsparrow.prepareTrial(TrialSidesList)
+        
         SpatialSparrow_StateMachine
         %% create ITI jitter
         trialPrep = toc; %check how much time was used to prepare trial and subtract from ITI
@@ -99,6 +100,9 @@ for iTrials = 1:maxTrials
         end
         SpatialSparrow_SaveTrial
         toc;disp('==============================================')
+        % send the motors to zero before starting another trial
+        setMotorsToZero;
+        
         HandlePauseCondition; % Checks to see if the protocol is paused. If so, waits until user resumes.
         
     else  %stop code if stop button is pressed and close figures

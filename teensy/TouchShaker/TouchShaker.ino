@@ -102,10 +102,11 @@ const int sRateLever = 10; // This is the number of ms for outputs to be during 
 #define DECREASE_LEVERTHRESH_L 85 // identifier to decrease touch threshold for the left LEVER
 #define INCREASE_LEVERTHRESH_R 86 // identifier to increase touch threshold for the right LEVER
 #define DECREASE_LEVERTHRESH_R 87 // identifier to decrease touch threshold for the right LEVER
+#define IS_MOVING 88
+
 #define START_SCALE 91 // identifier to start logging data from the load cell
 #define STOP_SCALE 92 // identifier to stop logging data from the load cell
 #define SEND_DATA_SCALE 93 // identifier to return data from load cell recording
-
 // outputs
 #define LEFT_SPOUT_TOUCH 1 // byte to indicate left spout is being touched
 #define RIGHT_SPOUT_TOUCH 2 // byte to indicate right spout is being touched
@@ -158,14 +159,14 @@ int touchChangeInc = 2; // step size when increasing/decreasing touch thresholds
 // flags for current servo states. Required to control servo speed
 bool stimTrigger = false; // flag to indicate that stim trigger is produced
 bool trialTrigger = false; // flag to indicate that trial trigger is produced
-bool spoutMoves = true; // flag to indicate that spouts are in motion
+bool spoutMoves = false; // flag to indicate that spouts are in motion
 bool lSpoutMovesIn = false; // flag to indicate that spout is moving to inward position
 bool lSpoutMovesOut = true; // flag to indicate that spout is moving to outward position
 bool lSpoutMovesAdjust = false; // flag to indicate that spout is moving to outward position
 bool rSpoutMovesIn = false; // flag to indicate that spout is moving to inward position
 bool rSpoutMovesOut = true; // flag to indicate that spout is moving to outward position
 bool rSpoutMovesAdjust = false; // flag to indicate that spout is moving to outward position
-bool leverMoves = true; // flag to indicate that lever is in motion
+bool leverMoves = false; // flag to indicate that lever is in motion
 bool lMovesIn = false; // flag to indicate that lever is moving to inward position
 bool lMovesOut = true; // flag to indicate that lever is moving to outward position
 bool lMovesAdjust = false; // flag to indicate that lever is moving to outward position
@@ -222,6 +223,8 @@ void setup() {
   // put your setup code here, to run once:
   Serial1.begin(1312500); //baud rate for UART bpod serial communication
   Serial.begin(9600); // USB baud rate
+  //Serial.println("Started spatial sparrow");
+
   #ifdef USE_LOAD_CELL
     scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN); // communication with load cell amp
   #endif
@@ -241,9 +244,9 @@ void setup() {
   pinMode(PIN_STIMTRIG, OUTPUT);
   pinMode(PIN_TRIALTRIG, OUTPUT);
 
-  pinMode(PIN_CAMTIMER, OUTPUT);
-  analogWriteFrequency(PIN_CAMTIMER, camTrigRate);
-  analogWrite(PIN_CAMTIMER, 128); // set to 50% duty cycle
+  //pinMode(PIN_CAMTIMER, OUTPUT);
+  //analogWriteFrequency(PIN_CAMTIMER, camTrigRate);
+  //analogWrite(PIN_CAMTIMER, 128); // set to 50% duty cycle
   
   // Set pin modes for input lines and stepper range
   pinMode(PIN_SPOUTOUT_L, INPUT_PULLUP);
@@ -257,23 +260,25 @@ void setup() {
 }
 
 void loop() {
-  // This is the handshake with BPod.
-  // Current header types:
-  // START_TRIAL: Read the range for servo movements, the baseline duration, threshold for wheel motion and reset wheel position. returns a handshake afterwards.
-  // ADJUST_SPOUTS: Read limits for servos and moves them there immediately. returns a handshake afterwards.
+  // This is the main loop for the teensy, it contains functions to communicate with BPod.
+  // Current takes:
+    // START_TRIAL: Read the range for servo movements, the baseline duration, threshold for wheel motion and reset wheel position. returns a handshake afterwards.
+    // ADJUST_SPOUTS: Read limits for servos and moves them there immediately. returns a handshake afterwards.
 
   if (Serial1.available() > 0) {
-    if (!midRead) {
+
+    //if (!midRead) {
       FSMheader = Serial1COM.readByte();
-      midRead = 1; // flag for current reading of serial information
+    //  midRead = 1; // flag for current reading of serial information
       clocker = millis(); // counter to make sure that all serial information arrives within a reasonable time frame (currently 100ms)
-    }
+    //}
+//    Serial.println(FSMheader);
     if (FSMheader == START_TRIAL) {
         for (int i = 0; i < 6; i++) { // get number of characters for each variable (6 in total)
           temp[i] = Serial1COM.readByte(); // number of characters for current variable
         }
         
-      if (Serial1.available() >= (temp[0]+temp[1]+temp[2]+temp[3]+temp[4]+temp[5])) { // if enough bytes are sent for all variables to be read
+//      if (Serial1.available() >= (temp[0]+temp[1]+temp[2]+temp[3]+temp[4]+temp[5])) { // if enough bytes are sent for all variables to be read
         // read all variables for current trial
         lServoIn = readSerialChar(temp[0]); // left spout inner position
         rServoIn = readSerialChar(temp[1]); // right spout inner position
@@ -281,25 +286,34 @@ void loop() {
         rServoOut = readSerialChar(temp[3]); // right spout outer position
         leverIn = readSerialChar(temp[4]); // inner handle position
         leverOut = readSerialChar(temp[5]); // outer handle position
-
+        
+        /*Serial.println(FSMheader);
+        Serial.print(lServoIn); Serial.print(",");
+        Serial.print(rServoIn); Serial.print(",");
+        Serial.print(lServoOut); Serial.print(",");
+        Serial.print(lServoOut); Serial.print(",");
+        Serial.print(leverIn); Serial.print(",");
+        Serial.print(leverOut); Serial.print(",");
+        Serial.println();
+        */
         lSpoutInc = round(spoutSpeed / abs(lServoIn - lServoOut)); // time between steps to move at requested left spout speed.     
         rSpoutInc = round(spoutSpeed / abs(rServoIn - rServoOut)); // time between steps to move at requested right spout speed.     
         leverInc = round(leverSpeed / abs(leverIn - leverOut)); // time between steps to move at requested leverspeed.     
         midRead = 0;
         
         Serial1.write(GOT_BYTE);
-          while (Serial1.available() > 0) {
-            Serial1COM.readByte();
-          }
-        }
+//          while (Serial1.available() > 0) {
+//            Serial1COM.readByte();
+//          }
+//        }
       
-      else if ((millis() - clocker) >= 100) {
-        midRead = 0; 
-        Serial1.write(DID_ABORT);
-        while (Serial1.available() > 0) {
-          Serial1COM.readByte();
-        }
-      }
+//      else {//  ((millis() - clocker) >= 100) {
+//        midRead = 0; 
+//        Serial1.write(DID_ABORT);
+//        while (Serial1.available() > 0) {
+//          Serial1COM.readByte();
+//        }
+//      }
     }
     
     else if (FSMheader == ADJUST_SPOUTES) {
@@ -325,9 +339,9 @@ void loop() {
         midRead = 0;
       }
       
-      else if ((millis() - clocker) >= 100) {
-        midRead = 0; Serial1.write(DID_ABORT);
-      }
+//      else if ((millis() - clocker) >= 100) {
+//        midRead = 0; Serial1.write(DID_ABORT);
+//      }
     }
     
     else if (FSMheader == ADJUST_LEVER) {
@@ -345,25 +359,20 @@ void loop() {
         midRead = 0;
       }
       
-      else if ((millis() - clocker) >= 100) {
-        midRead = 0; Serial1.write(DID_ABORT);
-      }
+//      else if ((millis() - clocker) >= 100) {
+//        midRead = 0; Serial1.write(DID_ABORT);
+//      }
     }
     
     else if (FSMheader == ADJUST_SPOUTSPEED) {
-      if (Serial1.available() > 0) {
         spoutSpeed = readSerialChar(Serial1COM.readByte()); // Duration of spout movement from outer to inner position in ms.
         spoutSpeed = spoutSpeed * 1000;
+        Serial.println(spoutSpeed);        
         lSpoutInc = round(spoutSpeed / abs(lServoIn - lServoOut)); // time between steps to move at requested left spout speed.     
         rSpoutInc = round(spoutSpeed / abs(rServoIn - rServoOut)); // time between steps to move at requested right spout speed.     
 
         Serial1.write(GOT_BYTE); // send confirmation
         midRead = 0;
-      }
-      
-      else if ((millis() - clocker) >= 100) {
-        midRead = 0; spoutSpeed = 350000; Serial1.write(DID_ABORT);
-      }
     }
     
     else if (FSMheader == ADJUST_LEVERSPEED) {
@@ -376,9 +385,9 @@ void loop() {
         midRead = 0;
       }
         
-      else if ((millis() - clocker) >= 100) {
-        midRead = 0; leverSpeed = 350000; Serial1.write(DID_ABORT);
-      }
+//      else if ((millis() - clocker) >= 100) {
+//        midRead = 0; leverSpeed = 350000; Serial1.write(DID_ABORT);
+//      }
     }
     
     else if (FSMheader == ADJUST_TOUCHLEVEL) { // check mean and std for all touch lines to adjust thresholds
@@ -394,9 +403,9 @@ void loop() {
         midRead = 0;
       }
       
-      else if ((millis() - clocker) >= 100) {
-        midRead = 0; Serial1.write(DID_ABORT);
-      }
+//      else if ((millis() - clocker) >= 100) {
+//        midRead = 0; Serial1.write(DID_ABORT);
+//      }
     }
 
     else if (FSMheader == SPOUTS_IN) { // move spouts in
@@ -414,7 +423,7 @@ void loop() {
       rSpoutClocker = micros() - rSpoutInc; // initialize timer for spout movement
       rSpoutMovesIn = true; rSpoutMovesOut = false; rSpoutMovesAdjust = false;  // flag that left spout moves to inner position
       
-      Serial1.write(GOT_BYTE);
+      Serial1.write(GOT_BYTE); 
       midRead = 0;
     }
 
@@ -530,6 +539,7 @@ void loop() {
       Serial1.write(GOT_BYTE);
       midRead = 0;
     }
+    
     #ifdef USE_LOAD_CELL
       else if (FSMheader >= START_SCALE && FSMheader <= SEND_DATA_SCALE){ // byte for scale recording
         if (FSMheader == START_SCALE){ // reset counter and start load-cell recording
@@ -554,14 +564,22 @@ void loop() {
         midRead = 0;
       }
     #endif
+    else if (FSMheader == IS_MOVING) {
+      if (spoutMoves || leverMoves) {
+          Serial1.write(DID_ABORT);
+      }
+        else {
+        Serial1.write(GOT_BYTE);
+      }
+    }
     else {
       midRead = 0; Serial1.write(DID_ABORT);
     }
   }
 
-  if (midRead && ((millis() - clocker) >= 100)) {
-    midRead = 0; Serial1.write(DID_ABORT);
-  }
+  //if (midRead && ((millis() - clocker) >= 100)) {
+  //  midRead = 0; Serial1.write(DID_ABORT);
+  //}
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // make stim trigger
@@ -817,9 +835,12 @@ void loop() {
       }
     }
 
+    
     // check if all spout movements are complete
-    if (!lSpoutMovesIn && !lSpoutMovesOut && !lSpoutMovesAdjust && !rSpoutMovesIn && !rSpoutMovesOut && !rSpoutMovesAdjust){ 
+    if (spoutMoves && !lSpoutMovesIn && !lSpoutMovesOut && !lSpoutMovesAdjust && !rSpoutMovesIn && !rSpoutMovesOut && !rSpoutMovesAdjust){ 
       spoutMoves = false;
+      // Send message to bpod to say movement ended
+      //Serial1.write(GOT_BYTE);
     }
   }
   
@@ -897,6 +918,7 @@ void loop() {
     }
   }
 
+  
     #ifdef USE_LOAD_CELL
   ////////////////////////////////////////////////
   /////// check load-cell inputs /////////////////
@@ -909,7 +931,7 @@ void loop() {
       }
     }
    #endif
-  if (Serial && ((millis() - usbClocker) >= usbRate)){
+  if (Serial && ((millis() - usbClocker) >= usbRate)){ // (false){
         usbClocker = millis();
       //    long wv_tmp = scale.read();
       ///////////////////////////////////////////////////

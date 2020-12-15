@@ -51,12 +51,7 @@ if length(fieldnames(RawEvents)) > 1
     else
         BpodSystem.Data.ResponseSide(iTrials) = NaN; %no response
     end
-
-    % move spouts and lever out
-    try BpodSystem.StartModuleRelay('TouchShaker1'); java.lang.Thread.sleep(10); end % Relay bytes from Teensy
-    teensyWrite([71 1 '0' 1 '0']); % Move spouts to zero position
-    teensyWrite([72 1 '0']); % Move handles to zero position
-
+    
     %print things to screen
     fprintf('Nr. of trials initiated: %d\n', iTrials)
     fprintf('Nr. of completed trials: %d\n', nansum(OutcomeRecord==0|OutcomeRecord==1))

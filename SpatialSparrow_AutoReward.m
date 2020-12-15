@@ -17,11 +17,7 @@ if S.TrainingMode == 1
     if rand > checker %checker = 0 means no unassisted trials, 1 is all trials are unassisted.
         SingleSpout = true; % percentage of unassisted trials. Use single spouts if spouts are moving.
     end
-else
-    set(BpodSystem.GUIHandles.SpatialSparrow_Control.fractionTrainingMixed,'string','1')
-    set(BpodSystem.GUIHandles.SpatialSparrow_Control.fractionTrainingAudio,'string','1')
-    set(BpodSystem.GUIHandles.SpatialSparrow_Control.fractionTrainingVision,'string','1')
-    set(BpodSystem.GUIHandles.SpatialSparrow_Control.fractionTrainingPiezo,'string','1')
+
 end
 
 %% TODO: SEE IF THIS IS USEFUL WHEN THINGS ARE WORKING
