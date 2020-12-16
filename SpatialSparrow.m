@@ -67,7 +67,7 @@ for iTrials = 1:maxTrials
         trialPrep = toc; %check how much time was used to prepare trial and subtract from ITI
         if trialPrep > ITIjitter
             if (ITIjitter - trialPrep)*1000 > 0
-                disp(['sleep' , num2str(ITIjitter)])
+                disp(['sleep ' , num2str(ITIjitter)])
                 java.lang.Thread.sleep((ITIjitter - trialPrep)*1000); %wait a moment to get to determined ITI
             end
         end
@@ -99,6 +99,8 @@ for iTrials = 1:maxTrials
             fwrite(udpWF,sprintf('log=trial_end:%d',iTrials));
         end
         SpatialSparrow_SaveTrial
+        BpodSystem.GUIHandles.spatialsparrow.update_performance_plots();
+
         toc;disp('==============================================')
         % send the motors to zero before starting another trial
         setMotorsToZero;

@@ -9,7 +9,7 @@ if exist('i2c','var')
 end
 
 if S.MoveLever
-    trialstart_cond = {'Tup',' MoveLever'};
+    trialstart_cond = {'Tup','MoveLever'};
 elseif (S.AutoReward || GiveReward) && S.TrainingMode
     
     trialstart_cond = {'Tup','AutoReward'};

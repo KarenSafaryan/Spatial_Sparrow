@@ -133,7 +133,7 @@ if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     %BpodSystem.GUIHandles.SpatialSparrow_Control = SpatialSparrow_Control; %get handle for control GUI
     %BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'init',TrialSidesList,60'}); %initiate control GUI and show outcome plot for the next 60 trials
     %BpodSystem.Data.animalWeight = str2double(newid('Enter animal weight (in grams)')); %ask for animal weight and save
-    
+    BpodSystem.Data.animalWeight = nan;
     %start bonsai
     if ~isunix && ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
         % start camera
