@@ -273,6 +273,10 @@ void loop() {
       clocker = millis(); // counter to make sure that all serial information arrives within a reasonable time frame (currently 100ms)
     //}
 //    Serial.println(FSMheader);
+    if (FSMheader == 128) {
+      _reboot_Teensyduino_(); 
+    }
+    
     if (FSMheader == START_TRIAL) {
         for (int i = 0; i < 6; i++) { // get number of characters for each variable (6 in total)
           temp[i] = Serial1COM.readByte(); // number of characters for current variable

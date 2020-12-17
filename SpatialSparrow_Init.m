@@ -91,16 +91,18 @@ if checker
 end
 
 %% check teensy module
-
+teensyReset()
+pause(1)
+disp('Teensy was reset')
 % send trialstart info and check response
 % teensyWrite([70 ones(1,6) '550050']); %set high touch threshold to avoid confusing bytes
 
 %% TODO: Move the handles and the spouts to the zero position before doing this.
-setMotorsToZero;
+% setMotorsToZero;
 %set touch threshold
-cVal = num2str(BpodSystem.ProtocolSettings.TouchThresh);
-teensyWrite([75 length(cVal) cVal]);
-pause(2); %give some time for calibration
+% cVal = num2str(BpodSystem.ProtocolSettings.TouchThresh);
+% teensyWrite([75 length(cVal) cVal]);
+% pause(2); %give some time for calibration
 
 %% Stimulus parameters - Create trial types list (single vs double stimuli)
 maxTrials = 5000;
