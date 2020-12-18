@@ -259,9 +259,8 @@ void setup() {
   touchData[3] = touchRead(LEVERSENSOR_R);
 }
 
-void loop() {
-  // This is the main loop for the teensy, it contains functions to communicate with BPod.
-  // Current takes:
+void serialEvent1() {
+// Current takes:
     // START_TRIAL: Read the range for servo movements, the baseline duration, threshold for wheel motion and reset wheel position. returns a handshake afterwards.
     // ADJUST_SPOUTS: Read limits for servos and moves them there immediately. returns a handshake afterwards.
 
@@ -584,6 +583,12 @@ void loop() {
   //if (midRead && ((millis() - clocker) >= 100)) {
   //  midRead = 0; Serial1.write(DID_ABORT);
   //}
+
+  
+}
+void loop() {
+  // This is the main loop for the teensy, it contains functions to communicate with BPod.
+  
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // make stim trigger

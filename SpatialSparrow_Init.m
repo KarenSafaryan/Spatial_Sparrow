@@ -91,8 +91,8 @@ if checker
 end
 
 %% check teensy module
-teensyReset()
-pause(1)
+%teensyReset()
+pause(2)
 disp('Teensy was reset')
 % send trialstart info and check response
 % teensyWrite([70 ones(1,6) '550050']); %set high touch threshold to avoid confusing bytes
