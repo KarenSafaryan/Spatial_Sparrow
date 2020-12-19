@@ -4,26 +4,26 @@
 
 #define HANDLE_MOTOR_BOTTOM 1
 #ifdef HANDLES_MOTOR_BOTTOM
-  #define LOW_DIR_H HIGH
-  #define HIGH_DIR_H LOW
+#define LOW_DIR_H HIGH
+#define HIGH_DIR_H LOW
 #else
-  #define LOW_DIR_H LOW
-  #define HIGH_DIR_H HIGH
+#define LOW_DIR_H LOW
+#define HIGH_DIR_H HIGH
 #endif
 
 #define SPOUT_MOTOR_BOTTOM 1
 #ifdef SPOUT_MOTOR_BOTTOM
-  #define LOW_DIR_S HIGH
-  #define HIGH_DIR_S LOW
+#define LOW_DIR_S HIGH
+#define HIGH_DIR_S LOW
 #else
-  #define LOW_DIR_S LOW
-  #define HIGH_DIR_S HIGH
+#define LOW_DIR_S LOW
+#define HIGH_DIR_S HIGH
 #endif
 
 
 //#define USE_LOAD_CELL 1
 #ifdef USE_LOAD_CELL
-  #include "HX711.h" //This load-cell library can be obtained here http://librarymanager/All#Avia_HX711
+#include "HX711.h" //This load-cell library can be obtained here http://librarymanager/All#Avia_HX711
 #endif
 // –--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--–--
 // This version includes:
@@ -44,20 +44,20 @@ unsigned long trialClocker = millis();
 int FSMheader = 0;
 const int sRateLicks = 5;  // This is the minimum duration of lick events that are send to bpod.
 const int sRateLever = 10; // This is the number of ms for outputs to be during levertouch. Signal remains live until 'sRateLever' ms after the last contact.
-  
+
 /* #################################################
-############## PIN CONFIGURATION ###################
-#################################################### */
+  ############## PIN CONFIGURATION ###################
+  #################################################### */
 // TTL Outputs
 #define PIN_STIMTRIG 21 // stimulus trigger that can be switched by serial command 'MAKE_STIMTRIGGER'
 #define PIN_TRIALTRIG 4 // trial-start trigger that can be switched by serial command 'MAKE_TRIALTRIGGER'
 #define PIN_CAMTIMER 3 // Trigger to synchronize camera acquisition. Sends TTL for 'camTrigDur' with an inter-pulse of 'camTrigRate'.
 
 #ifdef USE_LOAD_CELL
-  // load cell pins
-  #define LOADCELL_SCK_PIN  19
-  #define LOADCELL_DOUT_PIN  20
-  HX711 scale;
+// load cell pins
+#define LOADCELL_SCK_PIN  19
+#define LOADCELL_DOUT_PIN  20
+HX711 scale;
 #endif
 // Inputs for lick sensors
 #define LEVERSENSOR_L 15 // touch line for lever touch
@@ -77,14 +77,15 @@ const int sRateLever = 10; // This is the number of ms for outputs to be during 
 #define PIN_LEVERSTEP_L 9
 #define PIN_LEVERDIR_L 10
 #define PIN_LEVERSTEP_R 11
-#define PIN_LEVERDIR_R 12 
+#define PIN_LEVERDIR_R 12
 
 /* #################################################
-########### UART/BPOD COMMUNICATION ################
-#################################################### */
+  ########### UART/BPOD COMMUNICATION ################
+  #################################################### */
 // Byte codes for serial communication
 // inputs
 #define MODULE_INFO 255 // byte to return module info
+#define HWRESET 128
 #define START_TRIAL 70 // identifier to start trial, provides limit for wheel motion and servo movement
 #define ADJUST_SPOUTES 71 // identifier to change spout positions
 #define ADJUST_LEVER 72 // identifier to change lever positions
@@ -117,8 +118,8 @@ const int sRateLever = 10; // This is the number of ms for outputs to be during 
 #define BOTH_HANDLES_TOUCH 7 // byte to indicate that both handles are being touched
 #define LEFT_HANDLE_RELEASE 8 // byte to indicate left handle was released
 #define RIGHT_HANDLE_RELEASE 9 // byte to indicate that right handle was released
-#define GOT_BYTE 14 // positive handshake for bpod commands
-#define DID_ABORT 15 // negative handshake for bpod commands
+#define OK 14 // positive handshake for bpod commands
+#define FAIL 15 // negative handshake for bpod commands
 
 // other serial commands during the trial
 #define SPOUTS_IN 101 // serial command to move the spouts in
@@ -128,8 +129,8 @@ const int sRateLever = 10; // This is the number of ms for outputs to be during 
 #define LEVER_OUT 105 // serial command to move the lever out
 
 /* #################################################
-##################### VARIABLES ####################
-#################################################### */
+  ##################### VARIABLES ####################
+  #################################################### */
 // Servo vars
 float lServoIn = 10; // position to be reached when spouts are moved in by bpod trigger.
 float lServoOut = 0;  // position to be reached when spouts are moved outin by bpod trigger.
@@ -154,7 +155,7 @@ unsigned long touchClocker_R = millis(); // timer to measure duration of lever t
 int lSpoutInc = 1000; // incremental left spout motion to modulate speed
 int rSpoutInc = 1000; // incremental right spout motion to modulate speed
 int leverInc = 1000; // time between steps of the handle motor to move at requested speed
-int touchChangeInc = 2; // step size when increasing/decreasing touch thresholds 
+int touchChangeInc = 2; // step size when increasing/decreasing touch thresholds
 
 // flags for current servo states. Required to control servo speed
 bool stimTrigger = false; // flag to indicate that stim trigger is produced
@@ -182,7 +183,7 @@ float touchData[4]; // current values for the four touch lines (left spout, righ
 float meanTouchVals[4]; // mean values for the four touch lines (left spout, right spout, left, handle, right handle)
 float stdTouchVals[4]; // stand deviation values for the four touch lines (left spout, right spout, left, handle, right handle)
 float touchVal = 0; // temporary variable for usb communication
-long int sampleCnt[] = {0,0}; // counter for samples during touch adjustment
+long int sampleCnt[] = {0, 0}; // counter for samples during touch adjustment
 unsigned long adjustClocker = millis(); // timer for re-adjustment of touch lines
 
 // Other variables
@@ -201,22 +202,22 @@ float temp[10]; // temporary variable for general purposes
 int camTrigRate = 90; // rate of camera trigger in Hz.
 
 #ifdef USE_LOAD_CELL
-  unsigned long scaleClocker = millis(); // timer for load-cell measurements
-  bool readScale = false; // flag to collect data from load-cell
-  int scaleRate = 10; // duration between samples from load-cell in ms (default is 10ms).
-  unsigned long scaleCnt = 0; //counter to fill readings into scaleVals
-  #define SCALE_READS 100 // maximum samples from load-cell per trial. Default duration for readout at 100Hz is 1 minute. decrease from 60000 for memory
-  long scaleVals[SCALE_READS]; //array for scale readings. 
-  bool scaleWrap = false; // flag that scale reacording was above maximum. In this case, the full scaleVals array and the current scaleCnt is sent to Bpod.
-  int weight_val = 0;
+unsigned long scaleClocker = millis(); // timer for load-cell measurements
+bool readScale = false; // flag to collect data from load-cell
+int scaleRate = 10; // duration between samples from load-cell in ms (default is 10ms).
+unsigned long scaleCnt = 0; //counter to fill readings into scaleVals
+#define SCALE_READS 100 // maximum samples from load-cell per trial. Default duration for readout at 100Hz is 1 minute. decrease from 60000 for memory
+long scaleVals[SCALE_READS]; //array for scale readings.
+bool scaleWrap = false; // flag that scale reacording was above maximum. In this case, the full scaleVals array and the current scaleCnt is sent to Bpod.
+int weight_val = 0;
 #endif
 
 unsigned long usbClocker = millis();
-int usbRate = 5; 
+int usbRate = 5;
 /* #################################################
-##################### CAMERA TRIGGER ###############
-#################################################### */
-// volatile long cameraFramesCounter = 0; 
+  ##################### CAMERA TRIGGER ###############
+  #################################################### */
+// volatile long cameraFramesCounter = 0;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup() {
@@ -225,9 +226,9 @@ void setup() {
   Serial.begin(9600); // USB baud rate
   //Serial.println("Started spatial sparrow");
 
-  #ifdef USE_LOAD_CELL
-    scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN); // communication with load cell amp
-  #endif
+#ifdef USE_LOAD_CELL
+  scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN); // communication with load cell amp
+#endif
   //digitalWrite(LOADCELL_SCK_PIN, HIGH);
   // Set servo pins to output mode
   pinMode(PIN_SPOUTSTEP_L, OUTPUT);
@@ -247,7 +248,7 @@ void setup() {
   //pinMode(PIN_CAMTIMER, OUTPUT);
   //analogWriteFrequency(PIN_CAMTIMER, camTrigRate);
   //analogWrite(PIN_CAMTIMER, 128); // set to 50% duty cycle
-  
+
   // Set pin modes for input lines and stepper range
   pinMode(PIN_SPOUTOUT_L, INPUT_PULLUP);
   pinMode(PIN_SPOUTOUT_R, INPUT_PULLUP);
@@ -260,95 +261,58 @@ void setup() {
 }
 
 void serialEvent1() {
-// Current takes:
-    // START_TRIAL: Read the range for servo movements, the baseline duration, threshold for wheel motion and reset wheel position. returns a handshake afterwards.
-    // ADJUST_SPOUTS: Read limits for servos and moves them there immediately. returns a handshake afterwards.
-
-  if (Serial1.available() > 0) {
-
-    //if (!midRead) {
-      FSMheader = Serial1COM.readByte();
-    //  midRead = 1; // flag for current reading of serial information
-      clocker = millis(); // counter to make sure that all serial information arrives within a reasonable time frame (currently 100ms)
-    //}
-//    Serial.println(FSMheader);
-    if (FSMheader == 128) {
-      _reboot_Teensyduino_(); 
-    }
-    
-    if (FSMheader == START_TRIAL) {
-        for (int i = 0; i < 6; i++) { // get number of characters for each variable (6 in total)
+  FSMheader = Serial1COM.readByte();
+  switch (FSMheader) {
+    case HWRESET:
+    _reboot_Teensyduino_();
+      break;
+    case MODULE_INFO: // return module information to bpod
+        returnModuleInfo();
+        break;
+    case START_TRIAL:
+      if (Serial1.available() > 6) {
+        for (int i = 0; i < 6; i++)  // get number of characters for each variable (6 in total)
           temp[i] = Serial1COM.readByte(); // number of characters for current variable
-        }
-        
-//      if (Serial1.available() >= (temp[0]+temp[1]+temp[2]+temp[3]+temp[4]+temp[5])) { // if enough bytes are sent for all variables to be read
-        // read all variables for current trial
-        lServoIn = readSerialChar(temp[0]); // left spout inner position
-        rServoIn = readSerialChar(temp[1]); // right spout inner position
-        lServoOut = readSerialChar(temp[2]); // left spout outer position
-        rServoOut = readSerialChar(temp[3]); // right spout outer position
-        leverIn = readSerialChar(temp[4]); // inner handle position
-        leverOut = readSerialChar(temp[5]); // outer handle position
-        
-        /*Serial.println(FSMheader);
-        Serial.print(lServoIn); Serial.print(",");
-        Serial.print(rServoIn); Serial.print(",");
-        Serial.print(lServoOut); Serial.print(",");
-        Serial.print(lServoOut); Serial.print(",");
-        Serial.print(leverIn); Serial.print(",");
-        Serial.print(leverOut); Serial.print(",");
-        Serial.println();
-        */
-        lSpoutInc = round(spoutSpeed / abs(lServoIn - lServoOut)); // time between steps to move at requested left spout speed.     
-        rSpoutInc = round(spoutSpeed / abs(rServoIn - rServoOut)); // time between steps to move at requested right spout speed.     
-        leverInc = round(leverSpeed / abs(leverIn - leverOut)); // time between steps to move at requested leverspeed.     
-        midRead = 0;
-        
-        Serial1.write(GOT_BYTE);
-//          while (Serial1.available() > 0) {
-//            Serial1COM.readByte();
-//          }
-//        }
-      
-//      else {//  ((millis() - clocker) >= 100) {
-//        midRead = 0; 
-//        Serial1.write(DID_ABORT);
-//        while (Serial1.available() > 0) {
-//          Serial1COM.readByte();
-//        }
-//      }
-    }
-    
-    else if (FSMheader == ADJUST_SPOUTES) {
-      if (Serial1.available() > 0) {
+      }
+      else {
+        Serial1.write(FAIL);
+        break;
+      }
+      lServoIn = readSerialChar(temp[0]); // left spout inner position
+      rServoIn = readSerialChar(temp[1]); // right spout inner position
+      lServoOut = readSerialChar(temp[2]); // left spout outer position
+      rServoOut = readSerialChar(temp[3]); // right spout outer position
+      leverIn = readSerialChar(temp[4]); // inner handle position
+      leverOut = readSerialChar(temp[5]); // outer handle position
+      lSpoutInc = round(spoutSpeed / abs(lServoIn - lServoOut)); // time between steps to move at requested left spout speed.
+      rSpoutInc = round(spoutSpeed / abs(rServoIn - rServoOut)); // time between steps to move at requested right spout speed.
+      leverInc = round(leverSpeed / abs(leverIn - leverOut)); // time between steps to move at requested leverspeed.
+      Serial1.write(OK);
+      break;
+    case ADJUST_SPOUTES:
+      if (Serial1.available() > 2) {
         spoutMoves = true;
         lServoAdjust = readSerialChar(Serial1COM.readByte()); // requested handle position
         lSpoutClocker = micros() - lSpoutInc; // initialize timer for spout movement
         lSpoutMovesIn = false; lSpoutMovesOut = false; lSpoutMovesAdjust = true;  // flag that left spout moves to adjusted position
-  
-        if (lServoAdjust == 0 && lServoCurrent != 0) { // move handles to zero position (absolute outer limits)
+
+        if (lServoAdjust == 0 && lServoCurrent != 0) // move handles to zero position (absolute outer limits)
           findSpoutOut[0] = true; // find outer limit for left stepper
-        }
-        
+
         rServoAdjust = readSerialChar(Serial1COM.readByte()); // requested handle position
         rSpoutClocker = micros() - rSpoutInc; // initialize timer for spout movement
         rSpoutMovesIn = false; rSpoutMovesOut = false; rSpoutMovesAdjust = true;  // flag that right spout moves to adjusted position
-  
-        if (rServoAdjust == 0 && rServoCurrent != 0) { // move handles to zero position (absolute outer limits)
+
+        if (rServoAdjust == 0 && rServoCurrent != 0) // move handles to zero position (absolute outer limits)
           findSpoutOut[1] = true; // find outer limit for right stepper
-        }
-                
-        Serial1.write(GOT_BYTE);
-        midRead = 0;
+        Serial1.write(OK);
       }
-      
-//      else if ((millis() - clocker) >= 100) {
-//        midRead = 0; Serial1.write(DID_ABORT);
-//      }
-    }
-    
-    else if (FSMheader == ADJUST_LEVER) {
-      if (Serial1.available() > 0) {
+      else {
+        Serial1.write(FAIL);
+      }
+      break;
+    case ADJUST_LEVER:
+      if (Serial1.available() > 2) {
         leverAdjust = readSerialChar(Serial1COM.readByte()); // requested handle position
         lClocker = micros() - leverInc; // initialize timer for lever movement
         leverMoves = true;
@@ -358,60 +322,52 @@ void serialEvent1() {
           findLeverOut[0] = true; // find outer limit for left stepper
           findLeverOut[1] = true; // find outer limit for right stepper
         }
-        Serial1.write(GOT_BYTE); // send confirmation
+        Serial1.write(OK); // send confirmation
         midRead = 0;
       }
-      
-//      else if ((millis() - clocker) >= 100) {
-//        midRead = 0; Serial1.write(DID_ABORT);
-//      }
-    }
-    
-    else if (FSMheader == ADJUST_SPOUTSPEED) {
+      else {
+        Serial1.write(FAIL);
+      }
+      break;
+    case ADJUST_SPOUTSPEED:
+      if (Serial1.available() > 2) {
         spoutSpeed = readSerialChar(Serial1COM.readByte()); // Duration of spout movement from outer to inner position in ms.
         spoutSpeed = spoutSpeed * 1000;
-        Serial.println(spoutSpeed);        
-        lSpoutInc = round(spoutSpeed / abs(lServoIn - lServoOut)); // time between steps to move at requested left spout speed.     
-        rSpoutInc = round(spoutSpeed / abs(rServoIn - rServoOut)); // time between steps to move at requested right spout speed.     
+        lSpoutInc = round(spoutSpeed / abs(lServoIn - lServoOut)); // time between steps to move at requested left spout speed.
+        rSpoutInc = round(spoutSpeed / abs(rServoIn - rServoOut)); // time between steps to move at requested right spout speed.
 
-        Serial1.write(GOT_BYTE); // send confirmation
-        midRead = 0;
-    }
-    
-    else if (FSMheader == ADJUST_LEVERSPEED) {
-      if (Serial1.available() > 0) {
+        Serial1.write(OK); // send confirmation
+      }
+      else {
+        Serial1.write(FAIL);
+      }
+    case ADJUST_LEVERSPEED:
+      if (Serial1.available() > 2) {
         leverSpeed = readSerialChar(Serial1COM.readByte()); // Duration of spout movement from outer to inner position in ms.
         leverSpeed = leverSpeed * 1000;
         leverInc = round(leverSpeed / abs(leverIn - leverOut)); // time between steps to move at requested leverspeed.
-
-        Serial1.write(GOT_BYTE); // send confirmation
-        midRead = 0;
+        Serial1.write(OK); // send confirmation
       }
-        
-//      else if ((millis() - clocker) >= 100) {
-//        midRead = 0; leverSpeed = 350000; Serial1.write(DID_ABORT);
-//      }
-    }
-    
-    else if (FSMheader == ADJUST_TOUCHLEVEL) { // check mean and std for all touch lines to adjust thresholds
-      if (Serial1.available() > 0) {
+      else {
+        Serial1.write(FAIL);
+      }
+      break;
+
+    case ADJUST_TOUCHLEVEL:
+      if (Serial1.available() > 2) {
         touchThresh = readSerialChar(Serial1COM.readByte()); // new threshold for touch detection in SDUs
         touchAdjust = true; // flag to adjust touchlevels
         adjustClocker = millis();
         sampleCnt[0] = 0; sampleCnt[1] = 0; // reset counter
         meanTouchVals[0] = 0; meanTouchVals[1] = 0; meanTouchVals[2] = 0; meanTouchVals[3] = 0; // reset mean values
         stdTouchVals[0] = 0; stdTouchVals[1] = 0; stdTouchVals[2] = 0; stdTouchVals[3] = 0; // reset std values
-       
-        Serial1.write(GOT_BYTE); // send confirmation
-        midRead = 0;
+        Serial1.write(OK); // send confirmation
       }
-      
-//      else if ((millis() - clocker) >= 100) {
-//        midRead = 0; Serial1.write(DID_ABORT);
-//      }
-    }
-
-    else if (FSMheader == SPOUTS_IN) { // move spouts in
+      else {
+        Serial1.write(FAIL);
+      }
+      break;
+    case SPOUTS_IN:
       spoutMoves = true;
       if (lServoIn == 0) { // move left spout to zero position (absolute outer limits)
         findSpoutOut[0] = true; // find outer limit for left stepper
@@ -419,30 +375,24 @@ void serialEvent1() {
       if (rServoIn == 0) { // move left spout to zero position (absolute outer limits)
         findSpoutOut[1] = true; // find outer limit for right stepper
       }
-      
+
       lSpoutClocker = micros() - lSpoutInc; // initialize timer for spout movement
       lSpoutMovesIn = true; lSpoutMovesOut = false; lSpoutMovesAdjust = false;  // flag that left spout moves to inner position
-  
+
       rSpoutClocker = micros() - rSpoutInc; // initialize timer for spout movement
       rSpoutMovesIn = true; rSpoutMovesOut = false; rSpoutMovesAdjust = false;  // flag that left spout moves to inner position
-      
-      Serial1.write(GOT_BYTE); 
-      midRead = 0;
-    }
 
-    else if (FSMheader == LEFT_SPOUT_OUT) { // move left spout out
+      Serial1.write(OK);
+      break;
+    case LEFT_SPOUT_OUT:
       spoutMoves = true;
       if (lServoOut == 0) { // move left spout to zero position (absolute outer limits)
         findSpoutOut[0] = true; // find outer limit for left stepper
       }
       lSpoutClocker = micros() - lSpoutInc; // initialize timer for spout movement
       lSpoutMovesIn = false; lSpoutMovesOut = true; lSpoutMovesAdjust = false;  // flag that left spout moves to outer position
-
-      Serial1.write(GOT_BYTE);
-      midRead = 0;
-    }
-
-    else if (FSMheader == RIGHT_SPOUT_OUT) { // move right spout out
+      Serial1.write(OK);
+    case RIGHT_SPOUT_OUT:
       spoutMoves = true;
       if (rServoOut == 0) { // move left spout to zero position (absolute outer limits)
         findSpoutOut[1] = true; // find outer limit for right stepper
@@ -450,11 +400,9 @@ void serialEvent1() {
       rSpoutClocker = micros() - rSpoutInc; // initialize timer for spout movement
       rSpoutMovesIn = false; rSpoutMovesOut = true; rSpoutMovesAdjust = false;  // flag that right spout moves to outer position
 
-      Serial1.write(GOT_BYTE);
-      midRead = 0;
-    }
-
-    else if (FSMheader == LEVER_IN) { // move levers in
+      Serial1.write(OK);
+      break;
+    case LEVER_IN:
       leverMoves = true;
       if (leverIn == 0) {
         findLeverOut[0] = true; // find outer limit for left stepper
@@ -464,133 +412,117 @@ void serialEvent1() {
       lClocker = micros() - leverInc;
       lMovesIn = true; lMovesOut = false; lMovesAdjust = false; // flag that lever moves inward
 
-      Serial1.write(GOT_BYTE);
-      midRead = 0;
-    }
-
-    else if (FSMheader == LEVER_OUT) { // move levers out
-      if (lMovesOut == false) { //
-        leverMoves = true;
-        if (leverOut == 0) {
-          findLeverOut[0] = true; // find outer limit for left stepper
-          findLeverOut[1] = true; // find outer limit for right stepper
+      Serial1.write(OK);
+      break;
+    case LEVER_OUT:
+        if (lMovesOut == false) { //
+          leverMoves = true;
+          if (leverOut == 0) {
+            findLeverOut[0] = true; // find outer limit for left stepper
+            findLeverOut[1] = true; // find outer limit for right stepper
+          }
+          leverInc = round(leverSpeed / abs(leverIn - leverOut)); // time between steps to move at requested leverspeed.
+          lClocker = micros() - leverInc;
+          lMovesIn = false; lMovesOut = true; lMovesAdjust = false; // flag that lever moves outward
         }
-        leverInc = round(leverSpeed / abs(leverIn - leverOut)); // time between steps to move at requested leverspeed.
-        lClocker = micros() - leverInc;
-        lMovesIn = false; lMovesOut = true; lMovesAdjust = false; // flag that lever moves outward
-      }
+      Serial1.write(OK);
+      break;
+    case CHECK_LEVERS: // return lever touch information if requested by bpod
+        if (leverTouch_L && !leverTouch_R) {
+          Serial1.write(LEFT_HANDLE_TOUCH);
+        }
+        else if (!leverTouch_L && leverTouch_R) {
+          Serial1.write(RIGHT_HANDLE_TOUCH);
+        }
+        else if (leverTouch_BOTH) {
+          Serial1.write(BOTH_HANDLES_TOUCH);
+        }
+      break;
+    case MAKE_STIMTRIGGER: // stimulus trigger
+        stimTrigger = true;
+        stimClocker = millis();
+        digitalWriteFast(PIN_STIMTRIG, HIGH); // set stimulus trigger to high
 
-      Serial1.write(GOT_BYTE);
-      midRead = 0;
-    }
-    
-    else if (FSMheader == MODULE_INFO) { // return module information to bpod
-      returnModuleInfo();
-      midRead = 0;
-    }
-
-    else if (FSMheader == CHECK_LEVERS) { // return lever touch information if requested by bpod
-      if (leverTouch_L && !leverTouch_R){
-        Serial1.write(LEFT_HANDLE_TOUCH);
-      }
-      else if (!leverTouch_L && leverTouch_R){
-        Serial1.write(RIGHT_HANDLE_TOUCH);
-      }
-      else if (leverTouch_BOTH){
-        Serial1.write(BOTH_HANDLES_TOUCH);
-      }
-
-      midRead = 0;
-    }
-    
-    else if (FSMheader == MAKE_STIMTRIGGER) { // create stimulus trigger
-      stimTrigger = true;
-      stimClocker = millis();
-      digitalWriteFast(PIN_STIMTRIG, HIGH); // set stimulus trigger to high
-
-      Serial1.write(GOT_BYTE);
-      midRead = 0;
-    }
-    
-    else if (FSMheader == MAKE_TRIALTRIGGER) { // create trial-onset trigger
-      trialTrigger = true;
-      trialClocker = millis();
-      digitalWriteFast(PIN_TRIALTRIG, HIGH); // set trial trigger to high
-
-      Serial1.write(GOT_BYTE);
-      midRead = 0;
-    }
-
-    else if (FSMheader >= INCREASE_SPOUTTHRESH_L && FSMheader <= DECREASE_LEVERTHRESH_R){ // change touch threshold
-      if (FSMheader == INCREASE_SPOUTTHRESH_L){
-        stdTouchVals[0] = stdTouchVals[0] + touchChangeInc;} // increase threshold
-      else if (FSMheader == DECREASE_SPOUTTHRESH_L) { 
-        stdTouchVals[0] = stdTouchVals[0] - touchChangeInc;} // decrease threshold
-      else if (FSMheader == INCREASE_SPOUTTHRESH_R) { 
-        stdTouchVals[1] = stdTouchVals[1] + touchChangeInc;} // increase threshold
-      else if (FSMheader == DECREASE_SPOUTTHRESH_R) { 
-        stdTouchVals[1] = stdTouchVals[1] - touchChangeInc;} // decrease threshold
-      else if (FSMheader == INCREASE_LEVERTHRESH_L) {
-        stdTouchVals[2] = stdTouchVals[2] + touchChangeInc;} // increase threshold
-      else if (FSMheader == DECREASE_LEVERTHRESH_L) {
-        stdTouchVals[2] = stdTouchVals[2] - touchChangeInc;} // decrease threshold
-      else if (FSMheader == INCREASE_LEVERTHRESH_R) {
-        stdTouchVals[3] = stdTouchVals[3] + touchChangeInc;} // increase threshold
-      else if (FSMheader == DECREASE_LEVERTHRESH_R) {
-        stdTouchVals[3] = stdTouchVals[3] - touchChangeInc;} // decrease threshold
-
-      Serial1.write(GOT_BYTE);
-      midRead = 0;
-    }
-    
-    #ifdef USE_LOAD_CELL
-      else if (FSMheader >= START_SCALE && FSMheader <= SEND_DATA_SCALE){ // byte for scale recording
-        if (FSMheader == START_SCALE){ // reset counter and start load-cell recording
-          scaleCnt = 0; 
+        Serial1.write(OK);
+        break;
+    case MAKE_TRIALTRIGGER:
+        trialTrigger = true;
+        trialClocker = millis();
+        digitalWriteFast(PIN_TRIALTRIG, HIGH); // set trial trigger to high
+        Serial1.write(OK);
+        break;
+    case INCREASE_SPOUTTHRESH_L: // increase threshold
+        stdTouchVals[0] = stdTouchVals[0] + touchChangeInc;
+        Serial1.write(OK);
+        break;
+    case DECREASE_SPOUTTHRESH_L: // decrease threshold
+        stdTouchVals[0] = stdTouchVals[0] - touchChangeInc;
+        Serial1.write(OK);
+        break;
+    case INCREASE_SPOUTTHRESH_R:        
+        stdTouchVals[1] = stdTouchVals[1] + touchChangeInc;
+        Serial1.write(OK);
+        break;
+    case DECREASE_SPOUTTHRESH_R: // decrease threshold
+        stdTouchVals[1] = stdTouchVals[1] - touchChangeInc;
+        Serial1.write(OK);
+        break;
+    case INCREASE_LEVERTHRESH_L: // increase threshold
+        stdTouchVals[2] = stdTouchVals[2] + touchChangeInc;
+        Serial1.write(OK);
+        break;
+    case DECREASE_LEVERTHRESH_L:
+        stdTouchVals[2] = stdTouchVals[2] - touchChangeInc;
+        Serial1.write(OK);
+        break;
+    case INCREASE_LEVERTHRESH_R: // increase threshold
+        stdTouchVals[3] = stdTouchVals[3] + touchChangeInc;
+        Serial1.write(OK);
+        break;
+    case DECREASE_LEVERTHRESH_R:
+        stdTouchVals[3] = stdTouchVals[3] - touchChangeInc;
+        Serial1.write(OK);
+        break;
+#ifdef USE_LOAD_CELL
+      case START_SCALE:// byte for scale recording
+          scaleCnt = 0;
           scaleWrap = false;
           scaleClocker = millis();
           readScale = true;
-        }
-        else if (FSMheader == STOP_SCALE) {  // stop reading from load-cell
+          Serial1.write(OK);
+          break;
+      case STOP_SCALE:
           readScale = false;
-        }
-        else if (FSMheader == SEND_DATA_SCALE) { // return data from load-cell to bpod
+          Serial.write(OK);
+          break;
+      case SEND_DATA_SCALE:
           Serial1COM.writeUint32(scaleCnt); // send current array index
-          if (scaleWrap){
-            Serial1COM.writeInt32Array(scaleVals,SCALE_READS); // write full array
+          if (scaleWrap) {
+            Serial1COM.writeInt32Array(scaleVals, SCALE_READS); // write full array
           }
-          else{
-            Serial1COM.writeInt32Array(scaleVals,scaleCnt); // write partial array
-            }
+          else {
+            Serial1COM.writeInt32Array(scaleVals, scaleCnt); // write partial array
           }
-        Serial1.write(GOT_BYTE);
-        midRead = 0;
-      }
-    #endif
-    else if (FSMheader == IS_MOVING) {
-      if (spoutMoves || leverMoves) {
-          Serial1.write(DID_ABORT);
-      }
+        Serial1.write(OK);
+        break;
+#endif
+    case IS_MOVING:
+        if (spoutMoves || leverMoves) {
+          Serial1.write(FAIL);
+        }
         else {
-        Serial1.write(GOT_BYTE);
-      }
-    }
-    else {
-      midRead = 0; Serial1.write(DID_ABORT);
-    }
+          Serial1.write(OK);
+        }
+        break;
+    default:
+      
+        Serial1.write(FAIL);
   }
-
-  //if (midRead && ((millis() - clocker) >= 100)) {
-  //  midRead = 0; Serial1.write(DID_ABORT);
-  //}
-
-  
 }
-void loop() {
-  // This is the main loop for the teensy, it contains functions to communicate with BPod.
-  
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void loop() {
+  // This is the main loop for the teensy
+  ///////////////////////////////////////////////////////////////////////////////////////
   // make stim trigger
   if (stimTrigger) {
     if ((millis() - stimClocker) > stimDur) {  // done with stim trigger
@@ -609,18 +541,18 @@ void loop() {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // get data from touch pins
-  touchData[0] = (touchData[0]*15 + touchRead(SPOUTSENSOR_L))/16;
-  touchData[1] = (touchData[1]*15 + touchRead(SPOUTSENSOR_R))/16;
-  touchData[2] = (touchData[2]*15 + touchRead(LEVERSENSOR_L))/16;
-  touchData[3] = (touchData[3]*15 + touchRead(LEVERSENSOR_R))/16;
-  
+  touchData[0] = (touchData[0] * 15 + touchRead(SPOUTSENSOR_L)) / 16;
+  touchData[1] = (touchData[1] * 15 + touchRead(SPOUTSENSOR_R)) / 16;
+  touchData[2] = (touchData[2] * 15 + touchRead(LEVERSENSOR_L)) / 16;
+  touchData[3] = (touchData[3] * 15 + touchRead(LEVERSENSOR_R)) / 16;
+
   // recompute estimates for mean and standard deviation in each touch line and updates thresholds accordingly
   if (touchAdjust) {
     ++sampleCnt[0];
     for (int i = 0; i < 4; i++) {
-      meanTouchVals[i] = meanTouchVals[i] + ((touchData[i] - meanTouchVals[i])/sampleCnt[0]); // update mean
+      meanTouchVals[i] = meanTouchVals[i] + ((touchData[i] - meanTouchVals[i]) / sampleCnt[0]); // update mean
     }
-    if ((millis() - adjustClocker) > (touchAdjustDur/2)) { // second part of adjustment: get summed variance
+    if ((millis() - adjustClocker) > (touchAdjustDur / 2)) { // second part of adjustment: get summed variance
       ++sampleCnt[1];
       for (int i = 0; i < 4; i++) {
         stdTouchVals[i] = stdTouchVals[i] + sq(touchData[i] - meanTouchVals[i]); // update standard deviation (summed variance here)
@@ -628,7 +560,7 @@ void loop() {
     }
     if ((millis() - adjustClocker) > touchAdjustDur) {  // done with adjustment
       for (int i = 0; i < 4; i++) {
-         stdTouchVals[i] = sqrt(stdTouchVals[i]/sampleCnt[1]) + touchThreshOffset; // compute standard deviation from summed variance
+        stdTouchVals[i] = sqrt(stdTouchVals[i] / sampleCnt[1]) + touchThreshOffset; // compute standard deviation from summed variance
       }
       touchAdjust = false;
     }
@@ -637,7 +569,7 @@ void loop() {
   /////////////////////////////////////////////////////////////////////////////////////////////
   // check touch lines and create according output
   if (!touchAdjust) {
-    if (touchData[0] > (meanTouchVals[0]+(stdTouchVals[0]*touchThresh))) { // signal above 'stdTouchVals' standard deviations indicate lick event. only when spouts dont move.
+    if (touchData[0] > (meanTouchVals[0] + (stdTouchVals[0]*touchThresh))) { // signal above 'stdTouchVals' standard deviations indicate lick event. only when spouts dont move.
       spoutClocker_L = millis(); //update time when spout was last touched
       if (!spoutTouch_L) {
         Serial1.write(LEFT_SPOUT_TOUCH); // send a byte to bpod if this is an onset event
@@ -653,8 +585,8 @@ void loop() {
       }
     }
 
-    
-    if (touchData[1] > (meanTouchVals[1]+(stdTouchVals[1]*touchThresh))) { // signal above 'stdTouchVals' standard deviations indicate lick event. only when spouts dont move.
+
+    if (touchData[1] > (meanTouchVals[1] + (stdTouchVals[1]*touchThresh))) { // signal above 'stdTouchVals' standard deviations indicate lick event. only when spouts dont move.
       spoutClocker_R = millis(); //update time when spout was last touched
       if (!spoutTouch_R) {
         Serial1.write(RIGHT_SPOUT_TOUCH); // send a byte to bpod if this is an onset event
@@ -670,8 +602,8 @@ void loop() {
       }
     }
 
-    
-    if (touchData[2] > (meanTouchVals[2]+(stdTouchVals[2]*touchThresh))) { // signal above 200mv from lick circuit and not receiving serial data
+
+    if (touchData[2] > (meanTouchVals[2] + (stdTouchVals[2]*touchThresh))) { // signal above 200mv from lick circuit and not receiving serial data
       touchClocker_L = millis(); //update time when lever was last touched
       if (!leverTouch_L) {
         Serial1.write(LEFT_HANDLE_TOUCH); // send a byte to bpod if this is an onset event
@@ -686,8 +618,8 @@ void loop() {
         leverTouch_L = false;
       }
     }
-  
-    if (touchData[3] > (meanTouchVals[3]+(stdTouchVals[3]*touchThresh))) { // signal above 200mv from lick circuit and not receiving serial data
+
+    if (touchData[3] > (meanTouchVals[3] + (stdTouchVals[3]*touchThresh))) { // signal above 200mv from lick circuit and not receiving serial data
       touchClocker_R = millis(); //update time when lever was last touched
       if (!leverTouch_R) {
         Serial1.write(RIGHT_HANDLE_TOUCH); // send a byte to bpod if this is an onset event
@@ -703,13 +635,13 @@ void loop() {
       }
     }
 
-    if (leverTouch_L && leverTouch_R){
-        if (!leverTouch_BOTH) {
-          Serial1.write(BOTH_HANDLES_TOUCH); // send a byte to bpod if this is an onset event
-        }
-        leverTouch_BOTH = true;
+    if (leverTouch_L && leverTouch_R) {
+      if (!leverTouch_BOTH) {
+        Serial1.write(BOTH_HANDLES_TOUCH); // send a byte to bpod if this is an onset event
+      }
+      leverTouch_BOTH = true;
     }
-    else{
+    else {
       if (((millis() - touchClocker_L) >= sRateLever) || ((millis() - touchClocker_R) >= sRateLever)) { // check when lever was last touched and set output to low if it happened too long ago.
         leverTouch_BOTH = false;
       }
@@ -721,37 +653,37 @@ void loop() {
   if (spoutMoves == true) { // check spout motion
 
     // left spout movements
-    if (lSpoutMovesIn || lSpoutMovesOut || lSpoutMovesAdjust){
+    if (lSpoutMovesIn || lSpoutMovesOut || lSpoutMovesAdjust) {
       if ((micros() - lSpoutClocker) >= lSpoutInc) { // move left spout motor
         lSpoutClocker = micros();
-  
+
         // find absolute outer limits, this happens when requestion a movement to position zero
         if (findSpoutOut[0]) { // left spout is moving to zero position
           digitalWriteFast(PIN_SPOUTDIR_L, LOW_DIR_S); // make sure stepper is moving in the right direction
           delayMicroseconds(10); // short delay to ensure direction has changed
           sendStep(PIN_SPOUTSTEP_L, stepPulse); // make a step
-           if (!digitalReadFast(PIN_SPOUTOUT_L)) { // check if outer limit has been reached
-              findSpoutOut[0] = false;
-              lServoCurrent = 0;
-           }
+          if (!digitalReadFast(PIN_SPOUTOUT_L)) { // check if outer limit has been reached
+            findSpoutOut[0] = false;
+            lServoCurrent = 0;
+          }
         }
-  
+
         // regular movements, relative to zero position
-        if (!findSpoutOut[0]){
+        if (!findSpoutOut[0]) {
 
           // left spout moves in
           if (lSpoutMovesIn == true) {
             // target hasnt been reached yet
-            if (lServoCurrent != lServoIn) { 
+            if (lServoCurrent != lServoIn) {
               lServoCurrent = moveLeftSpout(lServoCurrent, lServoIn, stepPulse); // move left spout
             }
-            
-            // stop motion when target has been reached  
-            if (lServoCurrent == lServoIn) { 
+
+            // stop motion when target has been reached
+            if (lServoCurrent == lServoIn) {
               lSpoutMovesIn = false;
             }
           }
-    
+
           // left spout adjustment movement
           else if (lSpoutMovesAdjust == true) {
 
@@ -759,20 +691,20 @@ void loop() {
             if (lServoCurrent != lServoAdjust) {
               lServoCurrent = moveLeftSpout(lServoCurrent, lServoAdjust, stepPulse); // move left spout
             }
-            
+
             // stop motion when target has been reached
             if (lServoCurrent == lServoAdjust) {
               lSpoutMovesAdjust = false;
             }
           }
-    
+
           // left spout moves out
           else if (lSpoutMovesOut == true) {
             // target hasnt been reached yet
             if (lServoCurrent != lServoOut) {
               lServoCurrent = moveLeftSpout(lServoCurrent, lServoOut, stepPulse); // move left spout
             }
-            
+
             // stop motion when target has been reached
             if (lServoCurrent == lServoOut) {
               lSpoutMovesOut = false;
@@ -782,35 +714,35 @@ void loop() {
       }
     }
 
-    
+
     // right spout movements
-    if (rSpoutMovesIn || rSpoutMovesOut || rSpoutMovesAdjust){
+    if (rSpoutMovesIn || rSpoutMovesOut || rSpoutMovesAdjust) {
       if ((micros() - rSpoutClocker) >= rSpoutInc) { // move right spout motor
         rSpoutClocker = micros();
-  
+
         // find absolute outer limits, this happens when requestion a movement to position zero
         if (findSpoutOut[1]) { // right spout is moving to zero position
           digitalWriteFast(PIN_SPOUTDIR_R, HIGH_DIR_S); // make sure stepper is moving in the right direction
           delayMicroseconds(10); // short delay to ensure direction has changed
           sendStep(PIN_SPOUTSTEP_R, stepPulse); // make a step
-           if (!digitalReadFast(PIN_SPOUTOUT_R)) { // check if outer limit has been reached
-              findSpoutOut[1] = false;
-              rServoCurrent = 0;
-           }
+          if (!digitalReadFast(PIN_SPOUTOUT_R)) { // check if outer limit has been reached
+            findSpoutOut[1] = false;
+            rServoCurrent = 0;
+          }
         }
-  
+
         // regular movements, relative to zero position
-        if (!findSpoutOut[1]){
-           
+        if (!findSpoutOut[1]) {
+
           // right spout moves in
           if (rSpoutMovesIn == true) {
             // target hasnt been reached yet
-            if (rServoCurrent != rServoIn) { 
+            if (rServoCurrent != rServoIn) {
               rServoCurrent = moveRightSpout(rServoCurrent, rServoIn, stepPulse); // move right spout
             }
-            
-            // stop motion when target has been reached  
-            if (rServoCurrent == rServoIn) { 
+
+            // stop motion when target has been reached
+            if (rServoCurrent == rServoIn) {
               rSpoutMovesIn = false;
             }
           }
@@ -821,20 +753,20 @@ void loop() {
             if (rServoCurrent != rServoAdjust) {
               rServoCurrent = moveRightSpout(rServoCurrent, rServoAdjust, stepPulse); // move right spout
             }
-            
+
             // stop motion when target has been reached
             if (rServoCurrent == rServoAdjust) {
               rSpoutMovesAdjust = false;
             }
           }
-    
+
           // right spout moves out
           else if (rSpoutMovesOut == true) {
             // target hasnt been reached yet
             if (rServoCurrent != rServoOut) {
               rServoCurrent = moveRightSpout(rServoCurrent, rServoOut, stepPulse); // move right spout
             }
-            
+
             // stop motion when target has been reached
             if (rServoCurrent == rServoOut) {
               rSpoutMovesOut = false;
@@ -844,15 +776,13 @@ void loop() {
       }
     }
 
-    
+
     // check if all spout movements are complete
-    if (spoutMoves && !lSpoutMovesIn && !lSpoutMovesOut && !lSpoutMovesAdjust && !rSpoutMovesIn && !rSpoutMovesOut && !rSpoutMovesAdjust){ 
+    if (spoutMoves && !lSpoutMovesIn && !lSpoutMovesOut && !lSpoutMovesAdjust && !rSpoutMovesIn && !rSpoutMovesOut && !rSpoutMovesAdjust) {
       spoutMoves = false;
-      // Send message to bpod to say movement ended
-      //Serial1.write(GOT_BYTE);
     }
   }
-  
+
   ////////////////////////////////////////////////////////////////
   // Check for ongoing handle movements
   if (leverMoves == true) { // check lever motion
@@ -864,60 +794,60 @@ void loop() {
         digitalWriteFast(PIN_LEVERDIR_L, LOW_DIR_H); // make sure stepper is moving in the right direction
         delayMicroseconds(10); // short delay to ensure direction has changed
         sendStep(PIN_LEVERSTEP_L, stepPulse); // make a step
-         if (!digitalReadFast(PIN_LEVEROUT_L)) { // check if outer limit has been reached
-            findLeverOut[0] = false;
-            leverCurrent = 0;
-         }
+        if (!digitalReadFast(PIN_LEVEROUT_L)) { // check if outer limit has been reached
+          findLeverOut[0] = false;
+          leverCurrent = 0;
+        }
       }
-      
+
       if (findLeverOut[1]) { // right stepper is moving to zero position
-         digitalWriteFast(PIN_LEVERDIR_R, HIGH_DIR_H); // make sure stepper is moving in the right direction
-         delayMicroseconds(10); // short delay to ensure direction has changed
-         sendStep(PIN_LEVERSTEP_R, stepPulse); // make a step
-         if (!digitalReadFast(PIN_LEVEROUT_R)) { // check if outer limit has been reached
-            findLeverOut[1] = false;
-            leverCurrent = 0;
-         }
+        digitalWriteFast(PIN_LEVERDIR_R, HIGH_DIR_H); // make sure stepper is moving in the right direction
+        delayMicroseconds(10); // short delay to ensure direction has changed
+        sendStep(PIN_LEVERSTEP_R, stepPulse); // make a step
+        if (!digitalReadFast(PIN_LEVEROUT_R)) { // check if outer limit has been reached
+          findLeverOut[1] = false;
+          leverCurrent = 0;
+        }
       }
-      
+
       // regular movements, relative to zero position
-      if (!findLeverOut[0] && !findLeverOut[1]){ 
+      if (!findLeverOut[0] && !findLeverOut[1]) {
         // handles move in
         if (lMovesIn == true) {
-          
+
           // target hasnt been reached yet
-          if (leverCurrent != leverIn) { 
+          if (leverCurrent != leverIn) {
             leverCurrent = moveHandles(leverCurrent, leverIn, stepPulse); // move handles
           }
-          
-          // stop motion when target has been reached  
-          if (leverCurrent == leverIn) { 
+
+          // stop motion when target has been reached
+          if (leverCurrent == leverIn) {
             leverMoves = false; lMovesIn = false;
           }
         }
-  
+
         // adjustment movement
         else if (lMovesAdjust == true) {
-          
+
           // target hasnt been reached yet
           if (leverCurrent != leverAdjust) {
             leverCurrent = moveHandles(leverCurrent, leverAdjust, stepPulse); // move handles
           }
-          
+
           // stop motion when target has been reached
           if (leverCurrent == leverAdjust) {
             leverMoves = false; lMovesAdjust = false;
           }
         }
-  
+
         // handles move out
         else if (lMovesOut == true) {
-  
+
           // target hasnt been reached yet
           if (leverCurrent != leverOut) {
             leverCurrent = moveHandles(leverCurrent, leverOut, stepPulse); // move handles
           }
-          
+
           // stop motion when target has been reached
           if (leverCurrent == leverOut) {
             leverMoves = false; lMovesOut = false;
@@ -927,39 +857,39 @@ void loop() {
     }
   }
 
-  
-    #ifdef USE_LOAD_CELL
+
+#ifdef USE_LOAD_CELL
   ////////////////////////////////////////////////
   /////// check load-cell inputs /////////////////
-      if (scale.is_ready() && readScale && ((millis() - scaleClocker) >= scaleRate)){
-      scaleVals[scaleCnt] = scale.read();
-      ++scaleCnt;
-      if (scaleCnt > SCALE_READS){
-        scaleCnt = 0;
-        scaleWrap = true;
-      }
+  if (scale.is_ready() && readScale && ((millis() - scaleClocker) >= scaleRate)) {
+    scaleVals[scaleCnt] = scale.read();
+    ++scaleCnt;
+    if (scaleCnt > SCALE_READS) {
+      scaleCnt = 0;
+      scaleWrap = true;
     }
-   #endif
-  if (Serial && ((millis() - usbClocker) >= usbRate)){ // (false){
-        usbClocker = millis();
-      //    long wv_tmp = scale.read();
-      ///////////////////////////////////////////////////
+  }
+#endif
+  if (Serial && ((millis() - usbClocker) >= usbRate)) { // (false){
+    usbClocker = millis();
+    //    long wv_tmp = scale.read();
+    ///////////////////////////////////////////////////
 
     // send touch data for serial monitor
     for (int i = 0; i < 4; i++) { // send some feedback about touch events
 
-      touchVal = touchData[i] + (i*1500);//((touchData[i] / pow(2,16)) * pow(2,8) + (i*5)); // convert value from 16 to 8 bit number
+      touchVal = touchData[i] + (i * 1500); //((touchData[i] / pow(2,16)) * pow(2,8) + (i*5)); // convert value from 16 to 8 bit number
       Serial.print(int(touchVal)); Serial.print(",");
-    
-      touchVal = (meanTouchVals[i]+(stdTouchVals[i]*touchThresh)) +(i*1500);//(((meanTouchVals[i]+(stdTouchVals[i]*touchThresh))/ pow(2,16)) * pow(2,8) + (i*5)); // convert bound from 16 to 8 bit number
+
+      touchVal = (meanTouchVals[i] + (stdTouchVals[i] * touchThresh)) + (i * 1500); //(((meanTouchVals[i]+(stdTouchVals[i]*touchThresh))/ pow(2,16)) * pow(2,8) + (i*5)); // convert bound from 16 to 8 bit number
       Serial.print(int(touchVal)); Serial.print(",");
     }
-//    weight_val = ((wv_tmp / pow(2,16)) * pow(2,8) + (4*20)); // convert value from 16 to 8 bit number
-  //  weight_val = ((scaleVals[scaleCnt] / pow(2,16)) * pow(2,8) + (4*20)); // convert value from 16 to 8 bit number
-//    Serial.print(byte(weight_val));
+    //    weight_val = ((wv_tmp / pow(2,16)) * pow(2,8) + (4*20)); // convert value from 16 to 8 bit number
+    //  weight_val = ((scaleVals[scaleCnt] / pow(2,16)) * pow(2,8) + (4*20)); // convert value from 16 to 8 bit number
+    //    Serial.print(byte(weight_val));
     Serial.println();
   }
-  
+
 } // end of void loop
 
 
@@ -987,107 +917,114 @@ float AdjustServo(float Position, float Target, float Increment) {
 
 
 void sendStep(int cPin, int pulseTime) { // send stepper pulse as long as control signal is high
-    digitalWriteFast(cPin,HIGH); // send step
-    delayMicroseconds(pulseTime); // keep step signal high for pulseTime in microseconds. Should be at least 2 or longer.
-    digitalWriteFast(cPin,LOW);
+  digitalWriteFast(cPin, HIGH); // send step
+  delayMicroseconds(pulseTime); // keep step signal high for pulseTime in microseconds. Should be at least 2 or longer.
+  digitalWriteFast(cPin, LOW);
 }
 
 
-float moveHandles(float current, float target, int pulseDur){
+float moveHandles(float current, float target, int pulseDur) {
   if (current < target) { // levers move towards the animal
-  digitalWriteFast(PIN_LEVERDIR_R, LOW_DIR_H); // make sure handle is moving in the right direction
-  digitalWriteFast(PIN_LEVERDIR_L, HIGH_DIR_H); // make sure handle is moving in the right direction
+    digitalWriteFast(PIN_LEVERDIR_R, LOW_DIR_H); // make sure handle is moving in the right direction
+    digitalWriteFast(PIN_LEVERDIR_L, HIGH_DIR_H); // make sure handle is moving in the right direction
   }
   else {  // levers move away from the animal
-  digitalWriteFast(PIN_LEVERDIR_R, HIGH_DIR_H); // make sure handle is moving in the right direction
-  digitalWriteFast(PIN_LEVERDIR_L, LOW_DIR_H); // make sure handle is moving in the right direction
+    digitalWriteFast(PIN_LEVERDIR_R, HIGH_DIR_H); // make sure handle is moving in the right direction
+    digitalWriteFast(PIN_LEVERDIR_L, LOW_DIR_H); // make sure handle is moving in the right direction
   }
   delayMicroseconds(10); // short delay to ensure direction has changed
   sendStep(PIN_LEVERSTEP_L, pulseDur); // make a step
   sendStep(PIN_LEVERSTEP_R, pulseDur); // make a step
   current = AdjustServo(current, target, 1); // adjust current servo position
 
-  if (!digitalReadFast(PIN_LEVEROUT_L) && !digitalReadFast(PIN_LEVEROUT_R)){
-    current = 0; // if zero-pins are touched, set current position to zero  
+  if (!digitalReadFast(PIN_LEVEROUT_L) && !digitalReadFast(PIN_LEVEROUT_R)) {
+    current = 0; // if zero-pins are touched, set current position to zero
   }
   return current;
 }
 
-float moveLeftSpout(float current, float target, int pulseDur){
+float moveLeftSpout(float current, float target, int pulseDur) {
   if (current < target) { // spout moves towards the animal
-  digitalWriteFast(PIN_SPOUTDIR_L, HIGH_DIR_S); // make sure spout is moving in the correct direction
+    digitalWriteFast(PIN_SPOUTDIR_L, HIGH_DIR_S); // make sure spout is moving in the correct direction
   }
   else {  // spout move away from the animal
-  digitalWriteFast(PIN_SPOUTDIR_L, LOW_DIR_S); // make sure spout is moving in the right direction
+    digitalWriteFast(PIN_SPOUTDIR_L, LOW_DIR_S); // make sure spout is moving in the right direction
   }
   delayMicroseconds(10); // short delay to ensure direction has changed
   sendStep(PIN_SPOUTSTEP_L, pulseDur); // make a step
   current = AdjustServo(current, target, 1); // adjust current servo position
-  if (!digitalReadFast(PIN_SPOUTOUT_L)){
-    current = 0; // if zero-pin is touched, set current position to zero  
+  if (!digitalReadFast(PIN_SPOUTOUT_L)) {
+    current = 0; // if zero-pin is touched, set current position to zero
   }
   return current;
 }
 
-float moveRightSpout(float current, float target, int pulseDur){
+float moveRightSpout(float current, float target, int pulseDur) {
   if (current < target) { // spout moves towards the animal
-  digitalWriteFast(PIN_SPOUTDIR_R, LOW_DIR_S); // make sure spout is moving in the correct direction
+    digitalWriteFast(PIN_SPOUTDIR_R, LOW_DIR_S); // make sure spout is moving in the correct direction
   }
   else {  // spout move away from the animal
-  digitalWriteFast(PIN_SPOUTDIR_R, HIGH_DIR_S); // make sure spout is moving in the correct direction
+    digitalWriteFast(PIN_SPOUTDIR_R, HIGH_DIR_S); // make sure spout is moving in the correct direction
   }
   delayMicroseconds(10); // short delay to ensure direction has changed
   sendStep(PIN_SPOUTSTEP_R, pulseDur); // make a step
 
-  if (!digitalReadFast(PIN_SPOUTOUT_R)){
-    current = 0; // if zero-pin is touched, set current position to zero  
-    
+  if (!digitalReadFast(PIN_SPOUTOUT_R)) {
+    current = 0; // if zero-pin is touched, set current position to zero
+
   }
   current = AdjustServo(current, target, 1); // adjust current servo position
-  
+
   return current;
 }
 
 void returnModuleInfo() {
   Serial1COM.writeByte(65); // Acknowledge
   Serial1COM.writeUint32(FirmwareVersion); // 4-byte firmware version
-  Serial1COM.writeByte(sizeof(moduleName)-1); // Length of module name
-  Serial1COM.writeCharArray(moduleName, sizeof(moduleName)-1); // Module name
+  Serial1COM.writeByte(sizeof(moduleName) - 1); // Length of module name
+  Serial1COM.writeCharArray(moduleName, sizeof(moduleName) - 1); // Module name
   Serial1COM.writeByte(0); // 1 if more info follows, 0 if not
 }
 
-float readSerialChar(byte currentRead){
+float readSerialChar(byte currentRead) {
   float currentVar = 0;
-  byte cBytes[currentRead-1]; // current byte
+  byte cBytes[currentRead - 1]; // current byte
   int preDot = currentRead; // indicates how many characters there are before a dot
   int cnt = 0; // character counter
 
-  if (currentRead == 1){
-    currentVar = Serial1COM.readByte() -'0'; 
+  if (currentRead == 1) {
+    currentVar = Serial1COM.readByte() - '0';
   }
 
   else {
     for (int i = 0; i < currentRead; i++) {
       cBytes[i] = Serial1COM.readByte(); // go through all characters and check for dot or non-numeric characters
-      if (cBytes[i] == '.') {cBytes[i] = '0'; preDot = i;}
-      if (cBytes[i] < '0') {cBytes[i] = '0';}
-      if (cBytes[i] > '9') {cBytes[i] = '9';}
+      if (cBytes[i] == '.') {
+        cBytes[i] = '0';
+        preDot = i;
+      }
+      if (cBytes[i] < '0') {
+        cBytes[i] = '0';
+      }
+      if (cBytes[i] > '9') {
+        cBytes[i] = '9';
+      }
     }
-  
+
     // go through all characters to create new number
     if (currentRead > 1) {
-      for (int i = preDot-1; i >= 1; i--) {
-        currentVar = currentVar + ((cBytes[cnt]-'0') * pow(10,i));
+      for (int i = preDot - 1; i >= 1; i--) {
+        currentVar = currentVar + ((cBytes[cnt] - '0') * pow(10, i));
         cnt++;
       }
     }
-    currentVar = currentVar + (cBytes[cnt] -'0'); 
+    currentVar = currentVar + (cBytes[cnt] - '0');
     cnt++;
-  
+
     // add numbers after the dot
-    if (preDot != currentRead){
-      for (int i = 0; i < (currentRead-preDot); i++) {
-        currentVar = currentVar + ((cBytes[cnt]-'0') / pow(10,i));
+    if (preDot != currentRead) {
+      for (int i = 0; i < (currentRead - preDot); i++) {
+        currentVar = currentVar + ((cBytes[cnt] - '0') / pow(10, i));
         cnt++;
       }
     }

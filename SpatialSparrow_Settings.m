@@ -24,7 +24,6 @@ DefaultSettings.LeverSound = true; %play indicator sound when animal is touching
 DefaultSettings.RegularStim = false; %produce regular stimulus sequence
 DefaultSettings.biasSeqLength = 3; %nr of trials on one side after which the oder side is switched with 50% probability
 
-          
 if isunix
     DefaultSettings.widefieldPath = ''; %path to widefield data on server
     %DefaultSettings.videoDrive = '/home/anne/data'; %path to where the system saves video data

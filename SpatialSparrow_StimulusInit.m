@@ -8,7 +8,7 @@ TargStim = Sample(S.TargRate);
 if TrialType == 2 % present distractor stimulus
     DistStim = Sample(S.DistFractions); % ASSIGN A DISTRACTOR
     if DistStim < 0 || DistStim > 1
-        warning(['Current DistFraction = ' num2str(Distractor) '; Set to 0 instead.']);
+        warning(['Current DistFraction = ' num2str(DistStim) '; Set to 0 instead.']);
         DistStim = 0;
     end
     DistStim = floor(DistStim * TargStim); %convert distractor fraction to rate

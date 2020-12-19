@@ -36,22 +36,22 @@ if exist('udpWF', 'var')
     fwrite(udpWF,'softtrigger=1')
     fgetl(udpWF)
 end
-
+BpodSystem.Status.SpatialSparrowExit = false;
 %% Main loop for single trials
 for iTrials = 1:maxTrials
     % look at the pause button
     if BpodSystem.Status.SpatialSparrowPause
         disp('Spatial Sparrow paused')
-        while BpodSystem.Status.SpatialSparrowPause
+        while BpodSystem.Status.SpatialSparrowPause 
             drawnow; pause(0.03); 
-            if ~BpodSystem.Status.BeingUsed 
+            if ~BpodSystem.Status.BeingUsed | BpodSystem.Status.SpatialSparrowExit
                 break
             end
         end
     end
     
     % only run this code if protocol is still active
-    if BpodSystem.Status.BeingUsed
+    if BpodSystem.Status.BeingUsed & ~BpodSystem.Status.SpatialSparrowExit
         tic % single trial timer
         %BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'Update','Settings'});  %Get inputs from GUIs
         SpatialSparrow_TrialInit
@@ -63,6 +63,7 @@ for iTrials = 1:maxTrials
         BpodSystem.GUIHandles.spatialsparrow.prepareTrial(TrialSidesList)
         
         SpatialSparrow_StateMachine
+        
         %% create ITI jitter
         trialPrep = toc; %check how much time was used to prepare trial and subtract from ITI
         if trialPrep > ITIjitter
@@ -106,7 +107,9 @@ for iTrials = 1:maxTrials
         setMotorsToZero;
         
         HandlePauseCondition; % Checks to see if the protocol is paused. If so, waits until user resumes.
-        
+        if BpodSystem.Status.SpatialSparrowExit
+            RunProtocol('Stop')
+        end
     else  %stop code if stop button is pressed and close figures
         SpatialSparrow_CloseSession
         break;
