@@ -8,10 +8,10 @@ if ~isempty(BpodSystem.ProtocolSettings.bonsaiParadim)
     oscsend(udpObj,udpPath,'i',iTrials) % send current trialnr to bonsai
 end
 %% create sounds - recreate if loudness has changed
-if iTrials == 1 || PrevStimLoudness ~= S.StimLoudness
+if true || iTrials == 1 || PrevStimLoudness ~= S.StimLoudness 
     sRate = BpodSystem.ProtocolSettings.sRate;
-    PunishSound = ((rand(1,sRate*S.PunishSoundDur) * 5) - 2.5)/10; %white noise for punishment
-    RewardSound = zeros(1,sRate*0.02);RewardSound(1:sRate*0.01) = 1; %20ms click sound for reward
+    PunishSound = ((rand(1,int32(sRate*S.PunishSoundDur)) * 5) - 2.5)/10; %white noise for punishment
+    RewardSound = zeros(1,sRate*0.02);RewardSound(1:int32(sRate*0.01)) = 1; %20ms click sound for reward
     RewardSound = RewardSound*0.5;
 
     if isempty(PunishSound);PunishSound = zeros(1,sRate/1000);end

@@ -90,10 +90,10 @@ if checker
     BpodSystem.Status.BeingUsed = 0;
 end
 
-%% check teensy module
-teensyReset()
-pause(1)
-disp('Teensy was reset; setting thresholds')
+%% check teensy module - this does not work if not connected to the computer
+%teensyReset()
+%pause(1)
+%disp('Teensy was reset; setting thresholds')
 % send trialstart info and check response
 % teensyWrite([70 ones(1,6) '550050']); %set high touch threshold to avoid confusing bytes
 

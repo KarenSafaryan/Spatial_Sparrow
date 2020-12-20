@@ -100,8 +100,9 @@ for iTrials = 1:maxTrials
             fwrite(udpWF,sprintf('log=trial_end:%d',iTrials));
         end
         SpatialSparrow_SaveTrial
-        BpodSystem.GUIHandles.spatialsparrow.update_performance_plots();
-
+        try
+            BpodSystem.GUIHandles.spatialsparrow.update_performance_plots();
+        end
         toc;disp('==============================================')
         % send the motors to zero before starting another trial
         setMotorsToZero;
