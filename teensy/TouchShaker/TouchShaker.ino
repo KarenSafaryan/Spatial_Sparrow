@@ -123,6 +123,7 @@ HX711 scale;
 
 // other serial commands during the trial
 #define SPOUTS_IN 101 // serial command to move the spouts in
+#define SPOUTS_OUT 106 // serial command to move the spouts out
 #define LEFT_SPOUT_OUT 102 // serial command to move the left spout out
 #define RIGHT_SPOUT_OUT 103 // serial command to move the right spout out
 #define LEVER_IN 104 // serial command to move the lever in
@@ -284,9 +285,9 @@ void serialEvent1() {
       rServoOut = readSerialChar(temp[3]); // right spout outer position
       leverIn = readSerialChar(temp[4]); // inner handle position
       leverOut = readSerialChar(temp[5]); // outer handle position
-      lSpoutInc = round(spoutSpeed / abs(lServoIn - lServoOut)); // time between steps to move at requested left spout speed.
-      rSpoutInc = round(spoutSpeed / abs(rServoIn - rServoOut)); // time between steps to move at requested right spout speed.
-      leverInc = round(leverSpeed / abs(leverIn - leverOut)); // time between steps to move at requested leverspeed.
+      lSpoutInc = round(spoutSpeed / abs(lServoIn - lServoOut+1)); // time between steps to move at requested left spout speed.
+      rSpoutInc = round(spoutSpeed / abs(rServoIn - rServoOut+1)); // time between steps to move at requested right spout speed.
+      leverInc = round(leverSpeed / abs(leverIn - leverOut+1)); // time between steps to move at requested leverspeed.
       Serial1.write(OK);
       break;
     case ADJUST_SPOUTES:
@@ -333,8 +334,8 @@ void serialEvent1() {
       if (Serial1.available() > 2) {
         spoutSpeed = readSerialChar(Serial1COM.readByte()); // Duration of spout movement from outer to inner position in ms.
         spoutSpeed = spoutSpeed * 1000;
-        lSpoutInc = round(spoutSpeed / abs(lServoIn - lServoOut)); // time between steps to move at requested left spout speed.
-        rSpoutInc = round(spoutSpeed / abs(rServoIn - rServoOut)); // time between steps to move at requested right spout speed.
+        lSpoutInc = round(spoutSpeed / abs(lServoIn - lServoOut+1)); // time between steps to move at requested left spout speed.
+        rSpoutInc = round(spoutSpeed / abs(rServoIn - rServoOut+1)); // time between steps to move at requested right spout speed.
 
         Serial1.write(OK); // send confirmation
       }
@@ -345,7 +346,7 @@ void serialEvent1() {
       if (Serial1.available() > 2) {
         leverSpeed = readSerialChar(Serial1COM.readByte()); // Duration of spout movement from outer to inner position in ms.
         leverSpeed = leverSpeed * 1000;
-        leverInc = round(leverSpeed / abs(leverIn - leverOut)); // time between steps to move at requested leverspeed.
+        leverInc = round(leverSpeed / abs(leverIn - leverOut+1)); // time between steps to move at requested leverspeed.
         Serial1.write(OK); // send confirmation
       }
       else {
@@ -384,6 +385,23 @@ void serialEvent1() {
 
       Serial1.write(OK);
       break;
+    case SPOUTS_OUT:
+      spoutMoves = true;
+      if (lServoOut == 0) { // move left spout to zero position (absolute outer limits)
+        findSpoutOut[0] = true; // find outer limit for left stepper
+      }
+      if (rServoOut == 0) { // move left spout to zero position (absolute outer limits)
+        findSpoutOut[1] = true; // find outer limit for right stepper
+      }
+
+      lSpoutClocker = micros() - lSpoutInc; // initialize timer for spout movement
+      lSpoutMovesIn = false; lSpoutMovesOut = true; lSpoutMovesAdjust = false;  // flag that left spout moves to inner position
+
+      rSpoutClocker = micros() - rSpoutInc; // initialize timer for spout movement
+      rSpoutMovesIn = false; rSpoutMovesOut = true; rSpoutMovesAdjust = false;  // flag that left spout moves to inner position
+
+      Serial1.write(OK);
+      break;
     case LEFT_SPOUT_OUT:
       spoutMoves = true;
       if (lServoOut == 0) { // move left spout to zero position (absolute outer limits)
@@ -391,7 +409,9 @@ void serialEvent1() {
       }
       lSpoutClocker = micros() - lSpoutInc; // initialize timer for spout movement
       lSpoutMovesIn = false; lSpoutMovesOut = true; lSpoutMovesAdjust = false;  // flag that left spout moves to outer position
+//      rSpoutMovesIn = false; rSpoutMovesOut = false; rSpoutMovesAdjust = false;  // flag that left spout moves to outer position
       Serial1.write(OK);
+      break;
     case RIGHT_SPOUT_OUT:
       spoutMoves = true;
       if (rServoOut == 0) { // move left spout to zero position (absolute outer limits)
@@ -399,7 +419,8 @@ void serialEvent1() {
       }
       rSpoutClocker = micros() - rSpoutInc; // initialize timer for spout movement
       rSpoutMovesIn = false; rSpoutMovesOut = true; rSpoutMovesAdjust = false;  // flag that right spout moves to outer position
-
+//      lSpoutMovesIn = false; lSpoutMovesOut = false; lSpoutMovesAdjust = false;  // flag that left spout moves to outer position
+      
       Serial1.write(OK);
       break;
     case LEVER_IN:
@@ -515,7 +536,6 @@ void serialEvent1() {
         }
         break;
     default:
-      
         Serial1.write(FAIL);
   }
 }
@@ -649,9 +669,10 @@ void loop() {
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////
+//  Serial.println("hello");
   // Check for ongoing spout movements
   if (spoutMoves == true) { // check spout motion
-
+    Serial.println("INSIDE THE MOVE");
     // left spout movements
     if (lSpoutMovesIn || lSpoutMovesOut || lSpoutMovesAdjust) {
       if ((micros() - lSpoutClocker) >= lSpoutInc) { // move left spout motor
@@ -870,7 +891,7 @@ void loop() {
     }
   }
 #endif
-  if (Serial && ((millis() - usbClocker) >= usbRate)) { // (false){
+  if (false) {//(Serial && ((millis() - usbClocker) >= usbRate)) { // (false){
     usbClocker = millis();
     //    long wv_tmp = scale.read();
     ///////////////////////////////////////////////////

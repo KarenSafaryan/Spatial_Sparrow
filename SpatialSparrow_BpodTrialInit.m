@@ -21,11 +21,11 @@ if TrialSidesList(iTrials) == 0 %target is left
     LeftPortAction = 'CheckReward';
     pLeftPortAction = 'CheckReward';
     cLeftPortAction = 'Reward';
-    WireRewardOut = 103; %move right spout out if animal chooses left
+    moveNRewardOut = 103; %move right spout out if animal chooses left
+    movePunishOut = 106; %move right spout out if animal chooses right
     RightPortAction = 'CheckPunish';
     cRightPortAction = 'CheckPunish';
     pRightPortAction = 'HardPunish';
-    WirePunishOut = 102; %move left spout out if animal chooses right
     RewardValve = LeftPortValveState; %left-hand port represents port#0, therefore valve value is 2^0
     rewardValveTime = LeftValveTime;
     correctSide = 1;
@@ -34,11 +34,11 @@ else
     LeftPortAction = 'CheckPunish';
     cLeftPortAction = 'CheckPunish';
     pLeftPortAction = 'HardPunish';
-    WirePunishOut = 103; %move right spout out if animal chooses left
+    moveNRewardOut = 102; %move left spout out if animal chooses right
+    movePunishOut = 106; %move spouts out if animal chooses left
     RightPortAction = 'CheckReward';
     pRightPortAction = 'CheckReward';
     cRightPortAction = 'Reward';
-    WireRewardOut = 102; %move left spout out if animal chooses right
     RewardValve = RightPortValveState; %right-hand port represents port#2, therefore valve value is 2^2
     rewardValveTime = RightValveTime;
     correctSide = 2;

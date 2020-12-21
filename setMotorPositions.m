@@ -8,9 +8,9 @@ RightOut = RightIn - S.spoutOffset; %right outer position
 if exist('SingleSpout','var')
     if SingleSpout
         if correctSide == 1 %correct side is left
-            RightIn = RightOut - abs(RightIn - RightOut); %move right spout in opposite direction
+            RightIn = RightOut; %- abs(RightIn - RightOut); %move right spout in opposite direction
         else
-            LeftIn = LeftOut - abs(LeftIn - LeftOut); %move left spout in opposite direction
+            LeftIn = LeftOut; %- abs(LeftIn - LeftOut); %move left spout in opposite direction
         end
     end
 end
