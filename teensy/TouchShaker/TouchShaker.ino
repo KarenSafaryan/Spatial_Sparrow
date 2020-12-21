@@ -669,10 +669,8 @@ void loop() {
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////
-//  Serial.println("hello");
   // Check for ongoing spout movements
   if (spoutMoves == true) { // check spout motion
-    Serial.println("INSIDE THE MOVE");
     // left spout movements
     if (lSpoutMovesIn || lSpoutMovesOut || lSpoutMovesAdjust) {
       if ((micros() - lSpoutClocker) >= lSpoutInc) { // move left spout motor
@@ -891,7 +889,7 @@ void loop() {
     }
   }
 #endif
-  if (false) {//(Serial && ((millis() - usbClocker) >= usbRate)) { // (false){
+  if (Serial && ((millis() - usbClocker) >= usbRate)) { // (false){
     usbClocker = millis();
     //    long wv_tmp = scale.read();
     ///////////////////////////////////////////////////
