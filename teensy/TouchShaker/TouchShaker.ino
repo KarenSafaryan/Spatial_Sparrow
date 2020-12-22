@@ -146,8 +146,8 @@ float leverOut = 0; // outer lever position.
 float leverAdjust = 0; // lever position via adjust_lever commands.
 float leverCurrent = 0; // current lever position
 
-float spoutSpeed = 350000; // duration of the spout movement in us.
-float leverSpeed = 350000; // duration of the lever movement in us. this is the time it takes the lever to move from the outer to the inner position or vice versa.
+float spoutSpeed = 50000; // duration of the spout movement in us.
+float leverSpeed = 50000; // duration of the lever movement in us. this is the time it takes the lever to move from the outer to the inner position or vice versa.
 unsigned long lSpoutClocker = micros(); // timer to modulate speed of left spout
 unsigned long rSpoutClocker = micros(); // timer to modulate speed of right spout
 unsigned long lClocker = micros(); // timer to modulate speed of lever motion
@@ -285,13 +285,13 @@ void serialEvent1() {
       rServoOut = readSerialChar(temp[3]); // right spout outer position
       leverIn = readSerialChar(temp[4]); // inner handle position
       leverOut = readSerialChar(temp[5]); // outer handle position
-      lSpoutInc = round(spoutSpeed / abs(lServoIn - lServoOut+1)); // time between steps to move at requested left spout speed.
-      rSpoutInc = round(spoutSpeed / abs(rServoIn - rServoOut+1)); // time between steps to move at requested right spout speed.
-      leverInc = round(leverSpeed / abs(leverIn - leverOut+1)); // time between steps to move at requested leverspeed.
+      lSpoutInc = round(spoutSpeed / abs(lServoIn)); // time between steps to move at requested left spout speed.
+      rSpoutInc = round(spoutSpeed / abs(rServoIn)); // time between steps to move at requested right spout speed.
+      leverInc = round(leverSpeed / abs(leverIn)); // time between steps to move at requested leverspeed.
       Serial1.write(OK);
       break;
     case ADJUST_SPOUTES:
-      if (Serial1.available() > 2) {
+      if (Serial1.available() > 1) {
         spoutMoves = true;
         lServoAdjust = readSerialChar(Serial1COM.readByte()); // requested handle position
         lSpoutClocker = micros() - lSpoutInc; // initialize timer for spout movement
@@ -313,7 +313,7 @@ void serialEvent1() {
       }
       break;
     case ADJUST_LEVER:
-      if (Serial1.available() > 2) {
+      if (Serial1.available() > 1) {
         leverAdjust = readSerialChar(Serial1COM.readByte()); // requested handle position
         lClocker = micros() - leverInc; // initialize timer for lever movement
         leverMoves = true;
@@ -331,11 +331,11 @@ void serialEvent1() {
       }
       break;
     case ADJUST_SPOUTSPEED:
-      if (Serial1.available() > 2) {
+      if (Serial1.available() > 1) {
         spoutSpeed = readSerialChar(Serial1COM.readByte()); // Duration of spout movement from outer to inner position in ms.
         spoutSpeed = spoutSpeed * 1000;
-        lSpoutInc = round(spoutSpeed / abs(lServoIn - lServoOut+1)); // time between steps to move at requested left spout speed.
-        rSpoutInc = round(spoutSpeed / abs(rServoIn - rServoOut+1)); // time between steps to move at requested right spout speed.
+        lSpoutInc = round(spoutSpeed / abs(lServoIn)); // time between steps to move at requested left spout speed.
+        rSpoutInc = round(spoutSpeed / abs(rServoIn)); // time between steps to move at requested right spout speed.
 
         Serial1.write(OK); // send confirmation
       }
@@ -343,10 +343,10 @@ void serialEvent1() {
         Serial1.write(FAIL);
       }
     case ADJUST_LEVERSPEED:
-      if (Serial1.available() > 2) {
+      if (Serial1.available() > 1) {
         leverSpeed = readSerialChar(Serial1COM.readByte()); // Duration of spout movement from outer to inner position in ms.
         leverSpeed = leverSpeed * 1000;
-        leverInc = round(leverSpeed / abs(leverIn - leverOut+1)); // time between steps to move at requested leverspeed.
+        leverInc = round(leverSpeed / abs(leverIn)); // time between steps to move at requested leverspeed.
         Serial1.write(OK); // send confirmation
       }
       else {
@@ -355,7 +355,7 @@ void serialEvent1() {
       break;
 
     case ADJUST_TOUCHLEVEL:
-      if (Serial1.available() > 2) {
+      if (Serial1.available() > 1) {
         touchThresh = readSerialChar(Serial1COM.readByte()); // new threshold for touch detection in SDUs
         touchAdjust = true; // flag to adjust touchlevels
         adjustClocker = millis();
@@ -429,7 +429,7 @@ void serialEvent1() {
         findLeverOut[0] = true; // find outer limit for left stepper
         findLeverOut[1] = true; // find outer limit for right stepper
       }
-      leverInc = round(leverSpeed / abs(leverIn - leverOut)); // time between steps to move at requested leverspeed.
+      leverInc = round(leverSpeed / abs(leverIn)); // time between steps to move at requested leverspeed.
       lClocker = micros() - leverInc;
       lMovesIn = true; lMovesOut = false; lMovesAdjust = false; // flag that lever moves inward
 
@@ -442,7 +442,7 @@ void serialEvent1() {
             findLeverOut[0] = true; // find outer limit for left stepper
             findLeverOut[1] = true; // find outer limit for right stepper
           }
-          leverInc = round(leverSpeed / abs(leverIn - leverOut)); // time between steps to move at requested leverspeed.
+          leverInc = round(leverSpeed / abs(leverIn)); // time between steps to move at requested leverspeed.
           lClocker = micros() - leverInc;
           lMovesIn = false; lMovesOut = true; lMovesAdjust = false; // flag that lever moves outward
         }
