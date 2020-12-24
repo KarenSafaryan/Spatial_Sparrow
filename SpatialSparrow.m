@@ -15,7 +15,32 @@ BpodSystem.Status.SpatialSparrowPause = true;
 while BpodSystem.Status.SpatialSparrowPause
     drawnow; pause(0.03);
 end
-
+if BpodSystem.ProtocolSettings.triggerWidefield
+    if isfield(BpodSystem.ProtocolSettings,'labcamsWidefield')
+        if ~isempty(BpodSystem.ProtocolSettings.labcamsWidefield)
+            tmp = strsplit(BpodSystem.ProtocolSettings.labcamsWidefield,':');
+            udpAddress = tmp{1};
+            udpPort = str2num(tmp{2});
+            udpWF = udp(udpAddress,udpPort);
+            fopen(udpWF);
+            % check if labcams WIDEFIELD is connected already.
+            fwrite(udpWF,'ping');
+            fgetl(udpWF);
+            fwrite(udpWF,'manualsave=0')
+            fgetl(udpWF)
+            fwrite(udpWF,'softtrigger=0')
+            fgetl(udpWF)
+            fwrite(udpWF,['expname=' BpodSystem.ProtocolSettings.SubjectName filesep 'onephoton' filesep bhvFile filesep bhvFile '_2']); % 2 is the number of widefield channels
+            fgetl(udpWF)
+            disp(' -> WIDEFIELD labcams connected.');
+            
+        else
+            disp(' -> WIDEFIELD labcams not connected.');
+            clear udpWF
+        end
+    end
+end
+pause(1)
 %% Start saving labcams if connected
 if exist('udplabcams','var')
     fwrite(udplabcams,'softtrigger=0')

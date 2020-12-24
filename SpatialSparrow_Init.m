@@ -244,28 +244,4 @@ end
 %    set(BpodSystem.GUIHandles.SpatialSparrow_Control.ServoPos,'String',['L:' num2str(BpodSystem.ProtocolSettings.ServoPos(1)) '; R:' num2str(BpodSystem.ProtocolSettings.ServoPos(2))]); %set indicator for current servo position
 %end
 
-if BpodSystem.ProtocolSettings.triggerWidefield
-    if isfield(BpodSystem.ProtocolSettings,'labcamsWidefield')
-        if ~isempty(BpodSystem.ProtocolSettings.labcamsWidefield)
-            tmp = strsplit(BpodSystem.ProtocolSettings.labcamsWidefield,':');
-            udpAddress = tmp{1};
-            udpPort = str2num(tmp{2});
-            udpWF = udp(udpAddress,udpPort);
-            fopen(udpWF);
-            % check if labcams WIDEFIELD is connected already.
-            fwrite(udpWF,'ping');
-            fgetl(udpWF);
-            fwrite(udpWF,'manualsave=0')
-            fgetl(udpWF)
-            fwrite(udpWF,'softtrigger=0')
-            fgetl(udpWF)
-            fwrite(udpWF,['expname=' BpodSystem.ProtocolSettings.SubjectName filesep 'onephoton' filesep bhvFile filesep bhvFile '_2']); % 2 is the number of widefield channels
-            fgetl(udpWF)
-            disp(' -> WIDEFIELD labcams connected.');
-            
-        else
-            disp(' -> WIDEFIELD labcams not connected.');
-            clear udpWF
-        end
-    end
-end
+
