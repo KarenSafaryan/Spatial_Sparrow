@@ -117,21 +117,15 @@ maxTrials = 5000;
 TrialSidesList = double(rand(1,maxTrials) < S.ProbRight); % ONE MEANS RIGHT TRIAL
 PrevProbRight = S.ProbRight;
 BpodSystem.Data.cTrial = 1; BpodSystem.Data.Rewarded = logical([]); %needed for cam streamer to work in first trial
-  [dataPath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile); %behavioral file and data path
+[dataPath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile); %behavioral file and data path
+% Set the datapath to something that makes sense (drop Session Data and add the date)
 
-if ~exist(dataPath,'dir')
-    try
-        mkdir(dataPath);
-    catch
-        disp(['Could not create ',dataPath])
-        dataPath = uigetdir(pwd,'Specify the data folder');
-    end
-end
-if isfield(BpodSystem.GUIHandles,"spatialsparrow")
-    try
-        close(BpodSystem.GUIHandles.spatialsparrow)
-    end
-end
+tmp = strsplit(bhvFile,'_');
+session_folder = fullfile(BpodSystem.Path.DataFolder,BpodSystem.GUIData.SubjectName,...
+    [tmp{end-1} '_' tmp{end}],tmp{2});
+BpodSystem.Path.CurrentDataFile = fullfile(session_folder,[bhvFile '.mat']);
+[dataPath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile);
+
 %% Initialize camera, control GUI and feedback plots
 if BpodSystem.Status.BeingUsed %only run this code if protocol is still active
     %%
