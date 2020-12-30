@@ -12,11 +12,11 @@ if ~BpodSystem.Status.InStateMatrix
     BpodSystem.StartModuleRelay('TouchShaker1');
     ModuleWrite('TouchShaker1',bytes);
     res = 0;
-    for i=1:100
+    for i=1:51
         try
             Byte = ModuleRead('TouchShaker1', 1);
         catch
-            disp('Did not return')
+            disp('Did not return from: ')
             disp(bytes)
             Byte = 0;
         end

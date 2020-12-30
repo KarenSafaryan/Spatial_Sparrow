@@ -14,7 +14,7 @@ DefaultSettings.fractionTrainingVision = 1; % Amount of self-performed trials wi
 DefaultSettings.fractionTrainingPiezo = 1; % Amount of self-performed trials with somatosensory stimulation. Default is 1 (fully self-performed).
 DefaultSettings.fractionTrainingAudio = 1; % Amount of self-performed trials with auditory stimulation. Default is 1 (fully self-performed).
 DefaultSettings.fractionTrainingMixed = 1; % Amount of self-performed trials with mixed stimulation. Default is 1 (fully self-performed).
-DefaultSettings.SaveSettings = false; % Allows to save current settings to file
+DefaultSettings.SaveSettings = true; % Allows to save current settings to file
 DefaultSettings.PerformanceSwitch = 'Performed'; % Switch to show performance over all trials (including trials that were not self-performed)
 DefaultSettings.DoFit = false; % flag to do curve fitting in the performance window
 DefaultSettings.modSelect = 'Combined'; % selector which part of the data show in the performance curve window
@@ -62,9 +62,10 @@ DefaultSettings.spoutOffset = 10; %distance from inner spout position when moved
 
 % Trial timing
 DefaultSettings.preStimDelay = 1; % (s) animal should sit still before a new stimulus is presented
-DefaultSettings.minITI = 1; % (s) min additional time between trial end and next trial
-DefaultSettings.maxITI = 2; % (s) max additional time between trial end and next trial
-DefaultSettings.ITIlambda = 10; % defines the jitter between the min and maxITI. Higher lambda will constrain times closer to minITI.
+DefaultSettings.ITI_scale = 1.1; % (s) scale of the gamma distribution of inter trial intervals
+DefaultSettings.ITI_shape = 2; % (s) shape of the gamma distribution
+
+%DefaultSettings.ITIlambda = 10; % defines the jitter between the min and maxITI. Higher lambda will constrain times closer to minITI.
 DefaultSettings.WaitingTime = 1; % (s) minimum waiting time before a response can be made. Earlier licks are being ignored.
 DefaultSettings.TimeToChoose = 3; % (s) wait for a decision
 DefaultSettings.TimeToConfirm = 0.5; % (s) wait for a decision

@@ -69,14 +69,14 @@ for iTrials = 1:maxTrials
         disp('Spatial Sparrow paused')
         while BpodSystem.Status.SpatialSparrowPause 
             drawnow; pause(0.03); 
-            if ~BpodSystem.Status.BeingUsed | BpodSystem.Status.SpatialSparrowExit
+            if ~BpodSystem.Status.BeingUsed || BpodSystem.Status.SpatialSparrowExit
                 break
             end
         end
     end
     
     % only run this code if protocol is still active
-    if BpodSystem.Status.BeingUsed & ~BpodSystem.Status.SpatialSparrowExit
+    if BpodSystem.Status.BeingUsed && ~BpodSystem.Status.SpatialSparrowExit
         tic % single trial timer
         %BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control.UserData.update({'Update','Settings'});  %Get inputs from GUIs
         SpatialSparrow_TrialInit
@@ -91,11 +91,9 @@ for iTrials = 1:maxTrials
         
         %% create ITI jitter
         trialPrep = toc; %check how much time was used to prepare trial and subtract from ITI
-        if trialPrep > ITIjitter
-            if (ITIjitter - trialPrep)*1000 > 0
-                disp(['sleep ' , num2str(ITIjitter)])
-                java.lang.Thread.sleep((ITIjitter - trialPrep)*1000); %wait a moment to get to determined ITI
-            end
+        if (ITIjitter - trialPrep)*1000 > 0
+            %disp(['ITI ' , num2str(ITIjitter), 's'])
+            java.lang.Thread.sleep((ITIjitter - trialPrep)*1000); %wait a moment to get to determined ITI
         end
 %         disp(BpodSystem.SerialPort.bytesAvailable)
         BpodSystem.SerialPort.read(BpodSystem.SerialPort.bytesAvailable, 'uint8'); %remove all bytes from serial port
@@ -127,6 +125,8 @@ for iTrials = 1:maxTrials
         SpatialSparrow_SaveTrial
         try
             BpodSystem.GUIHandles.spatialsparrow.update_performance_plots();
+        catch
+            disp('Could not update performance plots.')
         end
         toc;disp('==============================================')
         % send the motors to zero before starting another trial
