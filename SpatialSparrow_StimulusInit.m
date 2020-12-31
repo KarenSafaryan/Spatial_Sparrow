@@ -37,7 +37,7 @@ end
 
 % check rewarded modality.
 if strcmpi(S.RewardedModality,'Vision')
- rightRewardVolume    StimType = 1;
+    StimType = 1;
 elseif strcmpi(S.RewardedModality,'Audio')
     StimType = 2;
 elseif strcmpi(S.RewardedModality,'Somatosensory')
