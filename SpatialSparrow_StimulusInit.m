@@ -5,6 +5,14 @@ sRate = BpodSystem.ProtocolSettings.sRate;
 %% Assign stimuli and create output variables
 % Determine stimulus presentation
 TargStim = Sample(S.TargRate);
+
+% decide over detection vs discrimination
+if rand > S.DistProb  % unimodal trial (detection only)
+    TrialType = 1; %identifier for detection trial - stimulate only one side
+else
+    TrialType = 2; %identifier for discrimination trial.
+end
+
 if TrialType == 2 % present distractor stimulus
     DistStim = Sample(S.DistFractions); % ASSIGN A DISTRACTOR
     if DistStim < 0 || DistStim > 1
@@ -38,18 +46,38 @@ end
 % check rewarded modality.
 if strcmpi(S.RewardedModality,'Vision')
     StimType = 1;
+    if ~S.useDistVisual
+        DistStim = 0;
+        TrialType = 1;
+    end
 elseif strcmpi(S.RewardedModality,'Audio')
     StimType = 2;
+    if ~S.useDistAudio
+        DistStim = 0;
+        TrialType = 1;
+    end
 elseif strcmpi(S.RewardedModality,'Somatosensory')
     StimType = 4;
+    if ~S.useDistPiezo
+        DistStim = 0;
+        TrialType = 1;
+    end
 elseif strcmpi(S.RewardedModality,'AudioVisual')
     StimType = 3;
     singleModProb = S.ProbAudio + S.ProbVision; %probability of switchting to single modality
     if rand < singleModProb %switch to single modality
         if rand <= (S.ProbAudio / singleModProb)
             StimType = 2; %switch to audio trial
+            if ~S.useDistAudio
+                DistStim = 0;
+                TrialType = 1;
+            end
         else
             StimType = 1; %switch to vision trial
+            if ~S.useDistVisual
+                DistStim = 0;
+                TrialType = 1;
+            end
         end
     end
 elseif strcmpi(S.RewardedModality,'SomatoVisual')
@@ -58,8 +86,16 @@ elseif strcmpi(S.RewardedModality,'SomatoVisual')
     if rand < singleModProb %switch to single modality
         if rand <= (S.ProbPiezo / singleModProb)
             StimType = 4; %switch to somatosensory trial
+            if ~S.useDistPiezo
+                DistStim = 0;
+                TrialType = 1;
+            end
         else
             StimType = 1; %switch to vision trial
+            if ~S.useDistVisual
+                DistStim = 0;
+                TrialType = 1;
+            end
         end
     end
 elseif strcmpi(S.RewardedModality,'SomatoAudio')
@@ -68,8 +104,16 @@ elseif strcmpi(S.RewardedModality,'SomatoAudio')
     if rand < singleModProb %switch to single modality
         if rand <= (S.ProbPiezo / singleModProb)
             StimType = 4; %switch to somatosensory trial
+            if ~S.useDistPiezo
+                DistStim = 0;
+                TrialType = 1;
+            end
         else
             StimType = 2; %switch to audio trial
+            if ~S.useDistAudio
+                DistStim = 0;
+                TrialType = 1;
+            end
         end
     end
 elseif strcmpi(S.RewardedModality,'AllMixed')
@@ -80,10 +124,22 @@ elseif strcmpi(S.RewardedModality,'AllMixed')
         coin = rand;
         if coin <= (S.ProbAudio / singleModProb)
             StimType = 2; %switch to audio trial
+            if ~S.useDistAudio
+                DistStim = 0;
+                TrialType = 1;
+            end
         elseif coin > (S.ProbAudio / singleModProb) && coin < ((S.ProbAudio + S.ProbVision) / singleModProb)
             StimType = 1; %switch to vision trial
+            if ~S.useDistVisual
+                DistStim = 0;
+                TrialType = 1;
+            end
         else
             StimType = 4; %switch to somatosensory trial
+            if ~S.useDistPiezo
+                DistStim = 0;
+                TrialType = 1;
+            end
         end
     end
 end
@@ -101,8 +157,10 @@ if ismember(StimType,[2 3 6 7]) %if auditory stimulation is required
     else
         UseChannels(2) = 1; %use right channel
     end
-    if DistStim > 0
-        UseChannels(:,1) = [1,1]; %use both channels
+    if S.useDistAudio
+        if DistStim > 0
+            UseChannels(:,1) = [1,1]; %use both channels
+        end
     end
 end
 % vision
@@ -112,8 +170,10 @@ if ismember(StimType,[1 3 5 7]) %if visual stimulation is required
     else
         UseChannels(4) = 1; %use right channel
     end
-    if DistStim > 0
-        UseChannels(:,2) = [1,1]; %use both channels
+    if S.useDistVisual
+        if DistStim > 0
+            UseChannels(:,2) = [1,1]; %use both channels
+        end
     end
 end
 % somatosensory
@@ -123,8 +183,10 @@ if ismember(StimType,4:7) %if somatosensory stimulation is required
     else
         UseChannels(6) = 1; %use right channel
     end
-    if DistStim > 0
-        UseChannels(:,3) = [1,1]; %use both channels
+    if S.useDistPiezo
+        if DistStim > 0
+            UseChannels(:,3) = [1,1]; %use both channels
+        end
     end
 end
 StimIntensities = [S.StimLoudness S.StimBrightness S.BuzzStrength; S.StimLoudness S.StimBrightness S.BuzzStrength];

@@ -51,12 +51,6 @@ if PrevProbRight ~= S.ProbRight
     TrialSidesList = [TrialSidesList(1:iTrials) double(rand(1,5000-iTrials) < S.ProbRight)];
 end
 
-% decide over detection vs discrimination
-if rand > S.DistProb  % unimodal trial (detection only)
-    TrialType = 1; %identifier for detection trial - stimulate only one side
-else
-    TrialType = 2; %identifier for discrimination trial.
-end
 
 % if the same side was repeated more than 'biasSeqLength'
 % THIS PREVENTS MORE THAN biasSeqLength STIM DISPLAYED ON THE SAME SIDE
