@@ -49,23 +49,21 @@ if exist('udpWF', 'var')
 end
 % check for path to server and save behavior + graph
 if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
-    serverPath = [serverPath filesep bhvFile];
+    if ~BpodSystem.ProtocolSettings.serverPath(end) == filesep
+        BpodSystem.ProtocolSettings.serverPath = [BpodSystem.ProtocolSettings.serverPath filesep];
+    end
+    serverPath = strrep(BpodSystem.Path.CurrentDataFile,...
+        BpodSystem.Path.DataFolder,...
+        BpodSystem.ProtocolSettings.serverPath);
+    [serverdir,tmp] = fileparts(serverPath);
     try
-        if ~exist(serverPath,'dir')
-            mkdir(serverPath)
+        if ~exist(serverdir,'dir')
+            mkdir(serverdir)
         end
         SessionData = BpodSystem.Data; %current session data
         if ~isempty(SessionData) & (iTrials > 10)
-            disp(['Writing to server: ',[serverPath filesep bhvFile '.mat']])
-            save([serverPath filesep bhvFile],'SessionData'); %save datafile
-
-            %save session graph
-            sPath = strrep(serverPath,filesep,'session_plots');
-            if ~exist(sPath,'dir')
-                mkdir(sPath)
-            end
-            set(BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control,'PaperOrientation','portrait','PaperPositionMode','auto');
-            saveas(BpodSystem.GUIHandles.SpatialSparrow_Control.SpatialSparrow_Control, [sPath filesep bhvFile '.jpg']);
+            disp(['Writing to: ',serverPath])
+            save(serverPath,'SessionData'); %save datafile
             try
                 if exist('hasvideo','var')
                     if hasvideo
@@ -76,7 +74,7 @@ if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
                         if ~isempty(filestocp)
                             for f = 1:length(filestocp)
                                 [SUCCESS,MESSAGE,MESSAGEID] = copyfile([filestocp(f).folder,...
-                                    filesep,filestocp(f).name],serverPath);
+                                    filesep,filestocp(f).name],serverdir);
                                 if ~SUCCESS
                                     disp(['ERRROR - Copy ',videoPaths,filesep,filestocp(f).name,' failed'])
                                 else
@@ -95,12 +93,12 @@ if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
 end
 
 % check for BpodImager imager folder on the server and save data there if a matching destination is found
-if exist(BpodSystem.ProtocolSettings.widefieldPath,'dir')
-    wfPath = [S.widefieldPath filesep BpodSystem.ProtocolSettings.SubjectName filesep ...
-        BpodSystem.GUIData.ProtocolName filesep]; %path to data server
-    check = dir([wfPath '*' date '*_open']); %check for open folder (created by BpodImager)
-    if ~isempty(check)
-        SessionData = BpodSystem.Data; %current session data
-        save([wfPath check.name filesep bhvFile],'SessionData'); %save datafile
-    end
-end
+% if exist(BpodSystem.ProtocolSettings.widefieldPath,'dir')
+%     wfPath = [S.widefieldPath filesep BpodSystem.ProtocolSettings.SubjectName filesep ...
+%         BpodSystem.GUIData.ProtocolName filesep]; %path to data server
+%     check = dir([wfPath '*' date '*_open']); %check for open folder (created by BpodImager)
+%     if ~isempty(check)
+%         SessionData = BpodSystem.Data; %current session data
+%         save([wfPath check.name filesep bhvFile],'SessionData'); %save datafile
+%     end
+% end

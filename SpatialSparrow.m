@@ -30,7 +30,12 @@ if BpodSystem.ProtocolSettings.triggerWidefield
             fgetl(udpWF)
             fwrite(udpWF,'softtrigger=0')
             fgetl(udpWF)
-            fwrite(udpWF,['expname=' BpodSystem.ProtocolSettings.SubjectName filesep 'onephoton' filesep bhvFile filesep bhvFile '_2']); % 2 is the number of widefield channels
+            
+            [dataPath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile); %behavioral file and data path
+            tmp = strsplit(bhvFile,'_');
+            session_folder = fullfile(BpodSystem.GUIData.SubjectName,...
+            [tmp{end-1} '_' tmp{end}],'onephoton',bhvFile);            
+            fwrite(udpWF,['expname=' session_folder]); 
             fgetl(udpWF)
             disp(' -> WIDEFIELD labcams connected.');
             
