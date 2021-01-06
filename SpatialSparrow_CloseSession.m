@@ -49,6 +49,11 @@ if exist('udpWF', 'var')
 end
 % check for path to server and save behavior + graph
 if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
+    try
+        set(BpodSystem.GUIHandles.spatialsparrow.StopButton,'text','Copying data')
+        set(BpodSystem.GUIHandles.spatialsparrow.StopButton,'FontColor',[100,255,100])
+        drawnow;
+    end
     if ~BpodSystem.ProtocolSettings.serverPath(end) == filesep
         BpodSystem.ProtocolSettings.serverPath = [BpodSystem.ProtocolSettings.serverPath filesep];
     end
@@ -91,7 +96,10 @@ if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
         warning('!!! Error while writing to server. Make sure local data got copied correctly. !!!');
     end
 end
-
+try
+    set(BpodSystem.GUIHandles.spatialsparrow.StopButton,'text','Start')
+    set(BpodSystem.GUIHandles.spatialsparrow.StopButton,'FontColor',[0,0,0])
+end
 % check for BpodImager imager folder on the server and save data there if a matching destination is found
 % if exist(BpodSystem.ProtocolSettings.widefieldPath,'dir')
 %     wfPath = [S.widefieldPath filesep BpodSystem.ProtocolSettings.SubjectName filesep ...
