@@ -101,17 +101,38 @@ end
 setMotorsToZero;
 % setting thresholds
 % move to outer
-ls = num2str(BpodSystem.ProtocolSettings.lOuterLim);
-rs = num2str(BpodSystem.ProtocolSettings.rOuterLim);
-teensyWrite([71 length(ls)  ls length(rs)  rs]);
-lo = num2str(BpodSystem.ProtocolSettings.LeverOut);
-teensyWrite([72 length(lo)  lo]);
-%set touch threshold
-cVal = num2str(BpodSystem.ProtocolSettings.TouchThresh);
-teensyWrite([75 length(cVal) cVal]);
-pause(2); %give some time for calibration
-disp('Done setting thresholds')
-
+if ~isfield(BpodSystem.ProtocolSettings,'capacitiveTouchThresholds')
+    disp('Teensy is setting the thresholds')
+    ls = num2str(BpodSystem.ProtocolSettings.lOuterLim);
+    rs = num2str(BpodSystem.ProtocolSettings.rOuterLim);
+    teensyWrite([71 length(ls)  ls length(rs)  rs]);
+    lo = num2str(BpodSystem.ProtocolSettings.LeverOut);
+    teensyWrite([72 length(lo)  lo]);
+    %set touch threshold
+    cVal = num2str(BpodSystem.ProtocolSettings.TouchThresh);
+    teensyWrite([75 length(cVal) cVal]);
+    pause(2); %give some time for calibration
+    res = teensyGetTouchThresh();
+    ii = 0;
+    while isempty(res)
+        res = teensyGetTouchThresh();
+        ii = ii+1;
+        if ii == 5
+            disp('There was an error reading the thresholds from the teensy...')
+            break
+        end
+    end
+    BpodSystem.ProtocolSettings.capacitiveTouchThresholds = res;
+    
+else
+    disp('Using thresholds from the last run.')
+    teensySetTouchThresh(BpodSystem.ProtocolSettings.capacitiveTouchThresholds)
+    ls = num2str(BpodSystem.ProtocolSettings.lInnerLim);
+    rs = num2str(BpodSystem.ProtocolSettings.rInnerLim);
+    teensyWrite([71 length(ls)  ls length(rs)  rs]);
+    lo = num2str(BpodSystem.ProtocolSettings.LeverIn);
+    teensyWrite([72 length(lo)  lo]);
+end
 %% Stimulus parameters - Create trial types list (single vs double stimuli)
 maxTrials = 5000;
 TrialSidesList = double(rand(1,maxTrials) < S.ProbRight); % ONE MEANS RIGHT TRIAL

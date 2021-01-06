@@ -22,7 +22,6 @@ if ~BpodSystem.Status.InStateMatrix
         end
         if Byte
             res = Byte == 14; %positve handshake received
-            %res = Byte; %positve handshake received
             break
         end
     end

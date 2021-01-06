@@ -103,6 +103,8 @@ HX711 scale;
 #define DECREASE_LEVERTHRESH_L 85 // identifier to decrease touch threshold for the left LEVER
 #define INCREASE_LEVERTHRESH_R 86 // identifier to increase touch threshold for the right LEVER
 #define DECREASE_LEVERTHRESH_R 87 // identifier to decrease touch threshold for the right LEVER
+#define SET_TOUCHLEVELS 89
+#define GET_TOUCHLEVELS 95 // send the touch thresholds to bpod
 #define IS_MOVING 88
 
 #define START_SCALE 91 // identifier to start logging data from the load cell
@@ -353,7 +355,25 @@ void serialEvent1() {
         Serial1.write(FAIL);
       }
       break;
-
+    case GET_TOUCHLEVELS:
+      Serial1.write(GET_TOUCHLEVELS); // send header
+      for (int i=0;i<4;i++) {
+        Serial1.print(stdTouchVals[i]);
+        Serial1.print("_");
+      }
+      Serial1.write(OK);
+      break;
+    case SET_TOUCHLEVELS:
+       if (Serial1.available() > 4) {
+          for (int i = 0; i < 4; i++)
+            temp[i] = Serial1COM.readByte(); 
+          for (int i = 0; i < 4; i++)
+            stdTouchVals[i] = readSerialChar(temp[i]);
+          Serial1.write(OK);
+        } else {
+          Serial1.write(FAIL);
+        }
+      break;
     case ADJUST_TOUCHLEVEL:
       if (Serial1.available() > 1) {
         touchThresh = readSerialChar(Serial1COM.readByte()); // new threshold for touch detection in SDUs
