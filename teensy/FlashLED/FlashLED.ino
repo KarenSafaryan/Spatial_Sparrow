@@ -125,9 +125,8 @@ void loop() { // check stim trigger and control display
   int offsetCount = 0;
   while (digitalReadFast(IN_STIM) == LOW) {
     for (int i = 0; i < lightCount; ++i) {
-      if (  i%3 == 0){
+      if (i <4)
         digitalWriteFast((i+offset)%lightCount, HIGH);
-      }
       else {
         digitalWriteFast((i+offset)%lightCount, LOW);
       }
