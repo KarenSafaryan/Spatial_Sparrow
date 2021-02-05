@@ -102,7 +102,7 @@ for iTrials = 1:maxTrials
         end
 %         disp(BpodSystem.SerialPort.bytesAvailable)
         BpodSystem.SerialPort.read(BpodSystem.SerialPort.bytesAvailable, 'uint8'); %remove all bytes from serial port
-        
+        setMotorPositions;
         while BpodSystem.SerialPort.bytesAvailable > 0 %clear excess bytes from bpod that aquired from ITI
             disp('!!! Something really weird is going on with the serial communication to Bpod !!!');
             disp(BpodSystem.SerialPort.bytesAvailable);
@@ -135,8 +135,8 @@ for iTrials = 1:maxTrials
         end
         toc;disp('==============================================')
         % send the motors to zero before starting another trial
-        setMotorsToZero;
         
+        setMotorsToZero;
         HandlePauseCondition; % Checks to see if the protocol is paused. If so, waits until user resumes.
         if BpodSystem.Status.SpatialSparrowExit
             RunProtocol('Stop')

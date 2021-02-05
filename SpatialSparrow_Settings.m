@@ -71,6 +71,7 @@ DefaultSettings.TimeToChoose = 3; % (s) wait for a decision
 DefaultSettings.TimeToConfirm = 0.5; % (s) wait for a decision
 DefaultSettings.TimeOut = 3; % (s) timeout punish for false response
 DefaultSettings.LeverWait = 10; % (s) time to wait for lever grasp. Trial is counted as not responded if no touch is detected.
+DefaultSettings.handleHoldDelay = 0.25;
 DefaultSettings.MoveLever = true; % Flag to decide whether lever should be moved or not.
 DefaultSettings.UseBothLevers = false; % Flag to decide whether both levers have to be touched to trigger stimulus presentation
 DefaultSettings.WaitBeforeLever = 1; % Waiting time before lever is moved in after trial onset
@@ -80,7 +81,8 @@ DefaultSettings.varStimDur = 0; % (s) Variable duration of the stimulus sequence
 DefaultSettings.optoDur = 0.5; % (s) Duration of the optogenetic stimulus.
 DefaultSettings.optoRamp = 0.2; % (s) Time where optogenetic stimulus is ramping down. Example: optoDur = 0.5 and optoRamp = 0.2 makes a 500ms stimulus that ramps down after 300ms.
 DefaultSettings.happyTime = 0.5; % (s) Time of the last bpod state. This is to give the animal some time to collect the water.
-
+DefaultSettings.TrialStartCue = 1;
+DefaultSettings.UseStimStartCue = 1;
 %Stimulus settings
 DefaultSettings.BeepDuration = 20; % Beep duration in ms.
 DefaultSettings.FlashDuration = 20; % Flash duration in ms.

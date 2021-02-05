@@ -138,6 +138,7 @@ maxTrials = 5000;
 TrialSidesList = double(rand(1,maxTrials) < S.ProbRight); % ONE MEANS RIGHT TRIAL
 PrevProbRight = S.ProbRight;
 BpodSystem.Data.cTrial = 1; BpodSystem.Data.Rewarded = logical([]); %needed for cam streamer to work in first trial
+BpodSystem.Data.TrialStartTime = [];
 [dataPath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile); %behavioral file and data path
 % Set the datapath to something that makes sense (drop Session Data and add the date)
 

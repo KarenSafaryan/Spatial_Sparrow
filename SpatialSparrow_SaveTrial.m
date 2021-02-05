@@ -12,6 +12,11 @@ if length(fieldnames(RawEvents)) > 1
     BpodSystem.Data.DistStim(iTrials) = DistStim; %Pulsecount for distractor side
     BpodSystem.Data.ITIjitter(iTrials) = ITIjitter; %duration of jitter between trials
     BpodSystem.Data.CorrectSide(iTrials) = correctSide; % 1 means left, 2 means right side
+    if correctSide == 2
+        BpodSystem.Data.StimSideValues([1,2],iTrials) =  [TargStim, DistStim];
+    else
+        BpodSystem.Data.StimSideValues([1,2],iTrials) =  [DistStim, TargStim];
+    end
     BpodSystem.Data.StimType(iTrials) = StimType; % 1 means vision is rewarded, 2 means audio is rewarded
     BpodSystem.Data.stimEvents{iTrials} = stimEvents; % timestamps for individual events on each channel. Order is AL,AR,VL,VR, timestamps are in s, relative to stimulus onset (use stimOn to be more precise).
     BpodSystem.Data.TrialSettings(iTrials) = S; % Adds the settings used for the current trial to the Data struct (to be saved after the trial ends)

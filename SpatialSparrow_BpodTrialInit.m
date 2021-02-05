@@ -110,5 +110,5 @@ end
 % teensyWrite(103); % Move right spout to outer position
 % teensyWrite(105); % Move handles to outer position
 % BpodSystem.StopModuleRelay('TouchShaker1'); % Stop relaying bytes from teensy to allow communication with state machine
-setMotorPositions;
+
 %disp("SET POSITION")
