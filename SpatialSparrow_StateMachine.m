@@ -149,23 +149,23 @@ sma = AddState(sma, 'Name', 'HardPunish', ... %punish for incorrect response - t
 sma = AddState(sma, 'Name', 'DidNotLever', ... %if animal did not touch the lever move on to next trial
     'Timer', 0.01, ...
     'StateChangeConditions', {'Tup', 'TrialEnd'}, ...
-    'OutputActions', {'BNCState', 2});
+    'OutputActions', {});
 
 sma = AddState(sma, 'Name', 'DidNotChoose', ... %if animal did not respond move on to next trial
     'Timer', 0.01, ...
     'StateChangeConditions', {'Tup', 'TrialEnd'}, ...
-    'OutputActions', {'BNCState', 2});
+    'OutputActions', {});
 
 if exist('i2c','var') % does this have I2C communication to scanimage?
     sma = AddState(sma, 'Name', 'TrialEnd', ... %move to next trials after a randomly varying waiting period.
         'Timer', 0, ...
         'StateChangeConditions', {'Tup', 'exit', 'TouchShaker1_14','exit'}, ...
-        'OutputActions', {'WavePlayer1','X', 'TouchShaker1', 105,'BNCState',0,'I2C1', [1 36]});  %make sure all stimuli are off and move handles out
+        'OutputActions', {'WavePlayer1','X', 'TouchShaker1', 105,'I2C1', [1 36]});  %make sure all stimuli are off and move handles out
 else
     sma = AddState(sma, 'Name', 'TrialEnd', ... %move to next trials after a randomly varying waiting period.
         'Timer', 0, ...
         'StateChangeConditions', {'Tup', 'exit', 'TouchShaker1_14','exit'}, ...
-        'OutputActions', {'WavePlayer1','X', 'TouchShaker1', 105, 'BNCState',0});  %make sure all stimuli are off and move handles out
+        'OutputActions', {'WavePlayer1','X', 'TouchShaker1', 105});  %make sure all stimuli are off and move handles out
 end
 
 
