@@ -101,7 +101,10 @@ end
 setMotorsToZero;
 % setting thresholds
 % move to outer
-if ~isfield(BpodSystem.ProtocolSettings,'capacitiveTouchThresholds')
+if ~isfield(BpodSystem.ProtocolSettings,'capacitiveTouchThresholds') 
+    BpodSystem.ProtocolSettings.capacitiveTouchThresholds = [];
+end
+if isempty(BpodSystem.ProtocolSettings.capacitiveTouchThresholds)
     disp('Teensy is setting the thresholds')
     ls = num2str(BpodSystem.ProtocolSettings.lOuterLim);
     rs = num2str(BpodSystem.ProtocolSettings.rOuterLim);
