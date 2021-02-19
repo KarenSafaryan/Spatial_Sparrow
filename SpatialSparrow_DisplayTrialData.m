@@ -5,7 +5,12 @@ global BpodSystem
 cModality = {'Vision only' 'Audio only' 'AudioVisual' 'Somatosensory' 'SomatoVisual' 'SomatoAudio' 'AllMixed'};
 disp(['Trial ' int2str(iTrials) ' - ' cModality{StimType} '; DecisionGap: ' num2str(cDecisionGap)]);
 disp(['Target: ' num2str(TargStim) ' Hz - ' cSide, ' - Dist. Fraction: ' num2str(DistStim) ' - ' wSide, ' | SingleSpout: = ' int2str(SingleSpout)]);
-BpodSystem.GUIHandles.spatialsparrow.prepareTrial(TrialSidesList)
+
+try
+    BpodSystem.GUIHandles.spatialsparrow.prepareTrial(TrialSidesList);
+catch
+    disp('Could not update performance plots.')
+end
 
 % a = min(min(Signal));b = max(max(Signal));
 % plotoffset = b - a ;
