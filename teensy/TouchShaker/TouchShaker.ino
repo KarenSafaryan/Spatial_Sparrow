@@ -608,7 +608,7 @@ void loop() {
 
   /////////////////////////////////////////////////////////////////////////////////////////////
   // check touch lines and create according output
-  if (!touchAdjust) {
+  if (!touchAdjust & !spoutMoves & !leverMoves) {
     if (touchData[0] > (meanTouchVals[0] + (stdTouchVals[0]*touchThresh))) { // signal above 'stdTouchVals' standard deviations indicate lick event. only when spouts dont move.
       spoutClocker_L = millis(); //update time when spout was last touched
       if (!spoutTouch_L) {

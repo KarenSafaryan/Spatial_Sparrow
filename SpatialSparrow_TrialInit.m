@@ -16,9 +16,9 @@ if true || iTrials == 1 || PrevStimLoudness ~= S.StimLoudness
     
     if isempty(PunishSound);PunishSound = zeros(1,sRate/1000);end
     if isempty(RewardSound);RewardSound = zeros(1,sRate/1000);end
-    trialStartSound = GenerateSineWave(sRate, 4000, 0.05) / 2; %0.5s pure tone if lever is touched to subsequently trigger the stimulus
+    trialStartSound = GenerateSineWave(sRate, 4000, 0.05) / 5; %0.5s pure tone if lever is touched to subsequently trigger the stimulus
     leverSound = GenerateSineWave(sRate, 2000, 0.05) / 10; %0.5s pure tone if lever is touched to subsequently trigger the stimulus
-    stimStartSound = GenerateSineWave(sRate, 9000, 0.1)/2;
+    stimStartSound = GenerateSineWave(sRate, 9000, 0.1)/5;
     W.loadWaveform(9,trialStartSound); % load signal to waveform object
     W.loadWaveform(10,leverSound); % load signal to waveform object
     W.loadWaveform(11,RewardSound); % load signal to waveform object

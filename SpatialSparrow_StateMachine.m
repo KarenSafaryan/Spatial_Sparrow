@@ -14,9 +14,6 @@ if S.TrialStartCue
 end
 if S.MoveLever
     trialstart_cond = {'Tup','MoveLever'};
-elseif (S.AutoReward || GiveReward) && S.TrainingMode
-    
-    trialstart_cond = {'Tup','AutoReward'};
 else
     trialstart_cond = {'Tup','StimulusCue'};
 end
@@ -26,21 +23,11 @@ sma = AddState(sma, 'Name', 'TrialStart', ... %trigger to signal trialstart to a
     'StateChangeConditions', trialstart_cond,... %wait for imager before producing barcode sequence
     'OutputActions', trialstart_stateout); % BNC 1 is high, all others are low, sends message to scan image
 
-%% Auto-reward
-if (S.AutoReward || GiveReward) && S.TrainingMode
-    sma = AddState(sma, 'Name', 'AutoReward', ... %always give a reward if AutoReward is on
-        'Timer', autoValve, ...
-        'StateChangeConditions', {'Tup', 'StimulusCue'},...  %do a short break before moving to response state
-        'OutputActions', {'ValveState', RewardValve}); %open reward valve
-end
-
-%% Check if the handles are being used and check if there is autoreward
+%% Check if the handles are being used
 
 if S.MoveLever
     if S.LeverWait
         movelever_cond = {'Tup','WaitForLever','TouchShaker1_14','WaitForLever'};
-    elseif sum(strcmp(sma.StateNames,'AutoReward'))
-        movelever_cond = {'Tup','AutoReward','TouchShaker1_14','AutoReward'};
     else
         movelever_cond = {'Tup','StimulusCue','TouchShaker1_14','StimulusCue'};
     end
@@ -61,11 +48,7 @@ if S.MoveLever
         'OutputActions', {'TouchShaker1', 76}); % request lever states from teensy
     
     waitforanimal_cond = {'TouchShaker1_8', LeverWaitState, 'TouchShaker1_9', LeverWaitState};
-    if (S.AutoReward || GiveReward) && S.TrainingMode
-        waitforanimal_cond =  [waitforanimal_cond,'Tup','AutoReward'];
-    else
-        waitforanimal_cond =  [waitforanimal_cond,'Tup','StimulusCue'];
-    end
+    waitforanimal_cond =  [waitforanimal_cond,'Tup','StimulusCue'];
     outaction = {};
     if S.LeverSound
         outaction = {'WavePlayer1',['P' leverSoundID]};
@@ -106,10 +89,17 @@ sma = AddState(sma, 'Name', 'DelayPeriod', ... %Add gap after stimulus presentat
     'StateChangeConditions', {'Tup','MoveSpout'},...
     'OutputActions', {});
 
+
+if (S.AutoReward || GiveReward) && SingleSpout % then give the reward right away
+    movespout_cond =  {'Tup','Reward','TouchShaker1_14','Reward'};
+else % check the animal response
+    movespout_cond = {'Tup','WaitForResponse','TouchShaker1_14','WaitForResponse'};
+end
 sma = AddState(sma, 'Name', 'MoveSpout', ... %move spouts towards the animal so it can report its choice
     'Timer', 0.1, ...
-    'StateChangeConditions', {'Tup','WaitForResponse','TouchShaker1_14','WaitForResponse'},...
+    'StateChangeConditions', movespout_cond,...
     'OutputActions', {'TouchShaker1', 101}); % trigger to moves spouts in
+
 
 sma = AddState(sma, 'Name', 'WaitForResponse', ... %wait for animal response after stimulus was presented
     'Timer', S.TimeToChoose, ...

@@ -77,6 +77,10 @@ W.TriggerProfiles(1, :) = 1:8; %when triggering first row, ch1-8 will play wavef
 W.TriggerMode = 'Master'; %output can be interrupted by new stimulus triggers
 W.LoopDuration(1:8) = 0; %keep on for a up to 10 minutes
 W.SamplingRate = BpodSystem.ProtocolSettings.sRate; %adjust sampling rate
+RewardSound = zeros(1,BpodSystem.ProtocolSettings.sRate*0.02);RewardSound(1:int32(BpodSystem.ProtocolSettings.sRate*0.01)) = 1; %20ms click sound for reward
+RewardSound = RewardSound*0.5;
+W.loadWaveform(11,RewardSound); % load signal to waveform object
+W.TriggerProfiles(11, 1:2) = 11; %this will play waveform 10 (leverSound) on ch1+2
 
 %% check for teensy module
 checker = true;
