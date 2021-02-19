@@ -90,7 +90,6 @@ for iTrials = 1:maxTrials
         SpatialSparrow_AutoReward
         SpatialSparrow_BpodTrialInit
         SpatialSparrow_DisplayTrialData
-        BpodSystem.GUIHandles.spatialsparrow.prepareTrial(TrialSidesList)
         
         
         
@@ -118,7 +117,7 @@ for iTrials = 1:maxTrials
             fwrite(udpWF,sprintf('log=trial_start:%d',iTrials));
         end
         %% run bpod and save data after trial is finished
-        SpatialSparrow_StateMachine
+        SpatialSparrow_StateMachine;
         RawEvents = RunStateMachine; % Send and run state matrix
         % set the frame number just after starting
         if exist('udplabcams','var')

@@ -4,9 +4,9 @@ global BpodSystem
 %% display some stimulus information
 cModality = {'Vision only' 'Audio only' 'AudioVisual' 'Somatosensory' 'SomatoVisual' 'SomatoAudio' 'AllMixed'};
 disp(['Trial ' int2str(iTrials) ' - ' cModality{StimType} '; DecisionGap: ' num2str(cDecisionGap)]);
-disp(['Target: ' num2str(TargStim) ' Hz - ' cSide]);
-disp(['Dist. Fraction: ' num2str(DistStim) ' - ' wSide]);
-disp(['SingleSpout: = ' int2str(SingleSpout) '; AutoReward = ' num2str(GiveReward || S.AutoReward)]);
+disp(['Target: ' num2str(TargStim) ' Hz - ' cSide, ' - Dist. Fraction: ' num2str(DistStim) ' - ' wSide, ' | SingleSpout: = ' int2str(SingleSpout)]);
+BpodSystem.GUIHandles.spatialsparrow.prepareTrial(TrialSidesList)
+
 % a = min(min(Signal));b = max(max(Signal));
 % plotoffset = b - a ;
 % plot(BpodSystem.GUIHandles.SpatialSparrow_Control.StimulusPlot, linspace(0,length(Signal)/sRate,length(Signal)), Signal(1,:), 'r'); %update stimulus plot - audio1

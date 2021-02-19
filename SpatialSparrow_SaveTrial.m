@@ -4,28 +4,33 @@ global BpodSystem
 if length(fieldnames(RawEvents)) > 1
 
     BpodSystem.Data = AddTrialEvents(BpodSystem.Data,RawEvents); %collect trialdata
+    BpodSystem.Data.Punished(iTrials) = ~isnan(BpodSystem.Data.RawEvents.Trial{1,iTrials}.States.HardPunish(1)); %False choice
+    BpodSystem.Data.DidNotChoose(iTrials) = ~isnan(BpodSystem.Data.RawEvents.Trial{1,iTrials}.States.DidNotChoose(1)); %No choice
+    BpodSystem.Data.DidNotLever(iTrials) = ~isnan(BpodSystem.Data.RawEvents.Trial{1,iTrials}.States.DidNotLever(1)); %No choice
+    % then it is autoreward, check if the mouse licked to the correct right side
     if (BpodSystem.ProtocolSettings.AutoReward && SingleSpout)
-        % then it is autoreward, check if the mouse licked to the correct right side
-        BpodSystem.Data.Rewarded(iTrials) = nan;
+        BpodSystem.Data.Rewarded(iTrials) = 0;
         if correctSide == 1
             if isfield(BpodSystem.Data.RawEvents.Trial{1,iTrials}.Events,'TouchShaker1_1')
                if length(BpodSystem.Data.RawEvents.Trial{1,iTrials}.Events.TouchShaker1_1)>2
-                BpodSystem.Data.Rewarded(iTrials) = 1;
+                    BpodSystem.Data.Rewarded(iTrials) = 1;
+               else
+                    BpodSystem.Data.DidNotChoose(iTrials) = 1;
                end
             end
         else
             if isfield(BpodSystem.Data.RawEvents.Trial{1,iTrials}.Events,'TouchShaker1_2')
                if length(BpodSystem.Data.RawEvents.Trial{1,iTrials}.Events.TouchShaker1_2)>2
                     BpodSystem.Data.Rewarded(iTrials) = 1;
+               else
+                    BpodSystem.Data.DidNotChoose(iTrials) = 1;
                end
             end
         end
     else
         BpodSystem.Data.Rewarded(iTrials) = ~isnan(BpodSystem.Data.RawEvents.Trial{1,iTrials}.States.Reward(1)); %Correct choice
-            end
-    BpodSystem.Data.Punished(iTrials) = ~isnan(BpodSystem.Data.RawEvents.Trial{1,iTrials}.States.HardPunish(1)); %False choice
-    BpodSystem.Data.DidNotChoose(iTrials) = ~isnan(BpodSystem.Data.RawEvents.Trial{1,iTrials}.States.DidNotChoose(1)); %No choice
-    BpodSystem.Data.DidNotLever(iTrials) = ~isnan(BpodSystem.Data.RawEvents.Trial{1,iTrials}.States.DidNotLever(1)); %No choice
+    end
+    
     BpodSystem.Data.TargStim(iTrials) = TargStim; %Pulsecount for target side
     BpodSystem.Data.DistStim(iTrials) = DistStim; %Pulsecount for distractor side
     BpodSystem.Data.ITIjitter(iTrials) = ITIjitter; %duration of jitter between trials
@@ -76,11 +81,9 @@ if length(fieldnames(RawEvents)) > 1
     end
     
     %print things to screen
-    fprintf('Nr. of trials initiated: %d\n', iTrials)
-    fprintf('Nr. of completed trials: %d\n', nansum(OutcomeRecord==0|OutcomeRecord==1))
-    fprintf('Nr. of rewards: %d\n', nansum(OutcomeRecord==1))
-    fprintf('Amount of water in ul (est.): %d\n',  nansum(OutcomeRecord==1) * (mean([S.leftRewardVolume S.rightRewardVolume])))
-
+    fprintf('Initiated: %d | Completed: %d | Rewards: %d\n', iTrials, ...
+        nansum(OutcomeRecord==0|OutcomeRecord==1), ...
+        nansum(OutcomeRecord==1))
 end
 % Create the folder if it does not exist already.
 [sessionpath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile);
