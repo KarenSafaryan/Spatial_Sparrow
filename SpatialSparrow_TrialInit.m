@@ -59,9 +59,11 @@ end
 % if the same side was repeated more than 'biasSeqLength'
 % THIS PREVENTS MORE THAN biasSeqLength STIM DISPLAYED ON THE SAME SIDE
 if iTrials > S.biasSeqLength
-    if length(unique(TrialSidesList(iTrials-S.biasSeqLength:iTrials))) == 1
-        if rand > 0.5
-            TrialSidesList(iTrials) = double(~logical(TrialSidesList(iTrials))); %flip to the other side
+    if S.biasSeqLength ~= 0
+        if length(unique(TrialSidesList(iTrials-S.biasSeqLength:iTrials))) == 1
+            if rand > 0.5
+                TrialSidesList(iTrials) = double(~logical(TrialSidesList(iTrials))); %flip to the other side
+            end
         end
     end
 end

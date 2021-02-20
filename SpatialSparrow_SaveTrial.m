@@ -88,16 +88,11 @@ end
 % Create the folder if it does not exist already.
 [sessionpath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile);
 if ~exist(sessionpath,'dir'),mkdir(sessionpath),end
-SaveBpodSessionData % Saves the field BpodSystem.Data to the current data file
+SaveBpodSessionData; % Saves the field BpodSystem.Data to the current data file
 
 if S.SaveSettings %if current settings should be saved to file
     ProtocolSettings = BpodSystem.ProtocolSettings;
     fname = BpodSystem.GUIData.SettingsFileName;
     save(fname, 'ProtocolSettings');
 end            
-% if S.SaveSettings %if current settings should be saved to file
-%     S.SaveSettings = false; %set variable back to false before saving
-%     ProtocolSettings = BpodSystem.ProtocolSettings;
-%     save(BpodSystem.GUIData.SettingsFileName, 'ProtocolSettings'); % save protocol settings file to directory
-%     set(BpodSystem.GUIHandles.SpatialSparrow_Control.SaveSettings,'Value',false); %set GUI back to false after saving
-% end
+
