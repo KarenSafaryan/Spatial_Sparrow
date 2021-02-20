@@ -68,7 +68,7 @@ if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
         SessionData = BpodSystem.Data; %current session data
         if ~isempty(SessionData) & (iTrials > 10)
             disp(['Writing to: ',serverPath])
-            save(serverPath,'SessionData'); %save datafile
+            [SUCCESS,MESSAGE,MESSAGEID] = copyfile(BpodSystem.Path.CurrentDataFile,serverPath);
             try
                 if exist('hasvideo','var')
                     if hasvideo
