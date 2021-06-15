@@ -16,16 +16,20 @@ if true || iTrials == 1 || PrevStimLoudness ~= S.StimLoudness
     
     if isempty(PunishSound);PunishSound = zeros(1,sRate/1000);end
     if isempty(RewardSound);RewardSound = zeros(1,sRate/1000);end
+    trialStartSound = GenerateSineWave(sRate, 4000, 0.05) / 5; %0.5s pure tone if lever is touched to subsequently trigger the stimulus
     leverSound = GenerateSineWave(sRate, 2000, 0.05) / 10; %0.5s pure tone if lever is touched to subsequently trigger the stimulus
-    
+    stimStartSound = GenerateSineWave(sRate, 9000, 0.1)/5;
+    W.loadWaveform(9,trialStartSound); % load signal to waveform object
     W.loadWaveform(10,leverSound); % load signal to waveform object
     W.loadWaveform(11,RewardSound); % load signal to waveform object
     W.loadWaveform(12,PunishSound); % load signal to waveform object
+    W.loadWaveform(13,stimStartSound); % load signal to waveform object
     PrevStimLoudness = S.StimLoudness;
-    
+    W.TriggerProfiles(9, 1:2) = 9;
     W.TriggerProfiles(10, 1:2) = 10; %this will play waveform 10 (leverSound) on ch1+2
     W.TriggerProfiles(11, 1:2) = 11; %this will play waveform 11 (rewardSound) on ch1+2
     W.TriggerProfiles(12, 1:2) = 12; %this will play waveform 12 (punishSound) on ch1+2
+    W.TriggerProfiles(13, 1:2) = 13; %this will play waveform 13 on ch1+2
 end
 
 %if get(BpodSystem.GUIHandles.SpatialSparrow_Control.AdjustSpoutes,'Value')
@@ -55,9 +59,11 @@ end
 % if the same side was repeated more than 'biasSeqLength'
 % THIS PREVENTS MORE THAN biasSeqLength STIM DISPLAYED ON THE SAME SIDE
 if iTrials > S.biasSeqLength
-    if length(unique(TrialSidesList(iTrials-S.biasSeqLength:iTrials))) == 1
-        if rand > 0.5
-            TrialSidesList(iTrials) = double(~logical(TrialSidesList(iTrials))); %flip to the other side
+    if S.biasSeqLength ~= 0
+        if length(unique(TrialSidesList(iTrials-S.biasSeqLength:iTrials))) == 1
+            if rand > 0.5
+                TrialSidesList(iTrials) = double(~logical(TrialSidesList(iTrials))); %flip to the other side
+            end
         end
     end
 end

@@ -77,6 +77,10 @@ W.TriggerProfiles(1, :) = 1:8; %when triggering first row, ch1-8 will play wavef
 W.TriggerMode = 'Master'; %output can be interrupted by new stimulus triggers
 W.LoopDuration(1:8) = 0; %keep on for a up to 10 minutes
 W.SamplingRate = BpodSystem.ProtocolSettings.sRate; %adjust sampling rate
+RewardSound = zeros(1,BpodSystem.ProtocolSettings.sRate*0.02);RewardSound(1:int32(BpodSystem.ProtocolSettings.sRate*0.01)) = 1; %20ms click sound for reward
+RewardSound = RewardSound*0.5;
+W.loadWaveform(11,RewardSound); % load signal to waveform object
+W.TriggerProfiles(11, 1:2) = 11; %this will play waveform 10 (leverSound) on ch1+2
 
 %% check for teensy module
 checker = true;
@@ -101,7 +105,10 @@ end
 setMotorsToZero;
 % setting thresholds
 % move to outer
-if ~isfield(BpodSystem.ProtocolSettings,'capacitiveTouchThresholds')
+if ~isfield(BpodSystem.ProtocolSettings,'capacitiveTouchThresholds') 
+    BpodSystem.ProtocolSettings.capacitiveTouchThresholds = [];
+end
+if isempty(BpodSystem.ProtocolSettings.capacitiveTouchThresholds)
     disp('Teensy is setting the thresholds')
     ls = num2str(BpodSystem.ProtocolSettings.lOuterLim);
     rs = num2str(BpodSystem.ProtocolSettings.rOuterLim);
@@ -138,6 +145,7 @@ maxTrials = 5000;
 TrialSidesList = double(rand(1,maxTrials) < S.ProbRight); % ONE MEANS RIGHT TRIAL
 PrevProbRight = S.ProbRight;
 BpodSystem.Data.cTrial = 1; BpodSystem.Data.Rewarded = logical([]); %needed for cam streamer to work in first trial
+BpodSystem.Data.TrialStartTime = [];
 [dataPath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile); %behavioral file and data path
 % Set the datapath to something that makes sense (drop Session Data and add the date)
 

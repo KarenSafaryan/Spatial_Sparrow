@@ -19,7 +19,8 @@ if S.TrainingMode == 1
     end
 
 end
-
+global BpodSystem
+BpodSystem.ProtocolSettings.SingleSpoutTrial = SingleSpout;
 %% TODO: SEE IF THIS IS USEFUL WHEN THINGS ARE WORKING
 %         % check for additional single spout if animal keeps making mistakes on the same side
 %         if singleSpoutBias

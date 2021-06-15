@@ -1,5 +1,5 @@
 %% connect to ao
-W = BpodWavePlayer('COM5');
+W = BpodWavePlayer('COM7');
 %%
 W.OutputRange = '-5V:5V'; % make sure output range is correct
 W.TriggerProfileEnable = 'Off'; % use trigger profiles to produce different waveforms across channels
@@ -9,9 +9,11 @@ W.TriggerProfileEnable = 'Off'; % use trigger profiles to produce different wave
 W.SamplingRate = 20000; %adjust sampling rate
 %%
 % addpath('Bpod_Gen2\Functions\Internal Functions\GenerateSineWave.m')
-sound = GenerateSineWave(W.SamplingRate, 2000, 1) / 1;
-sound = ((rand(1,sRate*S.PunishSoundDur) * 5) - 2.5)/10;
+sound = GenerateSineWave(W.SamplingRate, 9000, 0.1) / 2;
+%sound = ((rand(1,W.SamplingRate*0.5) * 5) - 2.5)/10;
 % W.TriggerProfiles(10, 1:2) = 10;
 %
-W.loadWaveform(10,sound); % load signal to waveform object
-W.play([2],10)
+
+sound
+W.loadWaveform(14,sound); % load signal to waveform object
+W.play([1,2],14)

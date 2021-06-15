@@ -111,19 +111,18 @@ for iTrials = 1:maxTrials
         SpatialSparrow_AutoReward
         SpatialSparrow_BpodTrialInit
         SpatialSparrow_DisplayTrialData
-        BpodSystem.GUIHandles.spatialsparrow.prepareTrial(TrialSidesList)
         
-        SpatialSparrow_StateMachine
+        
         
         %% create ITI jitter
         trialPrep = toc; %check how much time was used to prepare trial and subtract from ITI
-        if (ITIjitter - trialPrep)*1000 > 0
+        if (ITIjitter - trialPrep - 0.1)*1000  > 0 % removing the 0.1 because there is a delay in sending the state machine
             %disp(['ITI ' , num2str(ITIjitter), 's'])
-            java.lang.Thread.sleep((ITIjitter - trialPrep)*1000); %wait a moment to get to determined ITI
+            java.lang.Thread.sleep((ITIjitter - trialPrep - 0.1)*1000); %wait a moment to get to determined ITI
         end
 %         disp(BpodSystem.SerialPort.bytesAvailable)
         BpodSystem.SerialPort.read(BpodSystem.SerialPort.bytesAvailable, 'uint8'); %remove all bytes from serial port
-        
+        setMotorPositions;
         while BpodSystem.SerialPort.bytesAvailable > 0 %clear excess bytes from bpod that aquired from ITI
             disp('!!! Something really weird is going on with the serial communication to Bpod !!!');
             disp(BpodSystem.SerialPort.bytesAvailable);
@@ -139,7 +138,7 @@ for iTrials = 1:maxTrials
             fwrite(udpWF,sprintf('log=trial_start:%d',iTrials));
         end
         %% run bpod and save data after trial is finished
-        
+        SpatialSparrow_StateMachine;
         RawEvents = RunStateMachine; % Send and run state matrix
         % set the frame number just after starting
         if exist('udplabcams','var')
@@ -156,8 +155,8 @@ for iTrials = 1:maxTrials
         end
         toc;disp('==============================================')
         % send the motors to zero before starting another trial
-        setMotorsToZero;
         
+        setMotorsToZero;
         HandlePauseCondition; % Checks to see if the protocol is paused. If so, waits until user resumes.
         if BpodSystem.Status.SpatialSparrowExit
             RunProtocol('Stop')

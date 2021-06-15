@@ -16,8 +16,7 @@ if ~BpodSystem.Status.InStateMatrix
         try
             Byte = ModuleRead('TouchShaker1', 1);
         catch
-            disp('Did not return from: ')
-            disp(bytes)
+            disp(['Did not return from: ', num2str(bytes)])
             Byte = 0;
         end
         if Byte

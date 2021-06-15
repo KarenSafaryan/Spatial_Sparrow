@@ -4,14 +4,42 @@ global BpodSystem
 if length(fieldnames(RawEvents)) > 1
 
     BpodSystem.Data = AddTrialEvents(BpodSystem.Data,RawEvents); %collect trialdata
-    BpodSystem.Data.Rewarded(iTrials) = ~isnan(BpodSystem.Data.RawEvents.Trial{1,iTrials}.States.Reward(1)); %Correct choice
     BpodSystem.Data.Punished(iTrials) = ~isnan(BpodSystem.Data.RawEvents.Trial{1,iTrials}.States.HardPunish(1)); %False choice
     BpodSystem.Data.DidNotChoose(iTrials) = ~isnan(BpodSystem.Data.RawEvents.Trial{1,iTrials}.States.DidNotChoose(1)); %No choice
     BpodSystem.Data.DidNotLever(iTrials) = ~isnan(BpodSystem.Data.RawEvents.Trial{1,iTrials}.States.DidNotLever(1)); %No choice
+    % then it is autoreward, check if the mouse licked to the correct right side
+    if (BpodSystem.ProtocolSettings.AutoReward && SingleSpout)
+        BpodSystem.Data.Rewarded(iTrials) = 0;
+        if correctSide == 1
+            if isfield(BpodSystem.Data.RawEvents.Trial{1,iTrials}.Events,'TouchShaker1_1')
+               if length(BpodSystem.Data.RawEvents.Trial{1,iTrials}.Events.TouchShaker1_1)>2
+                    BpodSystem.Data.Rewarded(iTrials) = 1;
+               else
+                    BpodSystem.Data.DidNotChoose(iTrials) = 1;
+               end
+            end
+        else
+            if isfield(BpodSystem.Data.RawEvents.Trial{1,iTrials}.Events,'TouchShaker1_2')
+               if length(BpodSystem.Data.RawEvents.Trial{1,iTrials}.Events.TouchShaker1_2)>2
+                    BpodSystem.Data.Rewarded(iTrials) = 1;
+               else
+                    BpodSystem.Data.DidNotChoose(iTrials) = 1;
+               end
+            end
+        end
+    else
+        BpodSystem.Data.Rewarded(iTrials) = ~isnan(BpodSystem.Data.RawEvents.Trial{1,iTrials}.States.Reward(1)); %Correct choice
+    end
+    
     BpodSystem.Data.TargStim(iTrials) = TargStim; %Pulsecount for target side
     BpodSystem.Data.DistStim(iTrials) = DistStim; %Pulsecount for distractor side
     BpodSystem.Data.ITIjitter(iTrials) = ITIjitter; %duration of jitter between trials
     BpodSystem.Data.CorrectSide(iTrials) = correctSide; % 1 means left, 2 means right side
+    if correctSide == 2
+        BpodSystem.Data.StimSideValues([1,2],iTrials) =  [TargStim, DistStim];
+    else
+        BpodSystem.Data.StimSideValues([1,2],iTrials) =  [DistStim, TargStim];
+    end
     BpodSystem.Data.StimType(iTrials) = StimType; % 1 means vision is rewarded, 2 means audio is rewarded
     BpodSystem.Data.stimEvents{iTrials} = stimEvents; % timestamps for individual events on each channel. Order is AL,AR,VL,VR, timestamps are in s, relative to stimulus onset (use stimOn to be more precise).
     BpodSystem.Data.TrialSettings(iTrials) = S; % Adds the settings used for the current trial to the Data struct (to be saved after the trial ends)
@@ -53,25 +81,18 @@ if length(fieldnames(RawEvents)) > 1
     end
     
     %print things to screen
-    fprintf('Nr. of trials initiated: %d\n', iTrials)
-    fprintf('Nr. of completed trials: %d\n', nansum(OutcomeRecord==0|OutcomeRecord==1))
-    fprintf('Nr. of rewards: %d\n', nansum(OutcomeRecord==1))
-    fprintf('Amount of water in ul (est.): %d\n',  nansum(OutcomeRecord==1) * (mean([S.leftRewardVolume S.rightRewardVolume])))
-
+    fprintf('Initiated: %d | Completed: %d | Rewards: %d\n', iTrials, ...
+        nansum(OutcomeRecord==0|OutcomeRecord==1), ...
+        nansum(OutcomeRecord==1))
 end
 % Create the folder if it does not exist already.
 [sessionpath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile);
 if ~exist(sessionpath,'dir'),mkdir(sessionpath),end
-SaveBpodSessionData % Saves the field BpodSystem.Data to the current data file
+SaveBpodSessionData; % Saves the field BpodSystem.Data to the current data file
 
 if S.SaveSettings %if current settings should be saved to file
     ProtocolSettings = BpodSystem.ProtocolSettings;
     fname = BpodSystem.GUIData.SettingsFileName;
     save(fname, 'ProtocolSettings');
 end            
-% if S.SaveSettings %if current settings should be saved to file
-%     S.SaveSettings = false; %set variable back to false before saving
-%     ProtocolSettings = BpodSystem.ProtocolSettings;
-%     save(BpodSystem.GUIData.SettingsFileName, 'ProtocolSettings'); % save protocol settings file to directory
-%     set(BpodSystem.GUIHandles.SpatialSparrow_Control.SaveSettings,'Value',false); %set GUI back to false after saving
-% end
+

@@ -4,15 +4,6 @@ global BpodSystem
 if S.SaveSettings %if current settings should be saved to file
     S.SaveSettings = false; %set variable back to false before saving
     ProtocolSettings = BpodSystem.ProtocolSettings;
-    %save(BpodSystem.GUIData.SettingsFileName, 'ProtocolSettings'); % save protocol settings file to directory
-    %set(BpodSystem.GUIHandles.SpatialSparrow_Control.SaveSettings,'Value',false); %set GUI back to false after saving
-else
-    % check if settings should be saved when ending current session
-    %button = questdlg('Save current settings?','Save settings','Yes','No','Yes'); %creates a question dialog box with two push buttons labeled 'str1' and 'str2'. default specifies the default button selection and must be 'str1' or 'str2'.
-    %if strcmp(button,'Yes')
-    %    ProtocolSettings = BpodSystem.ProtocolSettings;
-     %   save(BpodSystem.GUIData.SettingsFileName, 'ProtocolSettings'); % save protocol settings file to directory
-    %end
 end
 % Move spouts to reset position.
 teensyWrite([71 1 '0' 1 '0']); % Move spouts to zero position
@@ -56,7 +47,7 @@ end
 % check for path to server and save behavior + graph
 if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
     try
-        set(BpodSystem.GUIHandles.spatialsparrow.StopButton,'text','Copying data')
+        set(BpodSystem.GUIHandles.spatialsparrow.StopButton,'Text','Copying data')
         set(BpodSystem.GUIHandles.spatialsparrow.StopButton,'FontColor',[100,255,100])
         drawnow;
     end
@@ -72,9 +63,9 @@ if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
             mkdir(serverdir)
         end
         SessionData = BpodSystem.Data; %current session data
-        if ~isempty(SessionData) & (iTrials > 10)
+        if ~isempty(SessionData) && (iTrials > 10)
             disp(['Writing to: ',serverPath])
-            save(serverPath,'SessionData'); %save datafile
+            [SUCCESS,MESSAGE,MESSAGEID] = copyfile(BpodSystem.Path.CurrentDataFile,serverPath);
             try
                 if exist('hasvideo','var')
                     if hasvideo
@@ -103,16 +94,8 @@ if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
     end
 end
 try
-    set(BpodSystem.GUIHandles.spatialsparrow.StopButton,'text','Start')
+    set(BpodSystem.GUIHandles.spatialsparrow.StopButton,'Text','Start')
     set(BpodSystem.GUIHandles.spatialsparrow.StopButton,'FontColor',[0,0,0])
+    drawnow;
 end
-% check for BpodImager imager folder on the server and save data there if a matching destination is found
-% if exist(BpodSystem.ProtocolSettings.widefieldPath,'dir')
-%     wfPath = [S.widefieldPath filesep BpodSystem.ProtocolSettings.SubjectName filesep ...
-%         BpodSystem.GUIData.ProtocolName filesep]; %path to data server
-%     check = dir([wfPath '*' date '*_open']); %check for open folder (created by BpodImager)
-%     if ~isempty(check)
-%         SessionData = BpodSystem.Data; %current session data
-%         save([wfPath check.name filesep bhvFile],'SessionData'); %save datafile
-%     end
-% end
+
