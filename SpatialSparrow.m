@@ -1,6 +1,6 @@
 function SpatialSparrow
 global BpodSystem
-
+BpodSystem.ProtocolSettings.triggerScanbox = false;
 SpatialSparrow_Settings
 SpatialSparrow_Init
 
@@ -45,6 +45,27 @@ if BpodSystem.ProtocolSettings.triggerWidefield
         end
     end
 end
+if BpodSystem.ProtocolSettings.triggerScanbox
+    if isfield(BpodSystem.ProtocolSettings,'scanboxAddress')
+            tmp = strsplit(BpodSystem.ProtocolSettings.scanboxAddress,':');
+            udpAddress = tmp{1};
+            udpPort = str2num(tmp{2});
+            udpsbox = udp(udpAddress,'RemotePort',udpPort);
+            fopen(udpsbox);
+            
+            [dataPath, bhvFile] = fileparts(BpodSystem.Path.CurrentDataFile); %behavioral file and data path
+            tmp = strsplit(bhvFile,'_');
+            session_folder = fullfile(BpodSystem.GUIData.SubjectName,...
+            [tmp{end-1} '_' tmp{end}],'two_photon',bhvFile);            
+            
+            tmp = strsplit(session_folder,'\')
+            fprintf(udpsbox,['D' 'd:\data\' tmp{1} '\' tmp{2}]); 
+            fprintf(udpsbox,['A'  tmp{3}]); 
+            fprintf(udpsbox,['U0'  ]);
+            fprintf(udpsbox,['E0'  ])
+            disp(' -> scanbox connected.');            
+            fprintf(udpsbox,'G');  
+    end
 pause(1)
 %% Start saving labcams if connected
 if exist('udplabcams','var')

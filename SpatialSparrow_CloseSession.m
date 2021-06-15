@@ -47,6 +47,12 @@ if exist('udpWF', 'var')
     fwrite(udpWF,'manualsave=0');
     fclose(udpWF);
 end
+
+if exist('udpsbox', 'var')
+    fprintf(udpsbox,'G');  
+    fclose(udpsbox)
+end
+   
 % check for path to server and save behavior + graph
 if exist(BpodSystem.ProtocolSettings.serverPath, 'dir') %if server responds
     try
