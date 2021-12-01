@@ -3,7 +3,7 @@
 %% Build state matrix
 sma = NewStateMatrix();
 
-trialstart_stateout = {'BNCState',1};
+trialstart_stateout = {'BNCState',1,'SoftCode',1};
 if exist('i2c','var')
     trialstart_stateout = [trialstart_stateout,'I2C1', [1 34]];
 end

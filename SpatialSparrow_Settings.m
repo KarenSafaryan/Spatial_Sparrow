@@ -119,3 +119,4 @@ DefaultSettings.PunishSoundDur = 0; % (s) Duration of white noise punish sound w
 DefaultSettings.ProbRight = 0.5; %Probability for occurence of a target presentation on the right.
 DefaultSettings.ServoPos = zeros(1,2); % position of left and right spout, relative to their inner limit. these values will be changed by anti-bias correction to correct spout position.
 DefaultSettings.maxServoPos = zeros(1,2)+3;
+disp('Loaded settings.')

@@ -3,7 +3,7 @@ global BpodSystem
 BpodSystem.ProtocolSettings.triggerScanbox = false;
 SpatialSparrow_Settings
 SpatialSparrow_Init
-
+disp('HERE')
 %% Initialize some arrays
 OutcomeRecord = NaN(1,maxTrials);
 AssistRecord = false(1,maxTrials);
@@ -66,6 +66,7 @@ if BpodSystem.ProtocolSettings.triggerScanbox
             disp(' -> scanbox connected.');            
             fprintf(udpsbox,'G');  
     end
+end
 pause(1)
 %% Start saving labcams if connected
 if exist('udplabcams','var')

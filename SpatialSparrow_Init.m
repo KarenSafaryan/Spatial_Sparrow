@@ -28,7 +28,7 @@ BpodSystem.ProtocolSettings.SubjectName = BpodSystem.GUIData.SubjectName; %updat
 serverPath = [S.serverPath filesep BpodSystem.ProtocolSettings.SubjectName filesep ...
     BpodSystem.GUIData.ProtocolName ]; %path to data server
 
-
+BpodSystem.SoftCodeHandlerFunction = 'SoftCodeHandler';
 %% ensure teensy, I2C, and analog modules are present and set up communication
 if ~isempty(find(contains(BpodSystem.Modules.Name,'I2C1'))) % check to see if this system has an I2C
     if isfield(BpodSystem.ModuleUSB, 'I2C1')
@@ -46,6 +46,7 @@ if ~isempty(find(contains(BpodSystem.Modules.Name,'I2C1'))) % check to see if th
 end
 
 %% connect to analog output module
+disp('Connecting to the WavePlayer')
 try
     W = BpodWavePlayer(S.wavePort); %check if analog module com port is correct
 catch
@@ -83,6 +84,7 @@ W.loadWaveform(11,RewardSound); % load signal to waveform object
 W.TriggerProfiles(11, 1:2) = 11; %this will play waveform 10 (leverSound) on ch1+2
 
 %% check for teensy module
+disp('Connecting to the teensy.')
 checker = true;
 for i = 1 : length(BpodSystem.Modules.Name)
     if strcmpi(BpodSystem.Modules.Name{i},'TouchShaker1')
