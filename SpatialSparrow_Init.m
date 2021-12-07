@@ -28,6 +28,8 @@ BpodSystem.ProtocolSettings.SubjectName = BpodSystem.GUIData.SubjectName; %updat
 serverPath = [S.serverPath filesep BpodSystem.ProtocolSettings.SubjectName filesep ...
     BpodSystem.GUIData.ProtocolName ]; %path to data server
 
+Screen('Preference', 'SkipSyncTests', 1);
+PsychToolboxDisplayServer('init') % Initialize display server
 BpodSystem.SoftCodeHandlerFunction = 'SoftCodeHandler';
 %% ensure teensy, I2C, and analog modules are present and set up communication
 if ~isempty(find(contains(BpodSystem.Modules.Name,'I2C1'))) % check to see if this system has an I2C
