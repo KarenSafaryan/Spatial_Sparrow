@@ -3,7 +3,7 @@
 %% Build state matrix
 sma = NewStateMatrix();
 
-trialstart_stateout = {'BNCState',1,'SoftCode',1};
+trialstart_stateout = {'BNCState',1}; % ,'SoftCode',1};
 if exist('i2c','var')
     trialstart_stateout = [trialstart_stateout,'I2C1', [1 34]];
 end
@@ -76,12 +76,12 @@ if exist('i2c','var') % does this have I2C communication to scanimage?
     sma = AddState(sma, 'Name', 'PlayStimulus', ... %present stimulus for the set stimulus duration.
         'Timer', waitDur, ... %waitDur is the duration the animal has to wait before moving to next state
         'StateChangeConditions', {'Tup','DelayPeriod'},...
-        'OutputActions', {'WavePlayer1',['P' 0], 'TouchShaker1', 77, 'I2C1',[1,35]}); %start stimulus presentation + stimulus trigger, sends I2C message to scanimage
+        'OutputActions', {'WavePlayer1',['P' 0], 'TouchShaker1', 77, 'I2C1',[1,35],'SoftCode', 1}); %start stimulus presentation + stimulus trigger, sends I2C message to scanimage
 else
     sma = AddState(sma, 'Name', 'PlayStimulus', ... %present stimulus for the set stimulus duration.
         'Timer', waitDur, ... %waitDur is the duration the animal has to wait before moving to next state
         'StateChangeConditions', {'Tup','DelayPeriod'},...
-        'OutputActions', {'WavePlayer1',['P' 0], 'TouchShaker1', 77}); %start stimulus presentation + stimulus trigger
+        'OutputActions', {'WavePlayer1',['P' 0], 'TouchShaker1', 77, 'SoftCode',1}); %start stimulus presentation + stimulus trigger
 end
 
 sma = AddState(sma, 'Name', 'DelayPeriod', ... %Add gap after stimulus presentation

@@ -113,7 +113,82 @@ for iTrials = 1:maxTrials
         SpatialSparrow_BpodTrialInit
         SpatialSparrow_DisplayTrialData
         
+        %% Visual Stimuli
+        % Pick this trial type and speed
+        refSpeed = S.RefSpeed; %deg/s
+        refContrast = selectRandomIndex(S.RefContrast);
+        speedList = S.SpeedList;
+        testSpeed = selectRandomIndex(speedList);
+        testContrast = selectRandomIndex(S.TestContrast);
+        thisTrialSpeeds = [testSpeed refSpeed];
+        thisTrialSide = TrialSidesList(iTrials);
+        Contrasts = nan(1,2);
         
+        if thisTrialSide == 1 % Reward on Left-hand port, i.e. present fastest of the two gratings on left side
+%             LeftPortAction = 'Reward';
+%             RightPortAction = 'SoftPunish';
+%             RewardValve = LeftPort; %left-hand port represents port#0, therefore valve value is 2^0
+%             rewardValveTime = LeftValveTime;
+            correctSide = 1;
+            LRSpeeds = [max(thisTrialSpeeds) min(thisTrialSpeeds)];
+        
+        else % Reward on Right-hand port, i.e. present fastest of the two gratings on right side
+%             LeftPortAction = 'SoftPunish';
+%             RightPortAction = 'Reward';
+%             RewardValve = RightPort; %right-hand port represents port#2, therefore valve value is 2^2
+%             rewardValveTime = RightValveTime;
+            correctSide = 2;
+            LRSpeeds = [min(thisTrialSpeeds) max(thisTrialSpeeds)];
+        end
+        
+        disp(['Left Speed: ' num2str(LRSpeeds(1)) ' degrees/s'])
+        disp(['Right Speed: ' num2str(LRSpeeds(2)) ' degrees/s'])
+        
+        Contrasts(LRSpeeds == refSpeed) = refContrast;
+        Contrasts(LRSpeeds ~= refSpeed) = testContrast;
+        
+        %create visual speed matrix
+        sFreqList = S.SFreqList; %cycles/deg
+        tFreqList = S.TFreqList; %cycles/sec
+        
+        [sf,tf] = meshgrid(sFreqList,tFreqList);
+        speedMatrix = tf./sf;
+        
+        leftSFreq = selectRandomIndex(unique(sf(speedMatrix == LRSpeeds(1))));
+        rightSFreq = selectRandomIndex(unique(sf(speedMatrix == LRSpeeds(2))));
+        
+        leftTFreq = selectRandomIndex(unique(tf(speedMatrix==LRSpeeds(1))));
+        rightTFreq = selectRandomIndex(unique(tf(speedMatrix == LRSpeeds(2))));
+        
+        %store and load parameters to PsychtoolboxDisplayServer
+        stimParameters.PlayStimulus = 1;
+        stimParameters.StimSize = selectRandomIndex(S.StimSize); %in degrees, need to be converted into pixels
+        
+        stimParameters.Speeds = LRSpeeds;
+        stimParameters.SFreqs = [leftSFreq rightSFreq];
+        stimParameters.TFreqs = [leftTFreq rightTFreq];
+        stimParameters.StimContrasts = Contrasts;
+        
+        stimParameters.Orientation = selectRandomIndex(S.Orientation); %degrees
+        stimParameters.Elevation = S.Elevation;%degrees
+        stimParameters.Azimuth = S.Azimuth;%degrees
+        stimParameters.StimDuration = S.minWaitTime;
+        
+        %add random delay to post stimulus
+        postStimWaitTime = (S.minWaitTime - S.StimulusDuration); % + generate_random_delay(S.lambdaDelay, S.preStimDelayMin, S.preStimDelayMax);
+        
+        if postStimWaitTime < 0
+            postStimWaitTime = 0;
+        else
+            stimParameters.StimDuration = S.StimulusDuration;
+        end
+        
+        if ~S.PlayStimulus
+            stimParameters.PlayStimulus = 0;
+            Modality = '-';
+        end
+        
+        PsychToolboxDisplayServer('Make','DG',stimParameters);
         
         %% create ITI jitter
         trialPrep = toc; %check how much time was used to prepare trial and subtract from ITI
