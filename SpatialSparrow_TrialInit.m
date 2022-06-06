@@ -70,6 +70,7 @@ end
 
 
 %% Move servo based on difference between left and right performance
+S.UseAntiBias = false;
 if S.UseAntiBias
     temp = TrialSidesList(LastBias:end); %get sides for all trials since the last check
     temp = temp(AssistRecord(LastBias:end)); %get sides for all performed trials

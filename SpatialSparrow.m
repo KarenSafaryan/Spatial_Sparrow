@@ -129,16 +129,16 @@ for iTrials = 1:maxTrials
 %             RightPortAction = 'SoftPunish';
 %             RewardValve = LeftPort; %left-hand port represents port#0, therefore valve value is 2^0
 %             rewardValveTime = LeftValveTime;
-            correctSide = 1;
-            LRSpeeds = [max(thisTrialSpeeds) min(thisTrialSpeeds)];
+%             correctSide = 1;
+            LRSpeeds = [min(thisTrialSpeeds) max(thisTrialSpeeds)];
         
         else % Reward on Right-hand port, i.e. present fastest of the two gratings on right side
 %             LeftPortAction = 'SoftPunish';
 %             RightPortAction = 'Reward';
 %             RewardValve = RightPort; %right-hand port represents port#2, therefore valve value is 2^2
 %             rewardValveTime = RightValveTime;
-            correctSide = 2;
-            LRSpeeds = [min(thisTrialSpeeds) max(thisTrialSpeeds)];
+%             correctSide = 2;
+            LRSpeeds = [max(thisTrialSpeeds) min(thisTrialSpeeds)];
         end
         
         disp(['Left Speed: ' num2str(LRSpeeds(1)) ' degrees/s'])
@@ -153,12 +153,22 @@ for iTrials = 1:maxTrials
         
         [sf,tf] = meshgrid(sFreqList,tFreqList);
         speedMatrix = tf./sf;
+        sf
+        LRSpeeds
+        speedMatrix
         
-        leftSFreq = selectRandomIndex(unique(sf(speedMatrix == LRSpeeds(1))));
-        rightSFreq = selectRandomIndex(unique(sf(speedMatrix == LRSpeeds(2))));
-        
-        leftTFreq = selectRandomIndex(unique(tf(speedMatrix==LRSpeeds(1))));
-        rightTFreq = selectRandomIndex(unique(tf(speedMatrix == LRSpeeds(2))));
+        leftSFreq = 0.16; % selectRandomIndex(unique(sf(speedMatrix == LRSpeeds(1))));
+        rightSFreq = 0.16; % selectRandomIndex(unique(sf(speedMatrix == LRSpeeds(2))));
+        leftSFreq
+        rightSFreq
+        tf
+        if(LRSpeeds(1)>LRSpeeds(2))
+            leftTFreq = max(tf(:, 1)); % selectRandomIndex(unique(tf(speedMatrix==LRSpeeds(1))));
+            rightTFreq = min(tf(:, 1)); % selectRandomIndex(unique(tf(speedMatrix == LRSpeeds(2))));
+        else
+            leftTFreq = min(tf(:, 1)); % selectRandomIndex(unique(tf(speedMatrix==LRSpeeds(1))));
+            rightTFreq = max(tf(:, 1)); % selectRandomIndex(unique(tf(speedMatrix == LRSpeeds(2))))
+        end
         
         %store and load parameters to PsychtoolboxDisplayServer
         stimParameters.PlayStimulus = 1;

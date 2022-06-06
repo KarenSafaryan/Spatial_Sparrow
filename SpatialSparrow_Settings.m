@@ -124,7 +124,7 @@ disp('Loaded settings.')
 %%%%%%%% VStim %%%%%%
 DefaultSettings.RefSpeed = 25;                  % degrees/s, reference speed. can also set to 37.5 degs/s
 DefaultSettings.SpeedList =[3.125 200];         % degrees/s, list of test speeds. Full list: [3.125 6.25 12.5 18.75 37.5 50 100 200]; %deg/s  --> full list [3.125 4.1667 6.25 8.3333 12.5 16.6667 18.75 25 33.3333 37.5 50 75 100 150 200]
-DefaultSettings.SFreqList = [0.02 0.16];        % cycles/deg, list of spatial frequencies. Full list: [0.02 0.04 0.08 0.12 0.16]
+DefaultSettings.SFreqList = [0.16 0.16];        % cycles/deg, list of spatial frequencies. Full list: [0.02 0.04 0.08 0.12 0.16]
 DefaultSettings.TFreqList = [0.5 4];            % cycles/sec, list of temporal frequencies. Full list: [0.5 1 2 3 4]
 DefaultSettings.RefContrast = 1;                % list of reference contrasts [0.1 0.8];
 DefaultSettings.TestContrast = 1;               % list of test contrasts [0.1 0.4 0.8];
